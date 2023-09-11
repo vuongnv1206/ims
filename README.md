@@ -1,5 +1,53 @@
 # ImsApplication
+#Issue Management System using .NET and Angular
 
+The Issue Management System is a web application developed using .NET and Angular. This application helps organizations manage and track issues, tasks, and work items in their projects.
+
+Key Features
+
+Create Issues: Users can create new issues and assign them to other users or themselves.
+
+Issue Management: Update the status of issues, attach related files, and add notes to track the issue resolution process.
+
+Search and Filter: The system provides the ability to search and filter issues based on various criteria such as status, assigned users, creation time, and more.
+
+Reports and Statistics: Display reports on the number of issues, resolution time, and user performance.
+
+Direct Communication: Provide integrated direct communication between team members working on the same issue.
+
+#Installation and Running
+
+System Requirements:
+
+.NET Core: Ensure you have .NET Core installed on your computer. You can download the latest version here.
+
+Node.js and npm: Make sure you have Node.js and npm installed. You can download them here.
+
+Clone the Repository: Use Git to clone the project from your repository: git clone https://github.com/nuocftraik/issue-management.git
+
+#Setup the Backend:
+
+Navigate to the backend directory of the project.
+
+Run dotnet restore to restore the required packages.
+
+Configure the database connection in the appsettings.json file.
+
+Run dotnet ef database update to apply migrations.
+
+Run dotnet run to start the backend server.
+
+#Setup the Frontend:
+
+Navigate to the frontend directory of the project.
+
+Run npm install to install the required frontend dependencies.
+
+Update the API URL in the environment.ts file.
+
+Run ng serve to start the Angular development server.
+
+Access the Application: Open your web browser and access the application at http://localhost:4200.
 
 
 ## Getting started
@@ -90,3 +138,6 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+
+
