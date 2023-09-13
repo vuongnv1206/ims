@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Contract.Systems
+namespace IMS.Contract.Systems.Authentications.Interfaces
 {
-	internal class Class1
+	public class IRoleService
 	{
 	}
 }

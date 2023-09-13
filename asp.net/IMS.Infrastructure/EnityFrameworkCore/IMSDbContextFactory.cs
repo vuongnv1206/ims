@@ -29,7 +29,9 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 				.SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
 				.AddJsonFile("appsettings.json", optional: false);
 
+
 			return builder.Build();
+
 		}
 	}
 }
