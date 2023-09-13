@@ -5,6 +5,7 @@ using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Authentications.Interfaces;
 using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,12 @@ namespace IMS.BusinessService.Systems
 		private readonly SignInManager<AppUser> _signInManager;
 		private readonly JwtSetting _jwtSettings;
 
-		public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtSetting jwtSettings)
+		public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+			IOptions<JwtSetting> jwtSettings)
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
-			_jwtSettings = jwtSettings;
+			_jwtSettings = jwtSettings.Value;
 		}
 		public async Task Register(RegisterModel input)
 		{
@@ -121,7 +123,7 @@ namespace IMS.BusinessService.Systems
 				issuer: _jwtSettings.Issuer,
 				audience: _jwtSettings.Audience,
 				claims: claims,
-				expires: DateTime.UtcNow.AddHours(1),
+				expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
 				signingCredentials: signingCredentials);
 			return jwtSecurityToken;
 		}

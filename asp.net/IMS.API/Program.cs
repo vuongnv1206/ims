@@ -1,6 +1,7 @@
 
 
 using IMS.BusinessService;
+using IMS.BusinessService.Common;
 using IMS.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
@@ -15,10 +16,14 @@ namespace IMS.Api
 			// Add services to the container.
 			var configuration = builder.Configuration;
 			builder.Services.AddHttpContextAccessor();
-	
-			builder.Services.ConfigureApplicationServices();
+
 			builder.Services.ConfigureInfrastructureServices(configuration);
 			builder.Services.ConfigureIdentityServices(configuration);
+			builder.Services.ConfigureApplicationServices();
+			builder.Services.ConfigureInfrastructureServices(configuration);
+
+			builder.Services.Configure<JwtSetting>(configuration.GetSection("JwtSettings"));
+
 
 			builder.Services.AddCors(o =>
 			{
@@ -35,6 +40,8 @@ namespace IMS.Api
 
 			var app = builder.Build();
 
+			//app.UsePathBase("/api");
+
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
@@ -42,10 +49,13 @@ namespace IMS.Api
 				app.UseSwaggerUI();
 			}
 
+			app.UseCors("CorsPolicy");
+			//app.UseRouting();
+
 			app.UseHttpsRedirection();
 			app.UseAuthentication();
 			app.UseAuthorization();
-			app.UseCors("CorsPolicy");
+			
 
 			app.MapControllers();
 

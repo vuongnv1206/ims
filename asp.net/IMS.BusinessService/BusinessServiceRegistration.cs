@@ -13,9 +13,12 @@ public static class BusinessServiceRegistration
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+		//
+		services.AddScoped<IMS.BusinessService.Common.JwtSetting>();
+
 		//AuthService
-		services.AddTransient<IAuthService, AuthService>();
-		services.AddTransient<IUserService, UserService>();
+		services.AddScoped<IAuthService, AuthService>();
+		services.AddScoped<IUserService, UserService>();
 
 		//Generic Repo
 		services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

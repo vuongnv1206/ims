@@ -1,8 +1,6 @@
 ﻿using IMS.Domain.Abstracts;
 using IMS.Domain.Systems;
-using IMS.Infrastructure.EntityConfigurations;
 using IMS.Infrastructure.Seedings;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;

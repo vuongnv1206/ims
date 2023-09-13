@@ -18,7 +18,7 @@ namespace IMS.Infrastructure
 		public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
 		{
 
-			services.AddIdentityCore<AppUser>().AddRoles<AppRole>()
+			services.AddIdentity<AppUser,AppRole>()
 				.AddEntityFrameworkStores<IMSDbContext>()
 				.AddDefaultTokenProviders();
 			//Add config for required Email
@@ -41,13 +41,13 @@ namespace IMS.Infrastructure
 				{
 					ValidateIssuer = true,
 					ValidateAudience = true,
-					ValidAudience = configuration["JWT:ValidAudience"],
-					ValidIssuer = configuration["JWT:ValidIssuer"],
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+					ValidAudience = configuration["JwtSettings:Audience"],
+					ValidIssuer = configuration["JwtSettings:Issuer"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
 				};
 			});
 
-			//Singin-Google
+
 			
 
 
