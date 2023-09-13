@@ -29,15 +29,6 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 			//builder.ApplyConfiguration(new RoleConfiguration());
 			//builder.ApplyConfiguration(new UserRoleConfiguration());
 
-			//foreach (var entityType in builder.Model.GetEntityTypes())
-			//{
-			//	var tableName = entityType.GetTableName();
-			//	if (tableName.StartsWith("AspNet"))
-			//	{
-			//		entityType.SetTableName(tableName.Substring(6));
-			//	}
-			//}
-
 			builder.SeedData();
 			base.OnModelCreating(builder);
 		}
@@ -57,9 +48,6 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 				}
 
 			}
-
-
-
 			var result = await base.SaveChangesAsync();
 
 			return result;

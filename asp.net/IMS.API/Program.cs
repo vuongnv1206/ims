@@ -1,6 +1,8 @@
 
 
 using IMS.BusinessService;
+using IMS.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace IMS.Api
 {
@@ -11,10 +13,20 @@ namespace IMS.Api
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-
-			// business service
+			var configuration = builder.Configuration;
+			builder.Services.AddHttpContextAccessor();
+	
 			builder.Services.ConfigureApplicationServices();
+			builder.Services.ConfigureInfrastructureServices(configuration);
+			builder.Services.ConfigureIdentityServices(configuration);
 
+			builder.Services.AddCors(o =>
+			{
+				o.AddPolicy("CorsPolicy",
+					builder => builder.AllowAnyOrigin()
+					.AllowAnyMethod()
+					.AllowAnyHeader());
+			});
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -33,7 +45,7 @@ namespace IMS.Api
 			app.UseHttpsRedirection();
 			app.UseAuthentication();
 			app.UseAuthorization();
-
+			app.UseCors("CorsPolicy");
 
 			app.MapControllers();
 
