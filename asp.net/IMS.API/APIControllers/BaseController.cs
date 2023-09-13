@@ -6,9 +6,9 @@ namespace IMS.Api.APIControllers
 	[ApiController]
 	public class BaseController : Controller
 	{
-		public IActionResult Index()
-		{
-			return View();
-		}
-	}
+        public BaseController()
+        {
+            
+        }
+    }
 }
