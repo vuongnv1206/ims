@@ -1,6 +1,7 @@
 
 
 using IMS.BusinessService;
+using IMS.Infrastructure;
 
 namespace IMS.Api
 {
@@ -9,14 +10,15 @@ namespace IMS.Api
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-
+			var configuration = builder.Configuration;
 			// Add services to the container.
 
 			// business service
 			builder.Services.ConfigureApplicationServices();
 
+			builder.Services.ConfigureSettingServices(configuration);
 
-			builder.Services.AddControllers();
+            builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
