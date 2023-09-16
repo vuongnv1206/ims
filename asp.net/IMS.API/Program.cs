@@ -4,6 +4,7 @@ using IMS.BusinessService;
 using IMS.BusinessService.Common;
 using IMS.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using IMS.Infrastructure;
 
 namespace IMS.Api
 {
@@ -12,7 +13,7 @@ namespace IMS.Api
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-
+			var configuration = builder.Configuration;
 			// Add services to the container.
 			var configuration = builder.Configuration;
 			builder.Services.AddHttpContextAccessor();
@@ -32,8 +33,9 @@ namespace IMS.Api
 					.AllowAnyMethod()
 					.AllowAnyHeader());
 			});
+			builder.Services.ConfigureSettingServices(configuration);
 
-			builder.Services.AddControllers();
+            builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
