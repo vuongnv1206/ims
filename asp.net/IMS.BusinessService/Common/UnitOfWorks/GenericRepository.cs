@@ -89,7 +89,7 @@ namespace IMS.BusinessService.Common.UnitOfWorks
 			{
 				_context.Entry(entity).State = EntityState.Modified;
 			}
-			await _context.SaveChangesAsync();
+			//await _context.SaveChangesAsync();
 		}
 
 		public async Task<T> GetWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors)

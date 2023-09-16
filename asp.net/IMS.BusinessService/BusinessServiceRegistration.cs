@@ -1,7 +1,9 @@
 ﻿using IMS.BusinessService.Common.UnitOfWorks;
 using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
-using IMS.Contract.Systems.Authentications.Interfaces;
+using IMS.Contract.Systems.Authentications;
+using IMS.Contract.Systems.Roles;
+using IMS.Contract.Systems.Users;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -14,11 +16,12 @@ public static class BusinessServiceRegistration
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 		//
-		services.AddScoped<IMS.BusinessService.Common.JwtSetting>();
+		services.AddScoped<Common.JwtSetting>();
 
 		//AuthService
 		services.AddScoped<IAuthService, AuthService>();
 		services.AddScoped<IUserService, UserService>();
+		services.AddScoped<IRoleService, RoleService>();
 
 		//Generic Repo
 		services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

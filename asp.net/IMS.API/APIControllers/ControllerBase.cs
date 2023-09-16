@@ -4,9 +4,9 @@ namespace IMS.Api.APIControllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class BaseController : Controller
+	public class ControllerBase : Controller
 	{
-        public BaseController()
+        public ControllerBase()
         {
             
         }
