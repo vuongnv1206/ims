@@ -1,19 +1,30 @@
-﻿using IMS.Contract.Common.Responses;
+﻿using IMS.BusinessService.Constants;
+using IMS.BusinessService.Extension;
+using IMS.Contract.Common.Responses;
 using IMS.Contract.Systems.Authentications;
-using IMS.Contract.Systems.Authentications.Interfaces;
+using IMS.Contract.Systems.Roles;
+using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using static IMS.BusinessService.Constants.Permissions;
 
 namespace IMS.Api.APIControllers.Systems
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
-	public class AuthController : BaseController
+	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _authService;
-		public AuthController(IAuthService authenticationService)
+		private readonly UserManager<AppUser> _userManager;
+		private readonly RoleManager<AppRole> _roleManager;
+
+		public AuthController(IAuthService authenticationService, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
 		{
 			_authService = authenticationService;
+			_userManager = userManager;
+			_roleManager = roleManager;
 		}
 
 		[HttpPost("login")]
@@ -41,5 +52,7 @@ namespace IMS.Api.APIControllers.Systems
 				return BadRequest(new { message = ex.Message });
 			}
 		}
+
+		
 	}
 }

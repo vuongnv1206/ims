@@ -41,7 +41,7 @@ namespace IMS.Api
 
 			var app = builder.Build();
 
-			//app.UsePathBase("/api");
+			app.UsePathBase("/api");
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())

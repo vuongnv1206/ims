@@ -25,7 +25,6 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 			//Ex:
 			//builder.ApplyConfiguration(new UserConfiguration());
 			//builder.ApplyConfiguration(new RoleConfiguration());
-			//builder.ApplyConfiguration(new UserRoleConfiguration());
 
 			builder.SeedData();
 			base.OnModelCreating(builder);
