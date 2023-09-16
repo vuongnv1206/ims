@@ -1,4 +1,5 @@
 ﻿using IMS.Contract.Common.Responses;
+using IMS.Contract.Systems.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace IMS.Contract.Systems.Authentications
         Task<AuthResponse> Login(LoginModel input);
         Task Register(RegisterModel input);
         Task ForgotPassword(string email);
+        Task<Token> GetFromTokenAsync(string token);
 
     }
 }

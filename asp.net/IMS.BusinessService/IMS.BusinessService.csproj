@@ -21,6 +21,11 @@
     <ProjectReference Include="..\IMS.Infrastructure\IMS.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IService\ILoginService\" />
+    <Folder Include="Service\LoginService\" />
+  </ItemGroup>
+
  
 
 </Project>

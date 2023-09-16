@@ -10,7 +10,7 @@ public static class ConfigurationServiceRegistration
     {
         // using options pattern
         services.Configure<GitlabSetting>
-                (configuration.GetSection(GitlabSetting.Gitlab));
+            (configuration.GetSection(GitlabSetting.Gitlab));
         services.Configure<AppSetting>
             (configuration.GetSection(AppSetting.AppSettings));
 
