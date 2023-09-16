@@ -15,7 +15,6 @@ namespace IMS.Api
 			var builder = WebApplication.CreateBuilder(args);
 			var configuration = builder.Configuration;
 			// Add services to the container.
-			var configuration = builder.Configuration;
 			builder.Services.AddHttpContextAccessor();
 
 			builder.Services.ConfigureInfrastructureServices(configuration);
