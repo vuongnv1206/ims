@@ -1,33 +1,45 @@
-﻿using IMS.BusinessService.Constants;
-using IMS.BusinessService.Extension;
+﻿using IMS.Contract.Common.Requests.LoginRequest;
 using IMS.Contract.Common.Responses;
+using IMS.Contract.Common.Responses.LoginResponse;
 using IMS.Contract.Systems.Authentications;
-using IMS.Contract.Systems.Roles;
+using IMS.Contract.Systems.Settings;
 using IMS.Domain.Systems;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-using static IMS.BusinessService.Constants.Permissions;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace IMS.Api.APIControllers.Systems
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _authService;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly RoleManager<AppRole> _roleManager;
+		private readonly IAuthService authService;
+        private readonly HttpClient httpClient;
+        private readonly GitlabSetting gitlabSetting;
 
-		public AuthController(IAuthService authenticationService, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public AuthController(
+			IAuthService authenticationService,
+			UserManager<AppUser> userManager,
+			RoleManager<AppRole> roleManager,
+			IAuthService authService,
+            HttpClient httpClient,
+            IOptions<GitlabSetting> gitlabSetting)
 		{
 			_authService = authenticationService;
 			_userManager = userManager;
 			_roleManager = roleManager;
-		}
+			this.authService = authService;
+            this.httpClient = httpClient;
+			this.gitlabSetting = gitlabSetting.Value;
+        }
 
-		[HttpPost("login")]
+        [HttpPost("login")]
 		[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
 		public async Task<ActionResult<AuthResponse>> Login(LoginModel request)
 		{
@@ -52,7 +64,34 @@ namespace IMS.Api.APIControllers.Systems
 				return BadRequest(new { message = ex.Message });
 			}
 		}
+		[HttpPost("authenWithOauth2")]
+        public async Task<IActionResult> AuthenWithOauth2(OauthRequest request)
+		{
+            var baseAddress = gitlabSetting.TokenUri;
+            var clientId = gitlabSetting.ClientId;
+            var clientSecret = gitlabSetting.ClientSecret;
+            var grantType = gitlabSetting.GrantType;
+            var redirectUrl = gitlabSetting.RedirectUrl;
 
-		
-	}
+            var form = new Dictionary<string, string>
+            {
+                { "grant_type", grantType },
+                { "client_id", clientId },
+                { "client_secret", clientSecret },
+                { "code", request.Code },
+                { "redirect_uri", redirectUrl },
+            };
+
+            HttpResponseMessage tokenResponse =
+                await httpClient.PostAsync(
+                    new Uri(baseAddress),
+                    new FormUrlEncodedContent(form));
+
+            var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
+            TokenResponse tok = JsonConvert.DeserializeObject<TokenResponse>(jsonContent);
+            var result = await authService.GetFromTokenAsync(tok.IdToken);
+            return Ok(result);
+        }
+
+    }
 }
