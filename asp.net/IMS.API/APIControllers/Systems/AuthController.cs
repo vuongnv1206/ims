@@ -29,13 +29,14 @@ namespace IMS.Api.APIControllers.Systems
 			RoleManager<AppRole> roleManager,
 			IAuthService authService,
             HttpClient httpClient,
-            IOptions<GitlabSetting> gitLabSetting)
+            IOptions<GitlabSetting> gitlabSetting)
 		{
 			_authService = authenticationService;
 			_userManager = userManager;
 			_roleManager = roleManager;
 			this.authService = authService;
             this.httpClient = httpClient;
+			this.gitlabSetting = gitlabSetting.Value;
         }
 
         [HttpPost("login")]
@@ -88,7 +89,7 @@ namespace IMS.Api.APIControllers.Systems
 
             var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
             TokenResponse tok = JsonConvert.DeserializeObject<TokenResponse>(jsonContent);
-            var result = await authService.GetFromTokenAsync(request.Code);
+            var result = await authService.GetFromTokenAsync(tok.IdToken);
             return Ok(result);
         }
 
