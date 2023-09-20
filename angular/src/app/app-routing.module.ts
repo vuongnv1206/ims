@@ -4,14 +4,14 @@ import { AppLayoutComponent } from './layout/app.layout.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     pathMatch: 'full',
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-    component: AppLayoutComponent
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    component: AppLayoutComponent,
   },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
   // {
   //   path: 'catalog',
@@ -23,11 +23,10 @@ const routes: Routes = [
   //   loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
   //   component: AppLayoutComponent
   // },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

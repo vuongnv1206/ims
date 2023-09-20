@@ -13,19 +13,15 @@ export class AppComponent {
   title = 'angular';
   menuMode = 'static';
   constructor(
-    private primeNgConfig : PrimeNGConfig,
-    private authService : AuthService,
+    private primeNgConfig: PrimeNGConfig,
+    private authService: AuthService,
     private router: Router
-    ){
-
-  }
+  ) {}
   ngOnInit(): void {
     this.primeNgConfig.ripple = true;
     document.documentElement.style.fontSize = '14px';
-
     if (this.authService.isAuthenticated() == false) {
       this.router.navigate([LOGIN_URL]);
     }
-
-  };
+  }
 }
