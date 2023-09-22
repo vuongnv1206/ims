@@ -11,7 +11,7 @@
 import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
 import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase, HttpContext } from '@angular/common/http';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -30,7 +30,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body: LoginModel | undefined): Observable<AuthResponse> {
+    login(body?: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
         let url_ = this.baseUrl + "/api/auth/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -40,6 +40,7 @@ export class AuthClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 "Accept": "text/plain"
@@ -85,7 +86,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    register(body: RegisterModel | undefined): Observable<void> {
+    register(body?: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -95,6 +96,7 @@ export class AuthClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -137,7 +139,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    authenWithOauth2(body: OauthRequest | undefined): Observable<void> {
+    authenWithOauth2(body?: OauthRequest | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/auth/authenWithOauth2";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -147,6 +149,7 @@ export class AuthClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -200,23 +203,24 @@ export class RoleClient {
     /**
      * @return Success
      */
-    getAllRoles(): Observable<void> {
+    roles(httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/Role/roles";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllRoles(response_);
+            return this.processRoles(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllRoles(response_ as any);
+                    return this.processRoles(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<void>;
                 }
@@ -225,7 +229,7 @@ export class RoleClient {
         }));
     }
 
-    protected processGetAllRoles(response: HttpResponseBase): Observable<void> {
+    protected processRoles(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -260,25 +264,28 @@ export class UserClient {
      * @param keyword (optional) 
      * @return Success
      */
-    getAllUsers(keyword: string | null | undefined): Observable<void> {
+    users(keyword?: string | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/users?";
-        if (keyword !== undefined && keyword !== null)
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
             url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllUsers(response_);
+            return this.processUsers(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllUsers(response_ as any);
+                    return this.processUsers(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<void>;
                 }
@@ -287,7 +294,7 @@ export class UserClient {
         }));
     }
 
-    protected processGetAllUsers(response: HttpResponseBase): Observable<void> {
+    protected processUsers(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -311,7 +318,7 @@ export class UserClient {
      * @param body (optional) 
      * @return Success
      */
-    assignRoles(userId: string | undefined, body: string[] | undefined): Observable<void> {
+    assignRoles(userId?: string | undefined, body?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/assign-roles?";
         if (userId === null)
             throw new Error("The parameter 'userId' cannot be null.");
@@ -325,6 +332,7 @@ export class UserClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -366,7 +374,7 @@ export class UserClient {
     /**
      * @return Success
      */
-    deleteUser(id: string): Observable<void> {
+    deleteUser(id: string, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/delete-user/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -376,6 +384,7 @@ export class UserClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            context: httpContext,
             headers: new HttpHeaders({
             })
         };

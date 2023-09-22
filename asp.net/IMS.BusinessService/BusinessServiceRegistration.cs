@@ -19,7 +19,7 @@ public static class BusinessServiceRegistration
 		services.AddScoped<Common.JwtSetting>();
 
 		//AuthService
-		services.AddTransient<IAuthService, AuthService>();
+		services.AddScoped<IAuthService, AuthService>();
 		services.AddScoped<IUserService, UserService>();
 		services.AddScoped<IRoleService, RoleService>();
 

@@ -18,14 +18,15 @@ namespace IMS.Infrastructure
 		public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
 		{
 
-			services.AddIdentity<AppUser,AppRole>()
-				.AddEntityFrameworkStores<IMSDbContext>()
-				.AddDefaultTokenProviders();
+			//services.AddIdentity<AppUser,AppRole>()
+			//	.AddEntityFrameworkStores<IMSDbContext>()
+			//	.AddDefaultTokenProviders();
+			services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<IMSDbContext>();
 			//Add config for required Email
 			services.Configure<IdentityOptions>(options => options.SignIn.RequireConfirmedEmail = true);
 
 			//For reset password
-			services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(1));
+			services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromDays(1));
 
 			//Adding Authentication
 			services.AddAuthentication(options =>
@@ -48,7 +49,9 @@ namespace IMS.Infrastructure
 			});
 
 
-			
+
+
+
 
 
 			return services;

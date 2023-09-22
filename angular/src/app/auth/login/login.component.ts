@@ -1,9 +1,9 @@
-import { LoginModel } from './../../api/api-generate';
+
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthClient, AuthResponse } from 'src/app/api/api-generate';
+import {  AuthClient, AuthResponse, LoginModel } from 'src/app/api/api-generate';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { HOME_URL } from 'src/app/shared/constants/url.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
