@@ -1,11 +1,12 @@
+import { LoginModel } from './../../api/api-generate';
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthClient, AuthResponse } from 'src/app/api/api-generate';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { LoginRequestDto } from 'src/app/shared/models/login-request.dto';
-import { LoginResponseDto } from 'src/app/shared/models/login-response.dto';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { HOME_URL } from 'src/app/shared/constants/url.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 
 @Component({
@@ -23,24 +24,21 @@ import { TokenService } from 'src/app/shared/services/token.service';
 export class LoginComponent implements OnDestroy {
 
     private ngUnsubscribe = new Subject<void>();
-    valCheck: string[] = ['remember'];
-
-    password!: string;
-
     loginForm: FormGroup;
     public blockedPanel:boolean = false;
 
     constructor(
       public layoutService: LayoutService,
       private fb:FormBuilder,
-      private authService : AuthService,
+      private notificationService : NotificationService,
       private router: Router,
-      private tokenService : TokenService
+      private tokenService : TokenService,
+      private apiClient : AuthClient
       )
       {
       this.loginForm = this.fb.group({
         username: new FormControl('',Validators.required),
-        password: new FormControl('',Validators.required)
+        password: new FormControl('',Validators.required),
       });
      }
 
@@ -48,22 +46,22 @@ export class LoginComponent implements OnDestroy {
 
      login() {
       this.toggleBlockUI(true);
-      var request: LoginRequestDto = {
+      var request: LoginModel = ( {
         username: this.loginForm.controls['username'].value,
         password: this.loginForm.controls['password'].value,
-      };
-      this.authService
+      });
+      this.apiClient
         .login(request)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: LoginResponseDto) => {
-            this.tokenService.saveToken(res.access_token);
-            this.tokenService.saveRefreshToken(res.refresh_token);
+          next: (res: AuthResponse) => {
+            this.tokenService.saveToken(res.token);
             this.toggleBlockUI(false);
-            this.router.navigate(['']);
+            this.router.navigate([HOME_URL]);
           },
-          error: () => {
-            //this.notificationService.showError("Đăng nhập không đúng.")
+          error: (error : any) => {
+            console.log(error);
+            this.notificationService.showError("Đăng nhập không đúng.")
             this.toggleBlockUI(false);
           },
         });

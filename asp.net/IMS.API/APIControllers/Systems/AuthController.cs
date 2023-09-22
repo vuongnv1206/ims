@@ -12,7 +12,7 @@ using System.Net.Http;
 
 namespace IMS.Api.APIControllers.Systems
 {
-	[Route("api/[controller]")]
+	[Route("api/auth")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
@@ -39,6 +39,7 @@ namespace IMS.Api.APIControllers.Systems
 			this.gitlabSetting = gitlabSetting.Value;
         }
 
+		
         [HttpPost("login")]
 		[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
 		public async Task<ActionResult<AuthResponse>> Login(LoginModel request)
