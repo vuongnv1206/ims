@@ -1,15 +1,20 @@
-
 import { Component, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import {  AuthClient, AuthResponse, LoginModel } from 'src/app/api/api-generate';
+import { AuthClient, AuthResponse, LoginModel } from 'src/app/api/api-generate';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { HOME_URL } from 'src/app/shared/constants/url.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { authCodeFlowConfig } from './authCodeFlowConfig';
-import { AuthService } from 'src/app/shared/services/auth.service';;
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { ACCESS_TOKEN } from '../../shared/constants/keys.const';
 
 @Component({
   selector: 'app-login',
@@ -50,7 +55,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';;
 })
 export class LoginComponent implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  
+
   code: string = '';
   state: string = '';
 
@@ -64,7 +69,7 @@ export class LoginComponent implements OnDestroy {
     private tokenService: TokenService,
     private route: ActivatedRoute,
     private apiClient: AuthClient,
-    private notificationService: NotificationService,
+    private notificationService: NotificationService
   ) {
     this.loginForm = this.fb.group({
       username: new FormControl('', Validators.required),
@@ -148,8 +153,23 @@ export class LoginComponent implements OnDestroy {
   }
 
   authenUrl() {
-    var query = {
+    let query = {
       code: this.code,
     };
+
+    this.apiClient
+      .authenWithOauth2(query)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          this.tokenService.saveToken(res.accessToken);
+          this.toggleBlockUI(false);
+          this.router.navigate([HOME_URL]);
+        },
+        error: (error: any) => {
+          this.notificationService.showError('Đăng nhập không đúng.');
+          this.toggleBlockUI(false);
+        },
+      });
   }
 }
