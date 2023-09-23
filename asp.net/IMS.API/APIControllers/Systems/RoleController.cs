@@ -14,10 +14,11 @@ namespace IMS.Api.APIControllers.Systems
         {
             _roleSerive = roleSerive;
         }
+		//alo
         [HttpGet("roles")]
 		public async Task<IActionResult> GetAllRoles ()
 		{
-			return Ok(await _roleSerive.GetListAllAsync());
+			return Ok(await _roleSerive.GetListAllAsync());  
 		}
 	}
 }
