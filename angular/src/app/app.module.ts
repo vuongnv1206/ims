@@ -14,6 +14,8 @@ import { NotificationService } from './shared/services/notification.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,17 +26,19 @@ import { ToastModule } from 'primeng/toast';
     AppLayoutModule,
     HttpClientModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    ButtonModule
   ],
   providers:
-  [{provide: API_BASE_URL, useValue: environment.API_URL},
-    TokenService,
-    AuthClient,
-    DialogService,
-    MessageService,
-    NotificationService,
-    ConfirmationService
-  ],
+    [{ provide: API_BASE_URL, useValue: environment.API_URL },
+      TokenService,
+      AuthClient,
+      DialogService,
+      MessageService,
+      NotificationService,
+      ConfirmationService
+    ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+  
+export class AppModule {}
