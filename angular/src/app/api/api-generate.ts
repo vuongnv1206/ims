@@ -15,8 +15,26 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase, HttpContext } 
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IAuthClient {
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    login(body: LoginModel | undefined): Observable<AuthResponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    register(body: RegisterModel | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    authenWithOauth2(body: OauthRequest | undefined): Observable<Token>;
+}
+
 @Injectable()
-export class AuthClient {
+export class AuthClient implements IAuthClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -30,7 +48,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body?: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
+    login(body: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
         let url_ = this.baseUrl + "/api/auth/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -86,7 +104,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    register(body?: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
+    register(body: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -139,7 +157,7 @@ export class AuthClient {
      * @param body (optional) 
      * @return Success
      */
-    authenWithOauth2(body?: OauthRequest | undefined, httpContext?: HttpContext): Observable<void> {
+    authenWithOauth2(body: OauthRequest | undefined, httpContext?: HttpContext): Observable<Token> {
         let url_ = this.baseUrl + "/api/auth/authenWithOauth2";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -152,6 +170,7 @@ export class AuthClient {
             context: httpContext,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "text/plain"
             })
         };
 
@@ -162,14 +181,14 @@ export class AuthClient {
                 try {
                     return this.processAuthenWithOauth2(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<Token>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<Token>;
         }));
     }
 
-    protected processAuthenWithOauth2(response: HttpResponseBase): Observable<void> {
+    protected processAuthenWithOauth2(response: HttpResponseBase): Observable<Token> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -178,7 +197,9 @@ export class AuthClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as Token;
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -189,8 +210,15 @@ export class AuthClient {
     }
 }
 
+export interface IRoleClient {
+    /**
+     * @return Success
+     */
+    roles(): Observable<void>;
+}
+
 @Injectable()
-export class RoleClient {
+export class RoleClient implements IRoleClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -249,8 +277,26 @@ export class RoleClient {
     }
 }
 
+export interface IUserClient {
+    /**
+     * @param keyword (optional) 
+     * @return Success
+     */
+    users(keyword: string | undefined): Observable<void>;
+    /**
+     * @param userId (optional) 
+     * @param body (optional) 
+     * @return Success
+     */
+    assignRoles(userId: string | undefined, body: string[] | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteUser(id: string): Observable<void>;
+}
+
 @Injectable()
-export class UserClient {
+export class UserClient implements IUserClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -264,7 +310,7 @@ export class UserClient {
      * @param keyword (optional) 
      * @return Success
      */
-    users(keyword?: string | undefined, httpContext?: HttpContext): Observable<void> {
+    users(keyword: string | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/users?";
         if (keyword === null)
             throw new Error("The parameter 'keyword' cannot be null.");
@@ -318,7 +364,7 @@ export class UserClient {
      * @param body (optional) 
      * @return Success
      */
-    assignRoles(userId?: string | undefined, body?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
+    assignRoles(userId: string | undefined, body: string[] | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/assign-roles?";
         if (userId === null)
             throw new Error("The parameter 'userId' cannot be null.");
@@ -443,6 +489,26 @@ export interface RegisterModel {
     username?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;
+}
+
+export interface Token {
+    accessToken?: string | undefined;
+    expire?: Date;
+    user?: UserDto;
+}
+
+export interface UserDto {
+    id?: string;
+    account?: string | undefined;
+    fullName?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    address?: string | undefined;
+    birthday?: Date | undefined;
+    startWorkDate?: Date | undefined;
+    endWorkDate?: Date | undefined;
+    isActive?: boolean | undefined;
+    isDelete?: boolean | undefined;
 }
 
 export class ApiException extends Error {

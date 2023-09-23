@@ -3,6 +3,7 @@ using IMS.Contract.Common.Responses;
 using IMS.Contract.Common.Responses.LoginResponse;
 using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Settings;
+using IMS.Contract.Systems.Tokens;
 using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,7 @@ namespace IMS.Api.APIControllers.Systems
 			}
 		}
 		[HttpPost("authenWithOauth2")]
-        public async Task<IActionResult> AuthenWithOauth2(OauthRequest request)
+        public async Task<ActionResult<Token>> AuthenWithOauth2(OauthRequest request)
 		{
             var baseAddress = gitlabSetting.TokenUri;
             var clientId = gitlabSetting.ClientId;
