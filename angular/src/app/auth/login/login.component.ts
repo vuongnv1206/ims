@@ -9,10 +9,7 @@ import { HOME_URL } from 'src/app/shared/constants/url.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { authCodeFlowConfig } from './authCodeFlowConfig';
-import { state } from '@angular/animations';
-import { UserModel } from 'src/app/shared/models/UserModel.dto';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { LoginRequestDto } from 'src/app/shared/models/login-request.dto';
+import { AuthService } from 'src/app/shared/services/auth.service';;
 
 @Component({
   selector: 'app-login',
@@ -53,9 +50,7 @@ import { LoginRequestDto } from 'src/app/shared/models/login-request.dto';
 })
 export class LoginComponent implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  valCheck: string[] = ['remember'];
-
-  password!: string;
+  
   code: string = '';
   state: string = '';
 
@@ -65,10 +60,11 @@ export class LoginComponent implements OnDestroy {
   constructor(
     public layoutService: LayoutService,
     private fb: FormBuilder,
-    private authService: AuthService,
     private router: Router,
     private tokenService: TokenService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private apiClient: AuthClient,
+    private notificationService: NotificationService,
   ) {
     this.loginForm = this.fb.group({
       username: new FormControl('', Validators.required),
@@ -86,6 +82,28 @@ export class LoginComponent implements OnDestroy {
         localStorage.clear();
       }
     });
+  }
+
+  login() {
+    this.toggleBlockUI(true);
+    var request: LoginModel = {
+      username: this.loginForm.controls['username'].value,
+      password: this.loginForm.controls['password'].value,
+    };
+    this.apiClient
+      .login(request)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: AuthResponse) => {
+          this.tokenService.saveToken(res.token);
+          this.toggleBlockUI(false);
+          this.router.navigate([HOME_URL]);
+        },
+        error: (error: any) => {
+          this.notificationService.showError('Đăng nhập không đúng.');
+          this.toggleBlockUI(false);
+        },
+      });
   }
 
   private toggleBlockUI(enabled: boolean) {
