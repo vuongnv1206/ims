@@ -15,6 +15,15 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
+  {
+    path: 'error',
+    loadChildren: () =>
+      import('./errors/error.module').then((m) => m.ErrorModule),
+  },
+  {
+    path: '**',
+    redirectTo: 'error/not-found',
+  },
   // {
   //   path: 'catalog',
   //   loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule),
