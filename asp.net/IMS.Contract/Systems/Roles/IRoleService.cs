@@ -12,7 +12,13 @@ namespace IMS.Contract.Systems.Roles
 
 		Task AddRole(CreateUpdateRoleDto input);
 
-		//Task<GetPermissionListResultDto> GetPermissionsAsync(string providerName, string providerKey);
-		//Task UpdatePermissionsAsync(string providerName, string providerKey, UpdatePermissionsDto input);
+		Task UpdateRole(Guid id, CreateUpdateRoleDto input);
+
+		Task DeleteManyRole(Guid[] ids);
+		Task<RoleDto> GetRoleById(Guid roleId);
+
+		Task<PermissionDto> GetAllRolePermission(string roleId);
+
+		Task SavePermission(PermissionDto input);
 	}
 }
