@@ -101,7 +101,6 @@ namespace IMS.BusinessService.Systems
                     Email = user.Email,
                     UserName = user.UserName
                 };
-                //var result = await _signInManager.PasswordSignInAsync(input.Username, input.Password, true, true);
                 return response;
             }
             else
@@ -115,7 +114,7 @@ namespace IMS.BusinessService.Systems
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
-            var permissions = await this.GetPermissionsByUserIdAsync(user.Id.ToString());
+            var permissions = await GetPermissionsByUserIdAsync(user.Id.ToString());
             var roleClaims = new List<Claim>();
 
             for (int i = 0; i < roles.Count; i++)
@@ -173,7 +172,7 @@ namespace IMS.BusinessService.Systems
                     permissions.AddRange(roleClaimValues);
                 }
             }
-            return permissions.Distinct().ToList();
+            return  permissions.Distinct().ToList();
         }
 
         public Task ForgotPassword(string email)
