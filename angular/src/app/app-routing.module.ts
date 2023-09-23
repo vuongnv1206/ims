@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
+import { OnlyLoggedInUsersGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    canActivate: [OnlyLoggedInUsersGuard],
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
     component: AppLayoutComponent,
   },
