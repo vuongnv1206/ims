@@ -13,6 +13,11 @@ namespace IMS.Contract.Systems.Users
 
         Task<List<UserDto>> GetListAllAsync(string? keyword);
         Task AssignRolesAsync(Guid userId, string[] roleNames);
+
+        Task CreateUser(CreateUserDto userDto);
+
+        Task UpdateUser(Guid id,UpdateUserDto userDto);
         
+        Task<UserDto> GetUserByIdAsync(Guid id);
     }
 }

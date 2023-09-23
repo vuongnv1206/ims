@@ -10,11 +10,9 @@ namespace IMS.Api.APIControllers.Systems
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		private readonly IRoleService _roleService;
 		private readonly IUserService _userService;
-        public UserController(IRoleService roleSerive, IUserService userSerive)
+        public UserController(IUserService userSerive)
         {
-			_roleService = roleSerive;
 			_userService = userSerive;
         }
 
@@ -27,15 +25,7 @@ namespace IMS.Api.APIControllers.Systems
 		[HttpPost("assign-roles")]
 		public async Task<IActionResult> AssignRoles(Guid userId, string[] roleNames)
 		{
-			try
-			{
-				await _userService.AssignRolesAsync(userId, roleNames);
-				return Ok("Roles assigned successfully.");
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, $"Internal server error: {ex.Message}");
-			}
+				return Ok(_userService.AssignRolesAsync(userId, roleNames));
 		}
 
 		[HttpDelete("delete-user/{id}")]
@@ -52,6 +42,23 @@ namespace IMS.Api.APIControllers.Systems
 			}
 		}
 
+		[HttpGet("{id}")]
+		public async Task<ActionResult<UserDto>> GetUserById(Guid id)
+		{
+			return Ok(_userService.GetUserByIdAsync(id));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> CreateUser([FromBody] CreateUserDto input)
+		{
+			return Ok(_userService.CreateUser(input));
+		}
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto input)
+		{
+			return Ok(_userService.UpdateUser(id,input));
+		}
 	}
 
 	

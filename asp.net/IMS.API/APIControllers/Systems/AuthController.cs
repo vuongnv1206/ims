@@ -17,23 +17,18 @@ namespace IMS.Api.APIControllers.Systems
 	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _authService;
-		private readonly UserManager<AppUser> _userManager;
-		private readonly RoleManager<AppRole> _roleManager;
 		private readonly IAuthService authService;
         private readonly HttpClient httpClient;
         private readonly GitlabSetting gitlabSetting;
 
         public AuthController(
 			IAuthService authenticationService,
-			UserManager<AppUser> userManager,
-			RoleManager<AppRole> roleManager,
 			IAuthService authService,
             HttpClient httpClient,
             IOptions<GitlabSetting> gitlabSetting)
 		{
 			_authService = authenticationService;
-			_userManager = userManager;
-			_roleManager = roleManager;
+
 			this.authService = authService;
             this.httpClient = httpClient;
 			this.gitlabSetting = gitlabSetting.Value;

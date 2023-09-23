@@ -15,5 +15,7 @@ namespace IMS.Contract.Systems.Authentications
         Task ForgotPassword(string email);
         Task<Token> GetFromTokenAsync(string token);
 
+      
+
     }
 }
