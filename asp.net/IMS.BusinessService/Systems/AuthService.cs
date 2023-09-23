@@ -12,6 +12,7 @@ using IMS.Contract.Systems.Settings;
 using IMS.Contract.Systems.Tokens;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -206,7 +207,8 @@ namespace IMS.BusinessService.Systems
         }
         private Token CreateToken(AppUser user)
         {
-            if (user == null) return null;
+            if (user == null) 
+                throw new Exception("Khong thay user");
 
             var tokenHandle = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(appSetting.JWT.Secret);

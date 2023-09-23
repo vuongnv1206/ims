@@ -1,18 +1,20 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { LoginRequestDto } from 'src/app/shared/models/login-request.dto';
 import { LoginResponseDto } from 'src/app/shared/models/login-response.dto';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { authCodeFlowConfig } from './authCodeFlowConfig';
+import { state } from '@angular/animations';
+import { UserModel } from 'src/app/shared/models/UserModel.dto';
 
 @Component({
   selector: 'app-login',
@@ -56,6 +58,8 @@ export class LoginComponent implements OnDestroy {
   valCheck: string[] = ['remember'];
 
   password!: string;
+  code: string = '';
+  state: string = '';
 
   loginForm: FormGroup;
   public blockedPanel: boolean = false;
@@ -65,11 +69,24 @@ export class LoginComponent implements OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.code = params['code'];
+      this.state = params['state'];
+      if (this.code !== undefined) {
+        this.authenUrl();
+      } else {
+        localStorage.clear();
+      }
     });
   }
 
@@ -135,5 +152,11 @@ export class LoginComponent implements OnDestroy {
     window.location.assign(
       `${authCodeFlowConfig.loginUrl}?client_id=${authCodeFlowConfig.clientId}&redirect_uri=${authCodeFlowConfig.redirectUri}&response_type=code&state=${state}&scope=${authCodeFlowConfig.scope}`
     );
+  }
+
+  authenUrl() {
+    var query = {
+      code: this.code,
+    };
   }
 }
