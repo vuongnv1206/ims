@@ -21,45 +21,51 @@ namespace IMS.Api.APIControllers.Systems
 		[HttpGet("all")]
 		public async Task<IActionResult> GetAllRoles()
 		{
-			return Ok(await _roleService.GetListAllAsync());
+			var data = await _roleService.GetListAllAsync();
+			return Ok(data);
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> CreateRole([FromBody] CreateUpdateRoleDto input)
 		{
-			return Ok(_roleService.AddRole(input));
+			await _roleService.AddRole(input);
+			return Ok("Add role succesfully");
 		}
 
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateRole(Guid id, [FromBody] CreateUpdateRoleDto input)
 		{
-
-			return Ok(_roleService.UpdateRole(id, input));
+			 await _roleService.UpdateRole(id, input);
+			return Ok("Update role succesfully");
 		}
 
 		[HttpDelete]
 		public async Task<IActionResult> DeleteRoles([FromQuery] Guid[] ids)
-		{
-			return Ok(_roleService.DeleteManyRole(ids));
+		{	
+			await _roleService.DeleteManyRole(ids);
+			return Ok("Delete roles succesfully");
 		}
 
 
 		[HttpGet("{id}")]
 		public async Task<ActionResult<RoleDto>> GetRoleById(Guid id)
 		{
-			return Ok(_roleService.GetRoleById(id));
+			var data = await _roleService.GetRoleById(id);
+			return Ok(data);
 		}
 
 		[HttpGet("{roleId}/permissions")]
 		public async Task<ActionResult<PermissionDto>> GetAllRolePermissions(string roleId)
-		{
-			return Ok(_roleService.GetAllRolePermission);
+		{	
+			var data = await _roleService.GetAllRolePermission(roleId);
+			return Ok(data);
 		}
 
 		[HttpPut("permissions")]
 		public async Task<IActionResult> SavePermission([FromBody] PermissionDto model)
 		{
-			return Ok(_roleService.SavePermission(model));
+			await _roleService.SavePermission(model);
+			return Ok("Update permission succesfully");
 		}
 	}
 }

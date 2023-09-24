@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using AutoMapper.Internal.Mappers;
-using Azure.Core;
+
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace IMS.BusinessService.Systems
 {
@@ -55,19 +50,30 @@ namespace IMS.BusinessService.Systems
 
 		public async Task CreateUser(CreateUserDto userDto)
 		{
-			if ((await _userManager.FindByNameAsync(userDto.UserName)) != null)
+			var existingUser = await _userManager.FindByNameAsync(userDto.UserName);
+			if (existingUser != null)
 			{
+				// Tên người dùng đã tồn tại
 				throw new Exception("Username is already exist");
 			}
 
-			if ((await _userManager.FindByEmailAsync(userDto.Email)) != null)
+			existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+			if (existingUser != null)
 			{
-				throw new Exception("Email  is already exist");
+				// Email đã tồn tại
+				throw new Exception("Email is already exist");
 			}
+
 			var user = _mapper.Map<CreateUserDto, AppUser>(userDto);
 			var result = await _userManager.CreateAsync(user, userDto.Password);
 
+			if (!result.Succeeded)
+			{
+				// Xử lý lỗi khi tạo người dùng thất bại
+				throw new Exception("Failed to create user. Please check the provided data.");
+			}
 		}
+
 
 		public async Task DeleteAsync(Guid id)
 		{

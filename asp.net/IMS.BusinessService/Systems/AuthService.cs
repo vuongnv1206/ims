@@ -10,6 +10,7 @@ using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Roles;
 using IMS.Contract.Systems.Settings;
 using IMS.Contract.Systems.Tokens;
+using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -226,7 +227,7 @@ namespace IMS.BusinessService.Systems
             };
 
             var token = tokenHandle.CreateToken(tokenDescriptor);
-            var userMap = mapper.Map<Token.UserDto>(user);
+            var userMap = mapper.Map<UserDto>(user);
 
             return new Token()
             {
