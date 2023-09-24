@@ -27,7 +27,7 @@ import { ButtonModule } from 'primeng/button';
     HttpClientModule,
     ConfirmDialogModule,
     ToastModule,
-    ButtonModule
+    ButtonModule,
   ],
   providers:
     [{ provide: API_BASE_URL, useValue: environment.API_URL },
