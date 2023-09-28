@@ -20,20 +20,20 @@ const routes: Routes = [
     loadChildren: () =>
       import('./errors/error.module').then((m) => m.ErrorModule),
   },
-  {
-    path: '**',
-    redirectTo: 'error/not-found',
-  },
+  // {
+  //   path: '**',
+  //   redirectTo: 'error/not-found',
+  // },
   // {
   //   path: 'catalog',
   //   loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule),
   //   component: AppLayoutComponent
   // },
-  // {
-  //   path: 'system',
-  //   loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
-  //   component: AppLayoutComponent
-  // },
+  {
+    path: 'system',
+    loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
+    component: AppLayoutComponent
+  },
 ];
 
 @NgModule({

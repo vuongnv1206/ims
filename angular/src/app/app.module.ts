@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
-import { API_BASE_URL, AuthClient } from './api/api-generate';
+import { API_BASE_URL, AuthClient, RoleClient, UserClient } from './api/api-generate';
 import { environment } from 'src/environments/environment';
 import { TokenService } from './shared/services/token.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,6 +15,8 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UtilityService } from './shared/services/utility.service';
 
 @NgModule({
   declarations: [
@@ -28,17 +30,22 @@ import { ButtonModule } from 'primeng/button';
     ConfirmDialogModule,
     ToastModule,
     ButtonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers:
     [{ provide: API_BASE_URL, useValue: environment.API_URL },
       TokenService,
       AuthClient,
+      UserClient,
+      RoleClient,
       DialogService,
       MessageService,
       NotificationService,
-      ConfirmationService
+      ConfirmationService,
+      UtilityService
     ],
   bootstrap: [AppComponent]
 })
-  
+
 export class AppModule {}
