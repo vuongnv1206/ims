@@ -14,3 +14,8 @@ public class PagingResponseInfo
     }
     public int ToTalRecord { get; set; }
 }
+
+public class PagingResponsse
+{
+    public PagingResponseInfo Page { get; set; }
+}

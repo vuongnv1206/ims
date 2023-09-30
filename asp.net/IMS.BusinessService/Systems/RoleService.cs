@@ -1,30 +1,36 @@
 ﻿using AutoMapper;
 using IMS.BusinessService.Constants;
 using IMS.BusinessService.Extension;
+using IMS.BusinessService.Service;
+using IMS.Contract.Common.Sorting;
 using IMS.Contract.Systems.Roles;
 using IMS.Domain.Systems;
+using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace IMS.BusinessService.Systems
 {
-	public class RoleService : IRoleService
+	public class RoleService : ServiceBase, IRoleService
 	{
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly UserManager<AppUser> _userManager;
-		private readonly IMapper _mapper;
 
-		public RoleService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper)
+		public RoleService(UserManager<AppUser> userManager,
+			RoleManager<AppRole> roleManager,
+			IMapper mapper,
+			IMSDbContext context)
+			: base(context, mapper)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
-			_mapper = mapper;
 		}
 
 		public async Task AddRole(CreateUpdateRoleDto input)
@@ -48,19 +54,26 @@ namespace IMS.BusinessService.Systems
 
 		
 
-		public async Task<List<RoleDto>> GetListAllAsync()
+		public async Task<RoleResponse> GetListAllAsync(RoleRequest request)
 		{
-			var roles = await _roleManager.Roles.ToListAsync();
-			var roleDtos = _mapper.Map<List<RoleDto>>(roles);
+			var roles = await _roleManager.Roles
+				.Paginate(request)
+				.ToDynamicListAsync();
+			var roleDtos = mapper.Map<List<RoleDto>>(roles);
 
-			return roleDtos;
+			var response = new RoleResponse
+			{
+				Roles = roleDtos,
+				Page = GetPagingResponse(request, roleDtos.Count()),
+			};
+			return response;
 		}
 
 		public async Task<RoleDto> GetRoleById(Guid roleId)
 		{
 			var role = await _roleManager.FindByIdAsync(roleId.ToString());
 			if (role == null) throw new Exception("Not found");
-			return _mapper.Map<AppRole, RoleDto>(role);
+			return mapper.Map<AppRole, RoleDto>(role);
 		}
 
 	

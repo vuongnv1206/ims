@@ -8,7 +8,7 @@ namespace IMS.Contract.Systems.Roles
 {
     public interface IRoleService
     {
-		Task<List<RoleDto>> GetListAllAsync();
+		Task<RoleResponse> GetListAllAsync(RoleRequest request);
 
 		Task AddRole(CreateUpdateRoleDto input);
 
