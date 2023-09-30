@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMS.Contract.Common.Paging;
 using IMS.Infrastructure.EnityFrameworkCore;
 
 namespace IMS.BusinessService.Service;
@@ -13,5 +14,17 @@ public abstract class ServiceBase
     {
         this.context = context;
         this.mapper = mapper;
+    }
+
+
+    public static PagingResponseInfo GetPagingResponse(PagingRequestBase request, int totalRecord)
+    {
+        return new PagingResponseInfo
+        {
+            CurrentPage = request.Page,
+            ItemsPerPage = request.ItemsPerPage,
+            ToTalPage = (totalRecord / request.ItemsPerPage) + ((totalRecord % request.ItemsPerPage) == 0 ? 0 : 1),
+            ToTalRecord = totalRecord
+        };
     }
 }
