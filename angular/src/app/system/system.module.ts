@@ -31,13 +31,17 @@ import { TagModule } from 'primeng/tag';
 import { FileUploadModule } from 'primeng/fileupload';
 import { NightMarketSharedModule } from '../shared/modules/nightmarket-shared.module';
 import { RoleAssignComponent } from './user/role-assign/role-assign.component';
+import { RoleDetailComponent } from './role/role-detail/role-detail.component';
+import { PermissionGrantComponent } from './role/permission-grant/permission-grant.component';
 
 @NgModule({
   declarations: [
     RoleComponent,
     UserComponent,
     UserDetailComponent,
-    RoleAssignComponent
+    RoleAssignComponent,
+    RoleDetailComponent,
+    PermissionGrantComponent,
   ],
   imports: [
     CommonModule,
