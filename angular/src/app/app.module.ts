@@ -17,7 +17,7 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityService } from './shared/services/utility.service';
-
+import { ImageModule } from 'primeng/image';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +31,8 @@ import { UtilityService } from './shared/services/utility.service';
     ToastModule,
     ButtonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ImageModule
   ],
   providers:
     [{ provide: API_BASE_URL, useValue: environment.API_URL },

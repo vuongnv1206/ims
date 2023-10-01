@@ -24,6 +24,7 @@
           </th>
           <th>Tên</th>
           <th>Tài khoản</th>
+          <th>Image</th>
           <th>Email</th>
           <th>Số ĐT</th>
           <th>Ngày tham gia</th>
@@ -37,8 +38,9 @@
             <span class="ui-column-title"></span>
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
-          <td>{{ row.name }}</td>
+          <td>{{ row.fullName }}</td>
           <td>{{ row.userName }}</td>
+          <td><p-image [src]="row.avatar" alt="Image" width="75" [preview]="true"></p-image></td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
           <td>{{ row.creationTime | date : 'dd-MM-yyyy hh:mm' }}</td>
@@ -59,11 +61,7 @@
       </ng-template>
     </p-table>
 
-    <p-paginator
-      [rows]="maxResultCount"
-      [totalRecords]="totalCount"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
-    ></p-paginator>
+    <p-paginator [rows]="maxResultCount" [totalRecords]="totalCount" [rowsPerPageOptions]="[10, 20, 50, 100]" ></p-paginator>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner

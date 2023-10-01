@@ -1,4 +1,4 @@
-import { Component,EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component,EventEmitter, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UploadEvent } from 'primeng/fileupload';
@@ -26,7 +26,7 @@ export class UserDetailComponent implements OnInit,OnDestroy {
   public saveBtnName: string;
   public roles: any[] = [];
   selectedEntity = {} as UserDto;
-  public avatarImage: string = ''; // Khởi tạo biến avatarImage
+  public avatarImage : any;
   public keyword: string = '';
   formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
 
@@ -38,6 +38,7 @@ export class UserDetailComponent implements OnInit,OnDestroy {
     public authService: AuthClient,
     private utilService: UtilityService,
     private notificationService : NotificationService,
+    private cd: ChangeDetectorRef,
     public dialogService: DialogService,
     private fb: FormBuilder
   ) {}
@@ -219,9 +220,42 @@ export class UserDetailComponent implements OnInit,OnDestroy {
             '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
           ),
         ])
-      )
+      ),
     });
-    this.avatarImage = this.form.get('avatar').value;
   }
+
+  // onFileChange(event) {
+  //   const reader = new FileReader();
+
+  //   if (event.target.files && event.target.files.length) {
+  //     const [file] = event.target.files;
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.form.patchValue({
+  //         avatarFileName: file.name,
+  //         avatarFileContent: reader.result,
+  //       });
+
+  //       // need to run CD since file load runs outside of zone
+  //       this.cd.markForCheck();
+  //     };
+  //   }
+  // }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Đọc dữ liệu của file thành URL cho việc hiển thị ảnh trước
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.avatarImage = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      // Cập nhật giá trị của FormControl 'avatar' với file đã chọn
+      this.form.get('avatar').setValue(file);
+    }
+  }
+
 
 }
