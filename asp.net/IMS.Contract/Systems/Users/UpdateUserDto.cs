@@ -12,5 +12,6 @@ namespace IMS.Contract.Systems.Users
 		public DateTime? BirthDay { get; set; }
 		public string? Avatar { get; set; }
 		public string? Address { get; set; }
+		public string? PhoneNumber { get; set; }
 	}
 }

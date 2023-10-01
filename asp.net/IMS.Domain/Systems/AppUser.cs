@@ -17,5 +17,8 @@ namespace IMS.Domain.Systems
 
 		public string? Avatar { get; set; }
 		public DateTime? BirthDay { set; get; }
+
+		public DateTime? CreationTime { get; set; }
+
 	}
 }

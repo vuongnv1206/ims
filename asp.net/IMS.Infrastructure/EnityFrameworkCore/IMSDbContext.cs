@@ -3,6 +3,7 @@ using IMS.Domain.Systems;
 using IMS.Infrastructure.Seedings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,20 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 				}
 
 			}
+
+			var entries = ChangeTracker
+				.Entries()
+				.Where(e => e.State == EntityState.Added);
+			foreach (var entityEntry in entries)
+			{
+				var dateCreatedProp = entityEntry.Entity.GetType().GetProperty("CreationTime");
+				if (entityEntry.State == EntityState.Added
+					&& dateCreatedProp != null)
+				{
+					dateCreatedProp.SetValue(entityEntry.Entity, DateTime.Now);
+				}
+			}
+
 			var result = await base.SaveChangesAsync();
 
 			return result;
