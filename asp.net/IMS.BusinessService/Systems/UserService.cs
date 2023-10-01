@@ -1,23 +1,27 @@
 ﻿using AutoMapper;
-
+using IMS.BusinessService.Service;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
+using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace IMS.BusinessService.Systems
 {
-	public class UserService : IUserService
+	public class UserService : ServiceBase, IUserService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly RoleManager<AppRole> _roleManager;
-		private readonly IMapper _mapper;
-		public UserService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper)
+		public UserService(
+			UserManager<AppUser> userManager,
+			RoleManager<AppRole> roleManager,
+			IMSDbContext context,
+			IMapper mapper)
+			: base(context, mapper)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
-			_mapper = mapper;
 		}
 
 		public async Task AssignRolesAsync(Guid userId, string[] roleNames)
@@ -64,7 +68,7 @@ namespace IMS.BusinessService.Systems
 				throw new Exception("Email is already exist");
 			}
 
-			var user = _mapper.Map<CreateUserDto, AppUser>(userDto);
+			var user = mapper.Map<CreateUserDto, AppUser>(userDto);
 			var result = await _userManager.CreateAsync(user, userDto.Password);
 
 			if (!result.Succeeded)
@@ -85,13 +89,13 @@ namespace IMS.BusinessService.Systems
 			await _userManager.DeleteAsync(user);
 		}
 
-		public async Task<List<UserDto>> GetListAllAsync(string? keyword)
+		public async Task<UserResponse> GetListAllAsync(UserRequest request)
 		{
 
 			var usersQuery = _userManager.Users
-			.Where(u => string.IsNullOrWhiteSpace(keyword) ||
-						u.FullName.Contains(keyword) ||
-						u.UserName.Contains(keyword));
+				.Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
+                        || u.FullName.Contains(request.KeyWords)
+						|| u.UserName.Contains(request.KeyWords));
 
 			var users = await usersQuery.ToListAsync();
 
@@ -102,14 +106,21 @@ namespace IMS.BusinessService.Systems
 				// Retrieve the roles for each user
 				var roles = await _userManager.GetRolesAsync(user);
 
-				var userDto = _mapper.Map<UserDto>(user);
+				var userDto = mapper.Map<UserDto>(user);
 
 				// Set the Roles property in UserDto
 				userDto.Roles = roles.ToList();
 
 				userDtos.Add(userDto);
 			}
-			return userDtos;
+
+			var response = new UserResponse
+			{
+				Users = userDtos,
+				Page = GetPagingResponse(request, userDtos.Count()),
+			};
+
+			return response;	
 		}
 
 		public async Task<UserDto> GetUserByIdAsync(Guid id)
@@ -119,7 +130,7 @@ namespace IMS.BusinessService.Systems
 			{
 				throw new Exception("Not found");
 			}
-			var userDto = _mapper.Map<AppUser, UserDto>(user);
+			var userDto = mapper.Map<AppUser, UserDto>(user);
 			var roles = await _userManager.GetRolesAsync(user);
 			userDto.Roles = roles;
 			return userDto;
@@ -132,7 +143,7 @@ namespace IMS.BusinessService.Systems
 			{
 				throw new Exception("Not found");
 			}
-			_mapper.Map(userDto, user);
+			mapper.Map(userDto, user);
 			var result = await _userManager.UpdateAsync(user);
 		}
 	}

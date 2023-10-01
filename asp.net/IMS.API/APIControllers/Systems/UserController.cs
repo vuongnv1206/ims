@@ -26,10 +26,10 @@ namespace IMS.Api.APIControllers.Systems
         }
 
 		[HttpGet("users")]
-		public async Task<List<UserDto>> GetAllUsers(string? keyword)
+		public async Task<IActionResult> GetAllUsers([FromQuery]UserRequest request)
 		{
-			var data = await _userService.GetListAllAsync(keyword);
-			return data;
+			var data = await _userService.GetListAllAsync(request);
+			return Ok(data);
 		}
 
 		[HttpPost("assign-roles")]

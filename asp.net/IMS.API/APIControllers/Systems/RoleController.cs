@@ -19,10 +19,10 @@ namespace IMS.Api.APIControllers.Systems
 		}
 		//alo
 		[HttpGet("all")]
-		public async Task<List<RoleDto>> GetAllRoles()
+		public async Task<IActionResult> GetAllRoles([FromQuery]RoleRequest request)
 		{
-			var data = await _roleService.GetListAllAsync();
-			return data;
+			var data = await _roleService.GetListAllAsync(request);
+			return Ok(data);
 		}
 
 		[HttpPost]
