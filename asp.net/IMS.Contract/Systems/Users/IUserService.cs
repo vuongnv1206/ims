@@ -11,7 +11,7 @@ namespace IMS.Contract.Systems.Users
     {
         Task DeleteAsync(Guid id);
 
-        Task<List<UserDto>> GetListAllAsync(string? keyword);
+        Task<UserResponse> GetListAllAsync(UserRequest request);
         Task AssignRolesAsync(Guid userId, string[] roleNames);
 
         Task CreateUser(CreateUserDto userDto);
