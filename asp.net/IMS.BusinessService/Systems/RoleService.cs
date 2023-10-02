@@ -57,14 +57,18 @@ namespace IMS.BusinessService.Systems
 		public async Task<RoleResponse> GetListAllAsync(RoleRequest request)
 		{
 			var roles = await _roleManager.Roles
-				.Paginate(request)
-				.ToDynamicListAsync();
-			var roleDtos = mapper.Map<List<RoleDto>>(roles);
+				.Where(x => string.IsNullOrWhiteSpace(request.KeyWords)
+					|| x.Name.Contains(request.KeyWords)
+					|| x.Description.Contains(request.KeyWords))
+				.ToListAsync();
+
+			var rolePaging = roles.Paginate(request);
+			var roleDtos = mapper.Map<List<RoleDto>>(rolePaging);
 
 			var response = new RoleResponse
 			{
 				Roles = roleDtos,
-				Page = GetPagingResponse(request, roleDtos.Count()),
+				Page = GetPagingResponse(request, roles.Count()),
 			};
 			return response;
 		}
