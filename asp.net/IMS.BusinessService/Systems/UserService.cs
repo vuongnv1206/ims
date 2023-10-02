@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Firebase.Storage;
 using IMS.BusinessService.Service;
+using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
@@ -15,18 +17,18 @@ namespace IMS.BusinessService.Systems
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly RoleManager<AppRole> _roleManager;
-        private readonly IHostingEnvironment hostingEnvironment;
+		private readonly IFirebaseService firebaseService;
         public UserService(
 			UserManager<AppUser> userManager,
 			RoleManager<AppRole> roleManager,
-            IHostingEnvironment hostingEnvironment,
+			IFirebaseService firebaseService,
             IMSDbContext context,
 			IMapper mapper)
 			: base(context, mapper)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
-            this.hostingEnvironment = hostingEnvironment;
+			this.firebaseService = firebaseService;
         }
 
 		public async Task AssignRolesAsync(Guid userId, string[] roleNames)
@@ -143,24 +145,20 @@ namespace IMS.BusinessService.Systems
 
 		public async Task UpdateUser(Guid id, UpdateUserDto userDto)
 		{
-            string webRootPath = hostingEnvironment.WebRootPath;
-            string contentRootPath = hostingEnvironment.ContentRootPath;
             var user = await _userManager.FindByIdAsync(id.ToString());
 			if (user == null)
 			{
 				throw new Exception("Not found");
 			}
 			mapper.Map(userDto, user);
+			if (userDto.FileImage != null)
+			{
+				var fileName = await firebaseService.UpLoadFileOnFirebaseAsync(userDto.FileImage);
+				user.Avatar = fileName;
+            }
 			var result = await _userManager.UpdateAsync(user);
 		}
 
-		private void UpdateImageFirebase(IFormFile file)
-		{
-			//FileStream stream;
-			//if (file.Length > 0) 
-			//{
-			//	var path = Path.Combine(Server.MapPath())
-			//}
-		}
+		
 	}
 }
