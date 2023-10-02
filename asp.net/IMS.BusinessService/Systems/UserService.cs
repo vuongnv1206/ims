@@ -4,6 +4,8 @@ using IMS.Contract.Common.Sorting;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
@@ -14,16 +16,19 @@ namespace IMS.BusinessService.Systems
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly RoleManager<AppRole> _roleManager;
-		public UserService(
+        private readonly IHostingEnvironment hostingEnvironment;
+        public UserService(
 			UserManager<AppUser> userManager,
 			RoleManager<AppRole> roleManager,
-			IMSDbContext context,
+            IHostingEnvironment hostingEnvironment,
+            IMSDbContext context,
 			IMapper mapper)
 			: base(context, mapper)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
-		}
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
 		public async Task AssignRolesAsync(Guid userId, string[] roleNames)
 		{
@@ -139,13 +144,24 @@ namespace IMS.BusinessService.Systems
 
 		public async Task UpdateUser(Guid id, UpdateUserDto userDto)
 		{
-			var user = await _userManager.FindByIdAsync(id.ToString());
+            string webRootPath = hostingEnvironment.WebRootPath;
+            string contentRootPath = hostingEnvironment.ContentRootPath;
+            var user = await _userManager.FindByIdAsync(id.ToString());
 			if (user == null)
 			{
 				throw new Exception("Not found");
 			}
 			mapper.Map(userDto, user);
 			var result = await _userManager.UpdateAsync(user);
+		}
+
+		private void UpdateImageFirebase(IFormFile file)
+		{
+			//FileStream stream;
+			//if (file.Length > 0) 
+			//{
+			//	var path = Path.Combine(Server.MapPath())
+			//}
 		}
 	}
 }

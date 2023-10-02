@@ -13,6 +13,8 @@ public static class ConfigurationServiceRegistration
             (configuration.GetSection(GitlabSetting.Gitlab));
         services.Configure<AppSetting>
             (configuration.GetSection(AppSetting.AppSettings));
+        services.Configure<FirebaseSetting>
+            (configuration.GetSection(FirebaseSetting.Firebase));
 
         return services;
     }

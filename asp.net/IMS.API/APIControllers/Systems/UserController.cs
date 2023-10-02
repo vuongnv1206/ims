@@ -76,7 +76,7 @@ namespace IMS.Api.APIControllers.Systems
 
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto input)
+		public async Task<IActionResult> UpdateUser(Guid id,[FromBody] UpdateUserDto input)
 		{
 			await _userService.UpdateUser(id, input);
 			return Ok("User updated successfully.");
