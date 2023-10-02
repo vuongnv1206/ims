@@ -16,6 +16,15 @@ public abstract class ServiceBase
         this.mapper = mapper;
     }
 
+    public ServiceBase(IMSDbContext context)
+    {
+        this.context = context;
+    }
+
+    public ServiceBase(IMapper mapper)
+    {
+        this.mapper = mapper;
+    }
 
     public static PagingResponseInfo GetPagingResponse(PagingRequestBase request, int totalRecord)
     {
