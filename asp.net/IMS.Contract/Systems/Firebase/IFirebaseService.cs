@@ -1,6 +1,8 @@
-﻿namespace IMS.Contract.Systems.Firebase;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace IMS.Contract.Systems.Firebase;
 
 public interface IFirebaseService
 {
-    public Task<bool> UpdateFileAsync(FileStream stream, string fileName);
+    Task<string> UpLoadFileOnFirebaseAsync(IFormFile file);
 }

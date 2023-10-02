@@ -2,6 +2,7 @@
 using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Systems.Authentications;
+using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Systems.Roles;
 using IMS.Contract.Systems.Users;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,10 @@ public static class BusinessServiceRegistration
 		services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-		return services;
+
+		// firebase
+		services.AddScoped<IFirebaseService, FirebaseService>();
+
+        return services;
     }
 }
