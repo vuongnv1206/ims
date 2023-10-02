@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Subject, forkJoin, takeUntil } from 'rxjs';
-import { RoleClient, RoleDto, UserClient, UserDto } from 'src/app/api/api-generate';
+import { Subject, takeUntil } from 'rxjs';
+import { RoleClient, RoleDto, RoleResponse, UserClient, UserDto } from 'src/app/api/api-generate';
 
 @Component({
   selector: 'app-role-assign',
@@ -37,11 +37,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
-    var roles = this.roleService.all();
-
-    forkJoin({
-      roles,
-    })
+    this.roleService.all()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (repsonse: any) => {
@@ -59,23 +55,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy{
     this.saveBtnName = 'Cập nhật';
     this.closeBtnName = 'Hủy';
   }
-  loadRoles() {
-    this.toggleBlockUI(true);
-    this.roleService
-      .all()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: RoleDto[]) => {
-          response.forEach(element => {
-            this.availableRoles.push(element.name);
-          });
-          this.toggleBlockUI(false);
-        },
-        error: () => {
-          this.toggleBlockUI(false);
-        },
-      });
-  }
+
   loadDetail(id: any) {
     this.toggleBlockUI(true);
     this.userService
@@ -94,7 +74,6 @@ export class RoleAssignComponent implements OnInit, OnDestroy{
   }
   saveChange() {
     this.toggleBlockUI(true);
-
     this.saveData();
   }
 
@@ -104,7 +83,7 @@ export class RoleAssignComponent implements OnInit, OnDestroy{
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.toggleBlockUI(false);
-        this.ref.close();
+        this.ref.close(true);
       });
   }
 

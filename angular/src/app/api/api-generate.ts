@@ -20,17 +20,17 @@ export interface IAuthClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body: LoginModel | undefined): Observable<AuthResponse>;
+    login(body?: LoginModel | undefined): Observable<AuthResponse>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    register(body: RegisterModel | undefined): Observable<void>;
+    register(body?: RegisterModel | undefined): Observable<void>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    authenWithOauth2(body: OauthRequest | undefined): Observable<Token>;
+    authenWithOauth2(body?: OauthRequest | undefined): Observable<Token>;
 }
 
 @Injectable()
@@ -48,7 +48,7 @@ export class AuthClient implements IAuthClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
+    login(body?: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
         let url_ = this.baseUrl + "/api/auth/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -104,7 +104,7 @@ export class AuthClient implements IAuthClient {
      * @param body (optional) 
      * @return Success
      */
-    register(body: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
+    register(body?: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -157,7 +157,7 @@ export class AuthClient implements IAuthClient {
      * @param body (optional) 
      * @return Success
      */
-    authenWithOauth2(body: OauthRequest | undefined, httpContext?: HttpContext): Observable<Token> {
+    authenWithOauth2(body?: OauthRequest | undefined, httpContext?: HttpContext): Observable<Token> {
         let url_ = this.baseUrl + "/api/auth/authenWithOauth2";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -212,24 +212,30 @@ export class AuthClient implements IAuthClient {
 
 export interface IRoleClient {
     /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    all(): Observable<RoleDto[]>;
+    all(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<RoleResponse>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    rolePOST(body: CreateUpdateRoleDto | undefined): Observable<void>;
+    rolePOST(body?: CreateUpdateRoleDto | undefined): Observable<void>;
     /**
      * @param ids (optional) 
      * @return Success
      */
-    roleDELETE(ids: string[] | undefined): Observable<void>;
+    roleDELETE(ids?: string[] | undefined): Observable<void>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    rolePUT(id: string, body: CreateUpdateRoleDto | undefined): Observable<void>;
+    rolePUT(id: string, body?: CreateUpdateRoleDto | undefined): Observable<void>;
     /**
      * @return Success
      */
@@ -242,7 +248,7 @@ export interface IRoleClient {
      * @param body (optional) 
      * @return Success
      */
-    permissionsPUT(body: PermissionDto | undefined): Observable<void>;
+    permissionsPUT(body?: PermissionDto | undefined): Observable<void>;
 }
 
 @Injectable()
@@ -257,10 +263,40 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    all(httpContext?: HttpContext): Observable<RoleDto[]> {
-        let url_ = this.baseUrl + "/api/Role/all";
+    all(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<RoleResponse> {
+        let url_ = this.baseUrl + "/api/Role/all?";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -279,14 +315,14 @@ export class RoleClient implements IRoleClient {
                 try {
                     return this.processAll(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<RoleDto[]>;
+                    return _observableThrow(e) as any as Observable<RoleResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<RoleDto[]>;
+                return _observableThrow(response_) as any as Observable<RoleResponse>;
         }));
     }
 
-    protected processAll(response: HttpResponseBase): Observable<RoleDto[]> {
+    protected processAll(response: HttpResponseBase): Observable<RoleResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -296,7 +332,7 @@ export class RoleClient implements IRoleClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RoleDto[];
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as RoleResponse;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -311,7 +347,7 @@ export class RoleClient implements IRoleClient {
      * @param body (optional) 
      * @return Success
      */
-    rolePOST(body: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
+    rolePOST(body?: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/Role";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -364,7 +400,7 @@ export class RoleClient implements IRoleClient {
      * @param ids (optional) 
      * @return Success
      */
-    roleDELETE(ids: string[] | undefined, httpContext?: HttpContext): Observable<void> {
+    roleDELETE(ids?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/Role?";
         if (ids === null)
             throw new Error("The parameter 'ids' cannot be null.");
@@ -417,7 +453,7 @@ export class RoleClient implements IRoleClient {
      * @param body (optional) 
      * @return Success
      */
-    rolePUT(id: string, body: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
+    rolePUT(id: string, body?: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/Role/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -581,7 +617,7 @@ export class RoleClient implements IRoleClient {
      * @param body (optional) 
      * @return Success
      */
-    permissionsPUT(body: PermissionDto | undefined, httpContext?: HttpContext): Observable<void> {
+    permissionsPUT(body?: PermissionDto | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/Role/permissions";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -633,16 +669,21 @@ export class RoleClient implements IRoleClient {
 
 export interface IUserClient {
     /**
-     * @param keyword (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    users(keyword: string | undefined): Observable<UserDto[]>;
+    users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<UserResponse>;
     /**
      * @param userId (optional) 
      * @param body (optional) 
      * @return Success
      */
-    assignRoles(userId: string | undefined, body: string[] | undefined): Observable<void>;
+    assignRoles(userId?: string | undefined, body?: string[] | undefined): Observable<void>;
     /**
      * @return Success
      */
@@ -655,12 +696,12 @@ export interface IUserClient {
      * @param body (optional) 
      * @return Success
      */
-    userPUT(id: string, body: UpdateUserDto | undefined): Observable<void>;
+    userPUT(id: string, body?: UpdateUserDto | undefined): Observable<void>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    userPOST(body: CreateUserDto | undefined): Observable<void>;
+    userPOST(body?: CreateUserDto | undefined): Observable<void>;
 }
 
 @Injectable()
@@ -675,15 +716,40 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param keyword (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    users(keyword: string | undefined, httpContext?: HttpContext): Observable<UserDto[]> {
+    users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<UserResponse> {
         let url_ = this.baseUrl + "/api/User/users?";
-        if (keyword === null)
-            throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined)
-            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -702,14 +768,14 @@ export class UserClient implements IUserClient {
                 try {
                     return this.processUsers(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<UserDto[]>;
+                    return _observableThrow(e) as any as Observable<UserResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<UserDto[]>;
+                return _observableThrow(response_) as any as Observable<UserResponse>;
         }));
     }
 
-    protected processUsers(response: HttpResponseBase): Observable<UserDto[]> {
+    protected processUsers(response: HttpResponseBase): Observable<UserResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -719,7 +785,7 @@ export class UserClient implements IUserClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserDto[];
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as UserResponse;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -735,7 +801,7 @@ export class UserClient implements IUserClient {
      * @param body (optional) 
      * @return Success
      */
-    assignRoles(userId: string | undefined, body: string[] | undefined, httpContext?: HttpContext): Observable<void> {
+    assignRoles(userId?: string | undefined, body?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/assign-roles?";
         if (userId === null)
             throw new Error("The parameter 'userId' cannot be null.");
@@ -897,7 +963,7 @@ export class UserClient implements IUserClient {
      * @param body (optional) 
      * @return Success
      */
-    userPUT(id: string, body: UpdateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
+    userPUT(id: string, body?: UpdateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -953,7 +1019,7 @@ export class UserClient implements IUserClient {
      * @param body (optional) 
      * @return Success
      */
-    userPOST(body: CreateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
+    userPOST(body?: CreateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1034,6 +1100,13 @@ export interface OauthRequest {
     code?: string | undefined;
 }
 
+export interface PagingResponseInfo {
+    itemsPerPage?: number;
+    currentPage?: number;
+    toTalPage?: number;
+    toTalRecord?: number;
+}
+
 export interface PermissionDto {
     roleId?: string | undefined;
     roleClaims?: RoleClaimDto[] | undefined;
@@ -1058,6 +1131,11 @@ export interface RoleDto {
     description?: string | undefined;
 }
 
+export interface RoleResponse {
+    page?: PagingResponseInfo;
+    roles?: RoleDto[] | undefined;
+}
+
 export interface Token {
     accessToken?: string | undefined;
     expire?: Date;
@@ -1069,6 +1147,7 @@ export interface UpdateUserDto {
     birthDay?: Date | undefined;
     avatar?: string | undefined;
     address?: string | undefined;
+    phoneNumber?: string | undefined;
 }
 
 export interface UserDto {
@@ -1081,6 +1160,11 @@ export interface UserDto {
     creationTime?: Date;
     avatar?: string | undefined;
     roles?: string[] | undefined;
+}
+
+export interface UserResponse {
+    page?: PagingResponseInfo;
+    users?: UserDto[] | undefined;
 }
 
 export class ApiException extends Error {

@@ -61,7 +61,9 @@
       </ng-template>
     </p-table>
 
-    <p-paginator [rows]="maxResultCount" [totalRecords]="totalCount" [rowsPerPageOptions]="[10, 20, 50, 100]" ></p-paginator>
+    <p-paginator [rows]="itemsPerPage" [totalRecords]="totalCount" [rowsPerPageOptions]="[10, 20, 50, 100]"
+    (onPageChange)="pageChanged($event)"
+    ></p-paginator>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner

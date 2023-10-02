@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogComponent } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { UserClient, UserDto } from 'src/app/api/api-generate';
+import { UserClient, UserDto, UserResponse } from 'src/app/api/api-generate';
 import { MessageConstants } from 'src/app/shared/constants/message.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UserDetailComponent } from './user-detail/user-detail.component';
@@ -20,9 +20,13 @@ export class UserComponent implements OnInit,OnDestroy {
     public blockedPanel: boolean = false;
 
     //Paging variables
-    public skipCount: number = 0;
-    public maxResultCount: number = 10;
-    public totalCount: number;
+      public page: number = 1;
+      public itemsPerPage: number = 3;
+      public totalCount: number;
+      public keyWords: string |  null;
+      public skip: number | null;
+      public take: number | null;
+      public sortField: string | null;
 
     //Business variables
     public items: UserDto[];
@@ -48,11 +52,12 @@ export class UserComponent implements OnInit,OnDestroy {
   loadData(selectionId = null) {
     this.toggleBlockUI(true);
     this.userService
-      .users(this.keyword)
+    .users(this.keyWords, this.page, this.itemsPerPage, this.skip, this.take, this.sortField)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response : UserDto[]) => {
-          this.items = response;
+        next: (response : UserResponse) => {
+          this.items = response.users;
+          this.totalCount = response.page.toTalRecord;
           if (selectionId != null && this.items.length > 0) {
             this.selectedItems = this.items.filter(x => x.id == selectionId);
           }
@@ -63,6 +68,18 @@ export class UserComponent implements OnInit,OnDestroy {
         },
       });
   }
+
+  pageChanged(event: any): void {
+    this.page = event.page;
+    this.itemsPerPage = event.rows;
+    this.loadData({
+      page: this.page,
+      itemsPerPage:this.itemsPerPage
+    });
+}
+
+
+
 
   assignRole(id: string) {
     const ref = this.dialogService.open(RoleAssignComponent, {

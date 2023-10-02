@@ -7,7 +7,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { ConfirmationService } from 'primeng/api';
 import { MessageConstants } from 'src/app/shared/constants/message.const';
 import { PermissionGrantComponent } from './permission-grant/permission-grant.component';
-import { RoleClient, RoleDto } from 'src/app/api/api-generate';
+import { RoleClient, RoleDto, RoleResponse } from 'src/app/api/api-generate';
 
 @Component({
   selector: 'app-role',
@@ -19,10 +19,14 @@ export class RoleComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
 
-  //Paging variables
-  public skipCount: number = 0;
-  public maxResultCount: number = 10;
-  public totalCount: number;
+   //Paging variables
+   public page: number = 1;
+   public itemsPerPage: number = 5;
+   public totalCount: number;
+   public keyWords: string |  null;
+   public skip: number | null;
+   public take: number | null;
+   public sortField: string | null;
 
   //Business variables
   public items: RoleDto[];
@@ -49,11 +53,12 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
 
     this.roleService
-      .all()
+    .all(this.keyWords, this.page, this.itemsPerPage, this.skip, this.take, this.sortField)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDto[]) => {
-          this.items = response;
+        next: (response: RoleResponse) => {
+          this.items = response.roles;
+          this.totalCount = response.page.toTalRecord;
           if (selectionId != null && this.items.length > 0) {
             this.selectedItems = this.items.filter(x => x.id == selectionId);
           }
@@ -82,10 +87,13 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   pageChanged(event: any): void {
-    this.skipCount = (event.page - 1) * this.maxResultCount;
-    this.maxResultCount = event.rows;
-    this.loadData();
-  }
+    this.page = event.page;
+    this.itemsPerPage = event.rows;
+    this.loadData({
+      page: this.page,
+      itemsPerPage:this.itemsPerPage
+    });
+}
 
   showEditModal() {
     if (this.selectedItems.length == 0) {

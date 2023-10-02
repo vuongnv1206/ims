@@ -42,7 +42,7 @@
               type="text"
             />
           </div>
-          <button type="button" pButton (click)="loadData()">Tìm</button>
+          <button pButton type="button" pButton (click)="loadData()">Tìm</button>
         </div>
       </div>
     </div>
@@ -84,10 +84,10 @@
     </p-table>
 
     <p-paginator
-      [rows]="maxResultCount"
+      [rows]="itemsPerPage"
       [totalRecords]="totalCount"
       (onPageChange)="pageChanged($event)"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [rowsPerPageOptions]="[5,10,20]"
     ></p-paginator>
 
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">

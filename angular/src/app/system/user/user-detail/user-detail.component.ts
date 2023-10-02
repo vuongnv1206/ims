@@ -54,11 +54,8 @@ export class UserDetailComponent implements OnInit,OnDestroy {
     //Init form
     this.buildForm();
     //Load data to form
-    var roles = this.roleService.all();
     this.toggleBlockUI(true);
-    forkJoin({
-      roles
-    })
+    this.roleService.all()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (repsonse: any) => {
@@ -183,26 +180,7 @@ export class UserDetailComponent implements OnInit,OnDestroy {
 
 
 
-  loadData(selectionId = null) {
-    this.toggleBlockUI(true);
-    this.userService
-      .users(this.keyword)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: UserDto[]) => {
-          this.items = response;
 
-          if (selectionId != null && this.items.length > 0) {
-            this.selectedItems = this.items.filter(x => x.id == selectionId);
-          }
-
-          this.toggleBlockUI(false);
-        },
-        error: () => {
-          this.toggleBlockUI(false);
-        },
-      });
-  }
 
   buildForm() {
     this.form = this.fb.group({
@@ -224,38 +202,17 @@ export class UserDetailComponent implements OnInit,OnDestroy {
     });
   }
 
-  // onFileChange(event) {
-  //   const reader = new FileReader();
-
-  //   if (event.target.files && event.target.files.length) {
-  //     const [file] = event.target.files;
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       this.form.patchValue({
-  //         avatarFileName: file.name,
-  //         avatarFileContent: reader.result,
-  //       });
-
-  //       // need to run CD since file load runs outside of zone
-  //       this.cd.markForCheck();
-  //     };
-  //   }
-  // }
-
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
       // Đọc dữ liệu của file thành URL cho việc hiển thị ảnh trước
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.avatarImage = e.target.result;
+        // Cập nhật giá trị của FormControl 'avatar' với URL hình ảnh đã đọc
+        this.form.get('avatar').setValue(e.target.result);
       };
       reader.readAsDataURL(file);
-
-      // Cập nhật giá trị của FormControl 'avatar' với file đã chọn
-      this.form.get('avatar').setValue(file);
     }
   }
-
 
 }
