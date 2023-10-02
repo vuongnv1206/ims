@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using IMS.BusinessService.Service;
+using IMS.Contract.Common.Sorting;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq.Dynamic.Core;
 
 namespace IMS.BusinessService.Systems
 {
@@ -97,7 +98,7 @@ namespace IMS.BusinessService.Systems
                         || u.FullName.Contains(request.KeyWords)
 						|| u.UserName.Contains(request.KeyWords));
 
-			var users = await usersQuery.ToListAsync();
+			var users = await usersQuery.Paginate(request).ToDynamicListAsync();
 
 			var userDtos = new List<UserDto>();
 
@@ -109,7 +110,7 @@ namespace IMS.BusinessService.Systems
 				var userDto = mapper.Map<UserDto>(user);
 
 				// Set the Roles property in UserDto
-				userDto.Roles = roles.ToList();
+				userDto.Roles = roles;
 
 				userDtos.Add(userDto);
 			}
@@ -117,7 +118,7 @@ namespace IMS.BusinessService.Systems
 			var response = new UserResponse
 			{
 				Users = userDtos,
-				Page = GetPagingResponse(request, userDtos.Count()),
+				Page = GetPagingResponse(request, usersQuery.Count()),
 			};
 
 			return response;	
