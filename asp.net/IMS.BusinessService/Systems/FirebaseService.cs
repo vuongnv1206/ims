@@ -32,8 +32,8 @@ public class FirebaseService : ServiceBase, IFirebaseService
         var dateTime = DateTime.UtcNow; // unique file name
 		fileName = $"{nameFile}_{dateTime.ToString("dd-MM-yyyy HH:mm:ss")}.{ext}";
 
-        var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey));
-		var a = await auth.SignInWithEmailAndPasswordAsync("swdgroup6@gmail.com", "Abcd@1234");
+  //      var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey));
+		//var a = await auth.SignInWithEmailAndPasswordAsync("swdgroup6@gmail.com", "Abcd@1234");
 
 		var cancellation = new CancellationTokenSource();
 		try
@@ -43,7 +43,6 @@ public class FirebaseService : ServiceBase, IFirebaseService
                 bucket,
                 new FirebaseStorageOptions
                 {
-					AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
                     ThrowOnCancel = true,
                 }
             )
