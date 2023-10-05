@@ -7,38 +7,40 @@ import { MessageConstants } from 'src/app/shared/constants/message.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { RoleAssignComponent } from './role-assign/role-assign.component';
+import { FileService } from '../../shared/services/file.service';
+import { getDownloadURL, getStorage, ref } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
 })
-export class UserComponent implements OnInit,OnDestroy {
+export class UserComponent implements OnInit, OnDestroy {
+  //System variables
+  private ngUnsubscribe = new Subject<void>();
+  public blockedPanel: boolean = false;
 
-    //System variables
-    private ngUnsubscribe = new Subject<void>();
-    public blockedPanel: boolean = false;
+  //Paging variables
+  public page: number = 1;
+  public itemsPerPage: number = 3;
+  public totalCount: number;
+  public keyWords: string | null;
+  public skip: number | null;
+  public take: number | null;
+  public sortField: string | null;
 
-    //Paging variables
-      public page: number = 1;
-      public itemsPerPage: number = 3;
-      public totalCount: number;
-      public keyWords: string |  null;
-      public skip: number | null;
-      public take: number | null;
-      public sortField: string | null;
+  //Business variables
+  public items: UserDto[];
+  public selectedItems: UserDto[] = [];
+  public keyword: string = '';
 
-    //Business variables
-    public items: UserDto[];
-    public selectedItems: UserDto[] = [];
-    public keyword: string = '';
-
-    constructor(
-      private userService: UserClient,
-      public dialogService: DialogService,
-      private notificationService: NotificationService,
-      private confirmationService: ConfirmationService
-    ) {}
+  constructor(
+    private userService: UserClient,
+    public dialogService: DialogService,
+    private notificationService: NotificationService,
+    private confirmationService: ConfirmationService,
+    private fileService: FileService
+  ) {}
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -49,17 +51,39 @@ export class UserComponent implements OnInit,OnDestroy {
     this.loadData();
   }
 
+  public async GetFileFromFirebase(fileName: string) {
+    if (fileName === null) {
+      return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuH4tyG12O2rHbqYAnze8XPhJhJzKmWibEqgC_wrPVfBJu8iBHMebhXA1afSZZ6mZMQmg&usqp=CAU';
+    }
+
+    let file = await this.fileService.GetFileFromFirebase(fileName);
+    console.log('hehe ' + file);
+
+    return file;
+  }
+
   loadData(selectionId = null) {
     this.toggleBlockUI(true);
     this.userService
-    .users(this.keyWords, this.page, this.itemsPerPage, this.skip, this.take, this.sortField)
+      .users(
+        this.keyWords,
+        this.page,
+        this.itemsPerPage,
+        this.skip,
+        this.take,
+        this.sortField
+      )
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response : UserResponse) => {
+        next: (response: UserResponse) => {
           this.items = response.users;
+          this.items.forEach(
+            async (x) => (x.avatar = await this.GetFileFromFirebase(x.avatar))
+          );
+
           this.totalCount = response.page.toTalRecord;
           if (selectionId != null && this.items.length > 0) {
-            this.selectedItems = this.items.filter(x => x.id == selectionId);
+            this.selectedItems = this.items.filter((x) => x.id == selectionId);
           }
           this.toggleBlockUI(false);
         },
@@ -74,12 +98,9 @@ export class UserComponent implements OnInit,OnDestroy {
     this.itemsPerPage = event.rows;
     this.loadData({
       page: this.page,
-      itemsPerPage:this.itemsPerPage
+      itemsPerPage: this.itemsPerPage,
     });
-}
-
-
-
+  }
 
   assignRole(id: string) {
     const ref = this.dialogService.open(RoleAssignComponent, {
@@ -92,7 +113,9 @@ export class UserComponent implements OnInit,OnDestroy {
 
     ref.onClose.subscribe((result: boolean) => {
       if (result) {
-        this.notificationService.showSuccess(MessageConstants.ROLE_ASSIGN_SUCCESS_MSG);
+        this.notificationService.showSuccess(
+          MessageConstants.ROLE_ASSIGN_SUCCESS_MSG
+        );
         this.loadData();
       }
     });
@@ -100,11 +123,13 @@ export class UserComponent implements OnInit,OnDestroy {
 
   deleteItems() {
     if (this.selectedItems.length == 0) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      this.notificationService.showError(
+        MessageConstants.NOT_CHOOSE_ANY_RECORD
+      );
       return;
     }
     var ids = [];
-    this.selectedItems.forEach(element => {
+    this.selectedItems.forEach((element) => {
       ids.push(element.id);
     });
     this.confirmationService.confirm({
@@ -114,7 +139,6 @@ export class UserComponent implements OnInit,OnDestroy {
       },
     });
   }
-
 
   deleteItemsConfirm(id: any) {
     this.toggleBlockUI(true);
@@ -148,7 +172,9 @@ export class UserComponent implements OnInit,OnDestroy {
 
   showEditModal() {
     if (this.selectedItems.length == 0) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      this.notificationService.showError(
+        MessageConstants.NOT_CHOOSE_ANY_RECORD
+      );
       return;
     }
     var id = this.selectedItems[0].id;
@@ -176,5 +202,4 @@ export class UserComponent implements OnInit,OnDestroy {
       }, 1000);
     }
   }
-
 }

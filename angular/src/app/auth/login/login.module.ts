@@ -13,6 +13,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { AuthClient } from 'src/app/api/api-generate';
+import { FileService } from 'src/app/shared/services/file.service';
 
 @NgModule({
     imports: [
@@ -29,7 +30,7 @@ import { AuthClient } from 'src/app/api/api-generate';
 
     ],
     declarations: [LoginComponent],
-    providers: [AuthService,TokenService,MessageService,AuthClient],
+    providers: [AuthService,TokenService,MessageService,AuthClient, FileService],
 
 })
 export class LoginModule { }

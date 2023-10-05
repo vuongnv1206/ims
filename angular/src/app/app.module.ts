@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { API_BASE_URL, AuthClient, RoleClient, UserClient } from './api/api-generate';
-import { environment } from 'src/environments/environment';
 import { TokenService } from './shared/services/token.service';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -18,10 +17,19 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityService } from './shared/services/utility.service';
 import { ImageModule } from 'primeng/image';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideDatabase,getDatabase } from '@angular/fire/database';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { provideFunctions,getFunctions } from '@angular/fire/functions';
+import { provideMessaging,getMessaging } from '@angular/fire/messaging';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { FileService } from './shared/services/file.service';
+import { AngularFireModule } from '@angular/fire/compat';
+
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -32,21 +40,28 @@ import { ImageModule } from 'primeng/image';
     ButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    ImageModule
+    ImageModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
+    provideFirestore(() => getFirestore()),
+    provideFunctions(() => getFunctions()),
+    provideMessaging(() => getMessaging()),
+    provideStorage(() => getStorage()),
   ],
-  providers:
-    [{ provide: API_BASE_URL, useValue: environment.API_URL },
-      TokenService,
-      AuthClient,
-      UserClient,
-      RoleClient,
-      DialogService,
-      MessageService,
-      NotificationService,
-      ConfirmationService,
-      UtilityService
-    ],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: API_BASE_URL, useValue: environment.API_URL },
+    TokenService,
+    AuthClient,
+    UserClient,
+    RoleClient,
+    DialogService,
+    MessageService,
+    NotificationService,
+    ConfirmationService,
+    UtilityService,
+    FileService,
+  ],
+  bootstrap: [AppComponent],
 })
-
 export class AppModule {}

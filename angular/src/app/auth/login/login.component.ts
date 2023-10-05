@@ -13,9 +13,6 @@ import { HOME_URL } from 'src/app/shared/constants/url.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { authCodeFlowConfig } from './authCodeFlowConfig';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { ACCESS_TOKEN } from '../../shared/constants/keys.const';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
