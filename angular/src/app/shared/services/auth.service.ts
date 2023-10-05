@@ -5,6 +5,8 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { TokenService } from "./token.service";
+import { Auth, getAuth, User } from "@angular/fire/auth";
+import { FirebaseApp } from "@angular/fire/app";
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +14,13 @@ import { TokenService } from "./token.service";
 
 
 export class AuthService{
-  constructor(private httpClient: HttpClient,private tokenService: TokenService)
+  auth: Auth;
+  constructor(
+    private httpClient: HttpClient,
+    private tokenService: TokenService,
+    private afApp: FirebaseApp)
    {
-
+    this.auth = getAuth(this.afApp);
    }
 
   public isAuthenticated(): boolean {
