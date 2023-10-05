@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "my-project-swd-group6": {
+      "hosting": {
+        "angular": [
+          "my-project-swd-group6"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "my-project-swd-group6"
+  }
+}
