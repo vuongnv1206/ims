@@ -1,3 +1,16 @@
+# How to run project
+muốn chạy cả project thì phải chayj **BE** trước sau đó chạy **FE**
+## Backend
+1. chuột phải vào project `IMS.InfraStructure` chọn `Open in Terminal`
+2. gõ `dotnet ef database update` - cái này chạy lúc đầu tiên khi chưa có database trong máy, hoặc update database (các lần sau bỏ qua)
+3. bấm nút run `visual stdio` như bình thường - hiện thị ra swagger
+## Frontend
+1. install npm run `npm install`
+2. run `ng serve`
+3. localhost `localhost://4200` 
+
+
+
 # Angular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.7.
