@@ -25,7 +25,7 @@ using System.Text;
 
 namespace IMS.BusinessService.Systems
 {
-    public class AuthService : ServiceBase, IAuthService
+    public class AuthService : ServiceBase<AppUser>, IAuthService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
