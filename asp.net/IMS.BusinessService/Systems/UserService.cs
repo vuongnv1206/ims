@@ -15,7 +15,7 @@ using System.Linq.Dynamic.Core;
 
 namespace IMS.BusinessService.Systems
 {
-	public class UserService : ServiceBase, IUserService
+	public class UserService : ServiceBase<AppUser>, IUserService
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly RoleManager<AppRole> _roleManager;

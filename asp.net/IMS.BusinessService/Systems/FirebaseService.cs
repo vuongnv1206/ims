@@ -4,13 +4,14 @@ using Firebase.Storage;
 using IMS.BusinessService.Service;
 using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Systems.Settings;
+using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace IMS.BusinessService.Systems;
 
-public class FirebaseService : ServiceBase, IFirebaseService
+public class FirebaseService : ServiceBase<AppUser>, IFirebaseService
 {
 	private readonly FirebaseSetting firebaseSetting;
 	public FirebaseService(

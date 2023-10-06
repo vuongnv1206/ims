@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace IMS.BusinessService.Systems
 {
-	public class RoleService : ServiceBase, IRoleService
+	public class RoleService : ServiceBase<AppRole>, IRoleService
 	{
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly UserManager<AppUser> _userManager;
