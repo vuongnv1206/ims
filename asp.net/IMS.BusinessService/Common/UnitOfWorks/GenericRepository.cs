@@ -111,5 +111,15 @@ namespace IMS.BusinessService.Common.UnitOfWorks
 			}
 			return _context.Set<T>().FirstOrDefault(predicate);
 		}
-	}
+
+        public Task<T> GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ExistsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

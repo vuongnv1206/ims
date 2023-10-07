@@ -10,7 +10,7 @@ namespace IMS.Contract.Common.UnitOfWorks
 	public interface IGenericRepository<T> where T : class
 	{
 		//Get a
-		Task<T> GetById(Guid id);
+		Task<T> GetById(int id);
 		Task<T> GetWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
 
 
@@ -34,7 +34,7 @@ namespace IMS.Contract.Common.UnitOfWorks
 
 
 		//Others
-		Task<bool> ExistsAsync(Guid id);
+		Task<bool> ExistsAsync(int id);
 		Task<int> GetCountAsync(Expression<Func<T, bool>> predicate);
 	}
 }
