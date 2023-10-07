@@ -26,16 +26,15 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Class> Classes { get; set; }
+        public DbSet<ClassStudent> ClassStudents { get; set; }
+
         public DbSet<Issues> Issues { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Milestone> Milestones { get; set; }
-        public DbSet<Semester> Semesters { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        //public DbSet<AppUser> Users{ get; set; }
         public DbSet<IssueSetting> IssueSettings { get; set; }
         public DbSet<SubjectUser> SubjectUsers { get; set; }
-        public DbSet<ClassStudent> ClassStudents { get; set; }
         public DbSet<ProjectMember> ProjectMembers { get; set; }
         public DbSet<Label> Labels { get; set; }
 
@@ -43,19 +42,8 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //Configure using Fluent API
-            //Ex:
-            //builder.ApplyConfiguration(new UserConfiguration());
-            //builder.ApplyConfiguration(new RoleConfiguration());
-
-            builder.Entity<ClassStudent>().HasKey(cs => new { cs.ClassId, cs.UserId });
-            builder.Entity<ProjectMember>().HasKey(cs => new { cs.ProjectId, cs.UserId });
-            builder.Entity<SubjectUser>().HasKey(cs => new { cs.SubjectId, cs.UserId });
-            builder.Entity<IssueSetting>().HasKey(cs => new { cs.SubjectId, cs.ProjectId, cs.ClassId });
-
-            builder.Entity<IdentityUserLogin<Guid>>().HasKey(s => new {s.ProviderKey,s.LoginProvider});
-            builder.Entity<IdentityUserRole<Guid>>().HasKey(s => new {s.RoleId,s.UserId});
-            builder.Entity<IdentityUserToken<Guid>>().HasKey(s => new {s.LoginProvider,s.UserId, s.Name});
+         
+            base.OnModelCreating(builder);
         }
 
         public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")

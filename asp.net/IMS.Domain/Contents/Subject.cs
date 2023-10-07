@@ -13,7 +13,7 @@ namespace IMS.Domain.Contents
         public string? Description { get; set; }
         public ICollection<Assignment> Assignments { get; set; }
         public ICollection<Class> Classes { get; set; }
-        public ICollection<IssueSetting> IssueSettings { get; set; }
+        public ICollection<IssueSetting>? IssueSettings { get; set; }
         public ICollection<SubjectUser> SubjectUsers { get; set; }
     }
 }

@@ -3,32 +3,45 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace IMS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDatabase : Migration
+    public partial class ContentEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Semesters",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Semesters", x => x.Id);
-                });
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "RoleId", "UserId" },
+                keyValues: new object[] { new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"), new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9") });
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "RoleId", "UserId" },
+                keyValues: new object[] { new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"), new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9") });
+
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"));
+
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"));
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUsers",
+                keyColumn: "Id",
+                keyValue: new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"));
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUsers",
+                keyColumn: "Id",
+                keyValue: new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"));
 
             migrationBuilder.CreateTable(
                 name: "Settings",
@@ -36,11 +49,11 @@ namespace IMS.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -56,9 +69,9 @@ namespace IMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -68,51 +81,16 @@ namespace IMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SettingId = table.Column<int>(type: "int", nullable: false),
-                    NomalizedEmail = table.Column<bool>(type: "bit", nullable: false),
-                    NomalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LookoutEnable = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccessFailCount = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Settings_SettingId",
-                        column: x => x.SettingId,
-                        principalTable: "Settings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Assignments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -134,11 +112,11 @@ namespace IMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     SettingId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -165,10 +143,10 @@ namespace IMS.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -176,15 +154,15 @@ namespace IMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_SubjectUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubjectUsers_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
+                        name: "FK_SubjectUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubjectUsers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_SubjectUsers_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -193,29 +171,30 @@ namespace IMS.Infrastructure.Migrations
                 name: "ClassStudents",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassStudents", x => new { x.ClassId, x.UserId });
+                    table.PrimaryKey("PK_ClassStudents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassStudents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClassStudents_Classes_ClassId",
                         column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ClassStudents_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,13 +204,12 @@ namespace IMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Visibility = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -247,55 +225,18 @@ namespace IMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IssueSettings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    ClassId = table.Column<int>(type: "int", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IssueSettings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IssueSettings_Classes_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Classes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IssueSettings_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IssueSettings_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Milestones",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    ClassId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProjectId = table.Column<int>(type: "int", nullable: true),
+                    ClassId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -306,43 +247,42 @@ namespace IMS.Infrastructure.Migrations
                         name: "FK_Milestones_Classes_ClassId",
                         column: x => x.ClassId,
                         principalTable: "Classes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Milestones_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProjectMembers",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectMembers", x => new { x.ProjectId, x.UserId });
+                    table.PrimaryKey("PK_ProjectMembers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProjectMembers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProjectMembers_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProjectMembers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -352,17 +292,17 @@ namespace IMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AssignedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsOpen = table.Column<bool>(type: "bit", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     IssueSettingId = table.Column<int>(type: "int", nullable: false),
                     MilestoneId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -370,11 +310,10 @@ namespace IMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Issues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Issues_IssueSettings_IssueSettingId",
-                        column: x => x.IssueSettingId,
-                        principalTable: "IssueSettings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Issues_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Issues_Milestones_MilestoneId",
                         column: x => x.MilestoneId,
@@ -385,12 +324,8 @@ namespace IMS.Infrastructure.Migrations
                         name: "FK_Issues_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Issues_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,9 +336,8 @@ namespace IMS.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssueId = table.Column<int>(type: "int", nullable: false),
-                    IssuesId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -411,26 +345,12 @@ namespace IMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Labels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Labels_Issues_IssuesId",
-                        column: x => x.IssuesId,
+                        name: "FK_Labels_Issues_IssueId",
+                        column: x => x.IssueId,
                         principalTable: "Issues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "dcb1f1d3-a6bd-4d2b-b4f2-a8002f9dd037", "AQAAAAIAAYagAAAAEOE5fO/6jkpBBDJmZmK2l+9oF+zdWynLoBsKe3iNMs6o64g3ncD29lt/eZ3VsF5+Ag==" });
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "1d8e21c9-ccb1-4533-93c0-1dbd86afb389", "AQAAAAIAAYagAAAAENugJswOSW+fr5MToJ+AxVRPIstLI4fBHa4IpcPVhsEisXdUGcdN3EiQ7NUDcAunqQ==" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SubjectId",
@@ -448,14 +368,14 @@ namespace IMS.Infrastructure.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassStudents_ClassId",
+                table: "ClassStudents",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClassStudents_UserId",
                 table: "ClassStudents",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Issues_IssueSettingId",
-                table: "Issues",
-                column: "IssueSettingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Issues_MilestoneId",
@@ -473,24 +393,9 @@ namespace IMS.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IssueSettings_ClassId",
-                table: "IssueSettings",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IssueSettings_ProjectId",
-                table: "IssueSettings",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IssueSettings_SubjectId",
-                table: "IssueSettings",
-                column: "SubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Labels_IssuesId",
+                name: "IX_Labels_IssueId",
                 table: "Labels",
-                column: "IssuesId");
+                column: "IssueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Milestones_ClassId",
@@ -500,6 +405,11 @@ namespace IMS.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Milestones_ProjectId",
                 table: "Milestones",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectMembers_ProjectId",
+                table: "ProjectMembers",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
@@ -521,11 +431,6 @@ namespace IMS.Infrastructure.Migrations
                 name: "IX_SubjectUsers_UserId",
                 table: "SubjectUsers",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_SettingId",
-                table: "Users",
-                column: "SettingId");
         }
 
         /// <inheritdoc />
@@ -544,22 +449,13 @@ namespace IMS.Infrastructure.Migrations
                 name: "ProjectMembers");
 
             migrationBuilder.DropTable(
-                name: "Semesters");
-
-            migrationBuilder.DropTable(
                 name: "SubjectUsers");
 
             migrationBuilder.DropTable(
                 name: "Issues");
 
             migrationBuilder.DropTable(
-                name: "IssueSettings");
-
-            migrationBuilder.DropTable(
                 name: "Milestones");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Projects");
@@ -573,19 +469,32 @@ namespace IMS.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "Subjects");
 
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "eadf5a72-f169-47cd-b441-7fe648bc0e19", "AQAAAAIAAYagAAAAEE/9lFT9fE98HQZEzff25ynzoE1oVoR9RFzA/bXrWi/rLz6L/HcpWQubJxjD+13vTg==" });
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"), null, "User role", "User", "USER" },
+                    { new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"), null, "Admin role", "Admin", "ADMIN" }
+                });
 
-            migrationBuilder.UpdateData(
+            migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "177ac888-1802-470c-a2aa-7ecf2fd09079", "AQAAAAIAAYagAAAAEMRZF5BkRe707W3smWNagRaZ4vLJcV6jy+cDBaLtMik9LyXOmz+PImDVnm+iuLgTFw==" });
+                columns: new[] { "Id", "AccessFailedCount", "Address", "Avatar", "BirthDay", "ConcurrencyStamp", "CreationTime", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"), 0, null, null, null, "eadf5a72-f169-47cd-b441-7fe648bc0e19", null, "admin@gmail.com", true, "System", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEE/9lFT9fE98HQZEzff25ynzoE1oVoR9RFzA/bXrWi/rLz6L/HcpWQubJxjD+13vTg==", null, false, null, false, "admin@gmail.com" },
+                    { new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"), 0, null, null, null, "177ac888-1802-470c-a2aa-7ecf2fd09079", null, "user@gmail.com", true, "User", false, null, "USER@GMAIL.COM", "USER@GMAIL.COM", "AQAAAAIAAYagAAAAEMRZF5BkRe707W3smWNagRaZ4vLJcV6jy+cDBaLtMik9LyXOmz+PImDVnm+iuLgTFw==", null, false, null, false, "user@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"), new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9") },
+                    { new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"), new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9") }
+                });
         }
     }
 }

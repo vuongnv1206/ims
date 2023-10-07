@@ -2,17 +2,20 @@
 using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace IMS.Domain.Contents
 {
-    public class SubjectUser
+    public class SubjectUser : Auditable
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public int SubjectId { get; set; }
+        [ForeignKey(nameof(SubjectId))]
         public Subject Subject { get; set; }
+        [ForeignKey(nameof(UserId))]
         public AppUser User { get; set; }
 
     }
