@@ -12,9 +12,9 @@ namespace IMS.Contract.Systems.Users
 		public string FullName { get; set; }
 		public string UserName { get; set; }
 		public string Email { get; set; }
-		public string PhoneNumber { get; set; }
-        public DateTime BirthDay { get; set; }
-		public DateTime CreationTime { get; set; }
+		public string? PhoneNumber { get; set; }
+        public DateTime? BirthDay { get; set; }
+		public DateTime? CreationTime { get; set; }
 		public string? Avatar { get; set; }
 		public IList<string> Roles { get; set; }
 	}

@@ -57,7 +57,6 @@ export class UserComponent implements OnInit, OnDestroy {
     }
 
     let file = await this.fileService.GetFileFromFirebase(fileName);
-    console.log('hehe ' + file);
 
     return file;
   }

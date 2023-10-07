@@ -8,15 +8,16 @@ import { MessageConstants } from 'src/app/shared/constants/message.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { RoleAssignComponent } from '../role-assign/role-assign.component';
+import { FileService } from 'src/app/shared/services/file.service';
+import { UserClientCustom } from 'src/app/api/custom-api-generate';
 
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
 })
-export class UserDetailComponent implements OnInit,OnDestroy {
-
+export class UserDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  public items: UserDto[]
+  public items: UserDto[];
   public selectedItems: UserDto[] = [];
   // Default
   public blockedPanelDetail: boolean = false;
@@ -35,12 +36,15 @@ export class UserDetailComponent implements OnInit,OnDestroy {
     public config: DynamicDialogConfig,
     private roleService: RoleClient,
     private userService: UserClient,
+    private userServiceCustom: UserClientCustom,
     public authService: AuthClient,
     private utilService: UtilityService,
     private notificationService : NotificationService,
     private cd: ChangeDetectorRef,
     public dialogService: DialogService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private fileService: FileService,
+    private utilityService: UtilityService,
   ) {}
   ngOnDestroy(): void {
     if (this.ref) {
@@ -79,14 +83,27 @@ export class UserDetailComponent implements OnInit,OnDestroy {
           this.toggleBlockUI(false);
         },
       });
+    
   }
+
+  public async GetFileFromFirebase(fileName: string) {
+    if (fileName === null) {
+      return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuH4tyG12O2rHbqYAnze8XPhJhJzKmWibEqgC_wrPVfBJu8iBHMebhXA1afSZZ6mZMQmg&usqp=CAU';
+    }
+
+    let file = await this.fileService.GetFileFromFirebase(fileName);
+
+    return file;
+  }
+
   loadFormDetails(id: string) {
     this.userService
       .userGET(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDto) => {
+        next: async (response: UserDto) => {
           this.selectedEntity = response;
+          this.selectedEntity.avatar = await this.GetFileFromFirebase(response.avatar);
           this.buildForm();
           this.setMode('update');
 
@@ -98,20 +115,20 @@ export class UserDetailComponent implements OnInit,OnDestroy {
       });
   }
 
- // Validate
- validationMessages = {
-  fullName: [{ type: 'required', message: 'Bạn phải nhập tên' }],
-  email: [{ type: 'required', message: 'Bạn phải nhập email' }],
-  userName: [{ type: 'required', message: 'Bạn phải nhập tài khoản' }],
-  password: [
-    { type: 'required', message: 'Bạn phải nhập mật khẩu' },
-    {
-      type: 'pattern',
-      message: 'Mật khẩu ít nhất 8 ký tự, ít nhất 1 số, 1 ký tự đặc biệt, và một chữ hoa',
-    },
-  ],
-  phoneNumber: [{ type: 'required', message: 'Bạn phải nhập số điện thoại' }],
-};
+  // Validate
+  validationMessages = {
+    fullName: [{ type: 'required', message: 'Bạn phải nhập tên' }],
+    email: [{ type: 'required', message: 'Bạn phải nhập email' }],
+    userName: [{ type: 'required', message: 'Bạn phải nhập tài khoản' }],
+    password: [
+      { type: 'required', message: 'Bạn phải nhập mật khẩu' },
+      {
+        type: 'pattern',
+        message: 'Mật khẩu ít nhất 8 ký tự, ít nhất 1 số, 1 ký tự đặc biệt, và một chữ hoa',
+      },
+    ],
+    phoneNumber: [{ type: 'required', message: 'Bạn phải nhập số điện thoại' }],
+  };
 
   saveChange() {
     this.toggleBlockUI(true);
@@ -134,7 +151,7 @@ export class UserDetailComponent implements OnInit,OnDestroy {
           },
         });
     } else {
-      this.userService
+      this.userServiceCustom
         .userPUT(this.config.data?.id, this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
@@ -178,18 +195,15 @@ export class UserDetailComponent implements OnInit,OnDestroy {
     }
   }
 
-
-
-
-
   buildForm() {
     this.form = this.fb.group({
       avatar: new FormControl(this.selectedEntity.avatar || null),
-      userName: new FormControl(this.selectedEntity.userName || null, Validators.required),
-      email: new FormControl(this.selectedEntity.email || null, Validators.required),
+      fileImage: new FormControl(null),
+      userName: new FormControl(this.selectedEntity.userName || null,Validators.required),
+      email: new FormControl(this.selectedEntity.email || null,Validators.required),
       phoneNumber: new FormControl(this.selectedEntity.phoneNumber || null),
       birthDay: new FormControl(this.selectedEntity.birthDay || null),
-      fullName: new FormControl(this.selectedEntity.fullName || null, Validators.required),
+      fullName: new FormControl(this.selectedEntity.fullName || null,Validators.required),
       password: new FormControl(
         null,
         Validators.compose([
@@ -200,11 +214,13 @@ export class UserDetailComponent implements OnInit,OnDestroy {
         ])
       ),
     });
+    
   }
 
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
+        this.form.get('fileImage').setValue(file);
       // Đọc dữ liệu của file thành URL cho việc hiển thị ảnh trước
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -213,6 +229,7 @@ export class UserDetailComponent implements OnInit,OnDestroy {
       };
       reader.readAsDataURL(file);
     }
-  }
 
+  }
+  
 }

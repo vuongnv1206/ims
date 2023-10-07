@@ -9,7 +9,6 @@ export class FileService {
     const storage = getStorage();
 
     const url = await getDownloadURL(ref(storage, 'images/' + fileName));
-    console.log(url);
     return url;
   }
 }
