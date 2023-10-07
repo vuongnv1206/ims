@@ -4,7 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
-import { API_BASE_URL, AuthClient, RoleClient, UserClient } from './api/api-generate';
+import {
+  API_BASE_URL,
+  AuthClient,
+  RoleClient,
+  UserClient,
+} from './api/api-generate';
+import { UserClientCustom } from './api/custom-api-generate';
 import { TokenService } from './shared/services/token.service';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -17,13 +23,13 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityService } from './shared/services/utility.service';
 import { ImageModule } from 'primeng/image';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideDatabase,getDatabase } from '@angular/fire/database';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { provideFunctions,getFunctions } from '@angular/fire/functions';
-import { provideMessaging,getMessaging } from '@angular/fire/messaging';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideDatabase, getDatabase } from '@angular/fire/database';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideFunctions, getFunctions } from '@angular/fire/functions';
+import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FileService } from './shared/services/file.service';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -61,6 +67,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     ConfirmationService,
     UtilityService,
     FileService,
+    UserClientCustom,
   ],
   bootstrap: [AppComponent],
 })
