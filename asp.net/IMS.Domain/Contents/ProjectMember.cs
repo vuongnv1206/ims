@@ -1,4 +1,5 @@
 ﻿using IMS.Domain.Abstracts;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace IMS.Domain.Contents
 {
-    public class ProjectMember : Auditable
+    public class ProjectMember
     {
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public Guid UserId { get; set; }
         public int ProjectId { get; set; }
+        public AppUser User { get; set; }
         public Project Project { get; set; }
     }
 }

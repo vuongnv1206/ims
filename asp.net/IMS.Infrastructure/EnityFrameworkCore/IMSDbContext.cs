@@ -2,6 +2,7 @@
 using IMS.Domain.Contents;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.Seedings;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace IMS.Infrastructure.EnityFrameworkCore
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        public DbSet<User> Users { get; set; }
+        //public DbSet<AppUser> Users{ get; set; }
         public DbSet<IssueSetting> IssueSettings { get; set; }
         public DbSet<SubjectUser> SubjectUsers { get; set; }
         public DbSet<ClassStudent> ClassStudents { get; set; }
@@ -49,71 +50,12 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 
             builder.Entity<ClassStudent>().HasKey(cs => new { cs.ClassId, cs.UserId });
             builder.Entity<ProjectMember>().HasKey(cs => new { cs.ProjectId, cs.UserId });
+            builder.Entity<SubjectUser>().HasKey(cs => new { cs.SubjectId, cs.UserId });
+            builder.Entity<IssueSetting>().HasKey(cs => new { cs.SubjectId, cs.ProjectId, cs.ClassId });
 
-
-            builder.Entity<ClassStudent>()
-                .HasOne(cs => cs.Class)
-                .WithMany(c => c.ClassStudents)
-                .HasForeignKey(cs => cs.ClassId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<ClassStudent>()
-                .HasOne(cs => cs.User)
-                .WithMany(u => u.ClassStudents)
-                .HasForeignKey(cs => cs.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.SeedData();
-            base.OnModelCreating(builder);
-
-            builder.Entity<IssueSetting>()
-                .HasOne(p => p.Project)
-                .WithMany(u => u.IssueSettings)
-                .HasForeignKey(p => p.ProjectId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<IssueSetting>()
-             .HasOne(p => p.Subject)
-             .WithMany(u => u.IssueSettings)
-             .HasForeignKey(p => p.SubjectId)
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<IssueSetting>()
-             .HasOne(p => p.Class)
-             .WithMany(u => u.IssueSettings)
-             .HasForeignKey(p => p.ClassId)
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Milestone>()
-             .HasOne(p => p.Project)
-             .WithMany(u => u.Milestones)
-             .HasForeignKey(p => p.ProjectId)
-             .OnDelete(DeleteBehavior.Restrict);
-
-
-            builder.Entity<Issues>()
-             .HasOne(i => i.Project)
-            .WithMany(p => p.Issues)
-            .HasForeignKey(i => i.ProjectId)
-            .OnDelete(DeleteBehavior.NoAction);
-            
-            builder.Entity<Issues>()
-             .HasOne(i => i.User)
-            .WithMany(p => p.Issues)
-            .HasForeignKey(i => i.UserId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<ProjectMember>()
-             .HasOne(p => p.Project)
-             .WithMany(u => u.ProjectMembers)
-             .HasForeignKey(p => p.ProjectId)
-             .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<ProjectMember>()
-             .HasOne(p => p.User)
-             .WithMany(u => u.ProjectMembers)
-             .HasForeignKey(p => p.UserId)
-             .OnDelete(DeleteBehavior.Restrict);
-
+            builder.Entity<IdentityUserLogin<Guid>>().HasKey(s => new {s.ProviderKey,s.LoginProvider});
+            builder.Entity<IdentityUserRole<Guid>>().HasKey(s => new {s.RoleId,s.UserId});
+            builder.Entity<IdentityUserToken<Guid>>().HasKey(s => new {s.LoginProvider,s.UserId, s.Name});
         }
 
         public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")

@@ -1,4 +1,5 @@
 ﻿using IMS.Domain.Abstracts;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace IMS.Domain.Contents
         public string Type { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<AppUser> Users { get; set; }
         public ICollection<Class> Classes { get; set; }
     }
 }

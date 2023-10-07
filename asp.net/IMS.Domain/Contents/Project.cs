@@ -11,7 +11,6 @@ namespace IMS.Domain.Contents
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Visibility {  get; set; }
         public string AvatarUrl { get; set; }
         public int Status { get; set; }
         public int ClassId { get; set; }

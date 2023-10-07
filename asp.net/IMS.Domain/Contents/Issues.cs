@@ -1,4 +1,5 @@
 ﻿using IMS.Domain.Abstracts;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace IMS.Domain.Contents
         public int ProjectId { get; set; }
         public int IssueSettingId { get; set; }
         public int MilestoneId { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public Guid UserId { get; set; }
+        public  AppUser User{ get; set; }
         public Milestone Milestone { get; set; }
         public Project Project { get; set; }
         public IssueSetting IssueSetting { get; set; }

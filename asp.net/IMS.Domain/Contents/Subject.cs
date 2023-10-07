@@ -10,7 +10,7 @@ namespace IMS.Domain.Contents
     public  class Subject : Auditable
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public ICollection<Assignment> Assignments { get; set; }
         public ICollection<Class> Classes { get; set; }
         public ICollection<IssueSetting> IssueSettings { get; set; }
