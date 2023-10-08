@@ -7,34 +7,34 @@ using System.Threading.Tasks;
 
 namespace IMS.Contract.Common.UnitOfWorks
 {
-	public interface IGenericRepository<T> where T : class
-	{
-		//Get a
-		Task<T> GetById(int id);
-		Task<T> GetWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
+    public interface IGenericRepository<T> where T : class
+    {
+        Task<T> GetById(int id);
+        Task<T> GetWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
 
 
-		//Queriable
-		IQueryable<T> GetListAsync();
-		IQueryable<T> GetListAsyncWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
+        //Queriable
+        IQueryable<T> GetListAsync();
+        IQueryable<T> GetListAsyncWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
 
 
-		//Insert
-		Task<T> InsertAsync(T entity);
-		Task InsertManyAsync(IEnumerable<T> entities);
+        //Insert
+        Task<T> InsertAsync(T entity);
+        Task InsertManyAsync(IEnumerable<T> entities);
 
-		//Update
-		Task<T> UpdateAsync(T entity);
-		Task UpdateManyAsync(IEnumerable<T> entities);
-
-
-		//Delete
-		Task DeleteAsync(T entity);
-		Task DeleteManyAsync(Expression<Func<T, bool>> predicate);
+        //Update
+        Task<T> UpdateAsync(T entity);
+        Task UpdateManyAsync(IEnumerable<T> entities);
 
 
-		//Others
-		Task<bool> ExistsAsync(int id);
-		Task<int> GetCountAsync(Expression<Func<T, bool>> predicate);
-	}
+        //Delete
+        Task DeleteAsync(T entity);
+        Task DeleteManyAsync(Expression<Func<T, bool>> predicate);
+
+
+        //Others
+        Task<bool> ExistsAsync(int id);
+        Task<int> GetCountAsync(Expression<Func<T, bool>> predicate);
+    }
+
 }
