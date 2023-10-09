@@ -20,5 +20,9 @@
 		<ProjectReference Include="..\IMS.Infrastructure\IMS.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="mailssave\" />
+	</ItemGroup>
+
 
 </Project>

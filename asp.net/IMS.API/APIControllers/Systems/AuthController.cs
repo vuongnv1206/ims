@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 
 namespace IMS.Api.APIControllers.Systems
 {
@@ -63,7 +65,14 @@ namespace IMS.Api.APIControllers.Systems
 
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
 
-                emailSender.SendEmailAsync(user.Email, "Confirmation email link!", confirmationLink);
+                //emailSender.SendEmailAsync(user.Email, "Confirmation email link!", confirmationLink);
+
+                var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
+                {
+                    Credentials = new NetworkCredential("b9d30cb10cb39e", "3bea5e7cfe3f25"),
+                    EnableSsl = true
+                };
+                client.Send("swdgroup6@gmail.com", $"{user.Email}", "Confirmation email link!", confirmationLink);
 
                 // Trả về kết quả thành công nếu không có lỗi
                 return Ok(new { message = "Registration successful" });
