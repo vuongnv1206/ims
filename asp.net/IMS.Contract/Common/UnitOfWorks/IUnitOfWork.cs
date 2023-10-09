@@ -9,7 +9,5 @@ namespace IMS.Contract.Common.UnitOfWorks
 	public interface IUnitOfWork : IDisposable
 	{
 		Task SaveChangesAsync();
-
-		//IProductRepository ProductRepository { get; }
 	}
 }

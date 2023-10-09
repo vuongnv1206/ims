@@ -14,8 +14,8 @@ namespace IMS.Contract.Common.UnitOfWorks
 		Task<T> GetWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
 
 
-		//Queriable
-		IQueryable<T> GetListAsync();
+        //Queriable
+        IQueryable<T> GetListAsync();
 		IQueryable<T> GetListAsyncWithDetails(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] propertySelectors);
 
 
