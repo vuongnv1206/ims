@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IMS.Contract.Contents.Assignments;
+using IMS.Contract.Contents.Labels;
 using IMS.Contract.Systems.Roles;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Contents;
@@ -25,5 +26,9 @@ public class MappingProfile : Profile
 		CreateMap<CreateUpdateAssignmentDTO ,Assignment>().ReverseMap();
 		CreateMap<AssignmentDTO , Assignment>().ReverseMap();
 
-	}
+        //Label
+        CreateMap<CreateUpdateLabelDTO, Label>().ReverseMap();
+        CreateMap<LabelDTO, Label>().ReverseMap();
+
+    }
 }
