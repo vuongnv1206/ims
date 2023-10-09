@@ -2,6 +2,7 @@
 using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Assignments;
+using IMS.Contract.Contents.Subjects;
 using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Systems.Roles;
@@ -27,6 +28,10 @@ public static class BusinessServiceRegistration
 		
 		//AssignmentService
 		services.AddScoped<IAssignmentService, AssignmentService>();
+
+		//SubjectService
+		services.AddScoped<ISubjectService, SubjectService>();
+
 		//Generic Repo
 		services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
