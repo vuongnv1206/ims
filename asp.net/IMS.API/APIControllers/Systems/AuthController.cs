@@ -1,4 +1,5 @@
-﻿using IMS.Contract.Common.Requests.LoginRequest;
+﻿using Firebase.Auth;
+using IMS.Contract.Common.Requests.LoginRequest;
 using IMS.Contract.Common.Responses;
 using IMS.Contract.Common.Responses.LoginResponse;
 using IMS.Contract.Systems.Authentications;
@@ -6,6 +7,7 @@ using IMS.Contract.Systems.Settings;
 using IMS.Contract.Systems.Tokens;
 using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -21,21 +23,25 @@ namespace IMS.Api.APIControllers.Systems
 		private readonly IAuthService authService;
         private readonly HttpClient httpClient;
         private readonly GitlabSetting gitlabSetting;
-
+        private readonly UserManager<AppUser> userManager;
+        private readonly IEmailSender emailSender;
         public AuthController(
-			IAuthService authenticationService,
-			IAuthService authService,
+            IAuthService authenticationService,
+            IAuthService authService,
             HttpClient httpClient,
+            IEmailSender emailSender,
+            UserManager<AppUser> userManager,
             IOptions<GitlabSetting> gitlabSetting)
 		{
 			_authService = authenticationService;
-
 			this.authService = authService;
             this.httpClient = httpClient;
-			this.gitlabSetting = gitlabSetting.Value;
+            this.gitlabSetting = gitlabSetting.Value;
+            this.userManager = userManager;
+            this.emailSender = emailSender;
         }
 
-		
+
         [HttpPost("login")]
 		[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
 		public async Task<ActionResult<AuthResponse>> Login(LoginModel request)
@@ -50,10 +56,17 @@ namespace IMS.Api.APIControllers.Systems
 			try
 			{
 				// Code xử lý đăng ký người dùng
-				await _authService.Register(request);
+				var user = await _authService.Register(request);
+                //Add token to verify the email...
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                //Encode để có thể đính kèm nó trên địa chỉ url
 
-				// Trả về kết quả thành công nếu không có lỗi
-				return Ok(new { message = "Registration successful" });
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
+
+                emailSender.SendEmailAsync(user.Email, "Confirmation email link!", confirmationLink);
+
+                // Trả về kết quả thành công nếu không có lỗi
+                return Ok(new { message = "Registration successful" });
 			}
 			catch (Exception ex)
 			{
@@ -90,5 +103,16 @@ namespace IMS.Api.APIControllers.Systems
             return Ok(result);
         }
 
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await userManager.ConfirmEmailAsync(user, token);
+                return Ok("Successfully email");
+            }
+            return BadRequest();
+        }
     }
 }

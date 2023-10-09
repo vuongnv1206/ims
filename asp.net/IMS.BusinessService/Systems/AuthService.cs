@@ -15,13 +15,16 @@ using IMS.Domain.Systems;
 using IMS.Infrastructure.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace IMS.BusinessService.Systems
 {
@@ -32,6 +35,7 @@ namespace IMS.BusinessService.Systems
         private readonly SignInManager<AppUser> _signInManager;
         private readonly JwtSetting _jwtSettings;
         private readonly AppSetting appSetting;
+        private readonly IEmailSender emailSender;
 
         public AuthService(
             IMSDbContext context,
@@ -40,6 +44,7 @@ namespace IMS.BusinessService.Systems
             SignInManager<AppUser> signInManager,
             IOptions<JwtSetting> jwtSettings,
             RoleManager<AppRole> roleManager,
+            IEmailSender emailSender,
             IOptions<AppSetting> appSetting)
             : base(context, mapper)
         {
@@ -47,9 +52,10 @@ namespace IMS.BusinessService.Systems
             _userManager = userManager;
             _jwtSettings = jwtSettings.Value;
             _roleManager = roleManager;
+            this.emailSender= emailSender;
             this.appSetting = appSetting.Value;
         }
-        public async Task Register(RegisterModel input)
+        public async Task<AppUser> Register(RegisterModel input)
         {
             var existingUser = await _userManager.FindByNameAsync(input.Username);
 
@@ -63,7 +69,7 @@ namespace IMS.BusinessService.Systems
                 Email = input.Email,
                 UserName = input.Username,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                EmailConfirmed = true
+                EmailConfirmed = false
             };
 
             var existingEmail = await _userManager.FindByEmailAsync(input.Email);
@@ -74,6 +80,7 @@ namespace IMS.BusinessService.Systems
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "User");
+                    return user;
                 }
                 else
                 {

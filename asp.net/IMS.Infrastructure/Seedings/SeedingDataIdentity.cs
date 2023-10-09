@@ -48,7 +48,8 @@ namespace IMS.Infrastructure.Seedings
 					 UserName = "admin@gmail.com",
 					 NormalizedUserName = "ADMIN@GMAIL.COM",
 					 PasswordHash = hasher.HashPassword(null, "Abcd@1234"),
-					 EmailConfirmed = true
+					 EmailConfirmed = true,
+					 SecurityStamp = Guid.NewGuid().ToString(),
 				 },
 				 new AppUser
 				 {
@@ -59,8 +60,9 @@ namespace IMS.Infrastructure.Seedings
 					 UserName = "user@gmail.com",
 					 NormalizedUserName = "USER@GMAIL.COM",
 					 PasswordHash = hasher.HashPassword(null, "Abcd@1234"),
-					 EmailConfirmed = true
-				 }
+					 EmailConfirmed = true,
+                     SecurityStamp = Guid.NewGuid().ToString(),
+                 }
 			);
 
 			builder.Entity<IdentityUserRole<Guid>>().HasData(

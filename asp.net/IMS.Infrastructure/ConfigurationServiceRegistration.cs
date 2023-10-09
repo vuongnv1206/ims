@@ -15,6 +15,8 @@ public static class ConfigurationServiceRegistration
             (configuration.GetSection(AppSetting.AppSettings));
         services.Configure<FirebaseSetting>
             (configuration.GetSection(FirebaseSetting.Firebase));
+        services.Configure<EmailSetting>
+            (configuration.GetSection(EmailSetting.EmailConfig));
 
         return services;
     }

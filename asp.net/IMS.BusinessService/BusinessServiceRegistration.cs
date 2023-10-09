@@ -1,3 +1,4 @@
+using IMS.BusinessService.Common.Emails;
 using IMS.BusinessService.Common.UnitOfWorks;
 using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
@@ -8,6 +9,7 @@ using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Systems.Roles;
 using IMS.Contract.Systems.Users;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -44,6 +46,9 @@ public static class BusinessServiceRegistration
 
 		// firebase
 		services.AddScoped<IFirebaseService, FirebaseService>();
+
+		//email
+		services.AddSingleton<IEmailSender, EmailService>();
 
         return services;
     }

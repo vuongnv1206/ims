@@ -21,7 +21,9 @@ namespace IMS.Infrastructure
 			//services.AddIdentity<AppUser,AppRole>()
 			//	.AddEntityFrameworkStores<IMSDbContext>()
 			//	.AddDefaultTokenProviders();
-			services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<IMSDbContext>();
+			services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
+				.AddEntityFrameworkStores<IMSDbContext>()
+				.AddDefaultTokenProviders();
 			//Add config for required Email
 			services.Configure<IdentityOptions>(options => options.SignIn.RequireConfirmedEmail = true);
 

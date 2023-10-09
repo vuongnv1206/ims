@@ -42,8 +42,9 @@ namespace IMS.Infrastructure.EnityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-         
             base.OnModelCreating(builder);
+            builder.SeedData();
+            
         }
 
         public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")
