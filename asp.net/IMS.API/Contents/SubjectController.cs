@@ -3,7 +3,6 @@ using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Subjects;
 using IMS.Domain.Contents;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace IMS.Api.Contents
 {
@@ -24,12 +23,12 @@ namespace IMS.Api.Contents
         }
 
 
-        [HttpGet("GetSubjectById")]
-        public async Task<ActionResult<SubjectDto>> GetSubjectById(int subjectId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SubjectReponse>> GetAssignmentId(int id)
         {
             try
             {
-                var data = await _subjectService.GetBySubjectByIdAsync(subjectId);
+                var data = await _subjectService.GetById(id);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -38,17 +37,15 @@ namespace IMS.Api.Contents
             }
         }
 
-        
-
-        [HttpGet]
-        public async Task<ActionResult<SubjectReponse>> GetAllSubject([FromQuery] SubjectRequest request)
+        [HttpGet("subject")]
+        public async Task<ActionResult<SubjectReponse>> GetAllAssignment([FromQuery] SubjectRequest request)
         {
-            var data = await _subjectService.GetSubjectAllAsync(request);
+            var data = await _subjectService.GetListAllAsync(request);
             return Ok(data);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSubject(int id)
+        public async Task<IActionResult> DeleteAssignment(int id)
         {
             var data = await _subjectService.GetById(id);
             if (data != null)
@@ -65,7 +62,7 @@ namespace IMS.Api.Contents
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewSubject([FromBody] CreateUpdateSubjectDto data)
+        public async Task<IActionResult> CreateNewAssignment([FromBody] CreateUpdateSubjectDto data)
         {
             var map = _mapper.Map<Subject>(data);
             var result = await _subjectService.InsertAsync(map);
@@ -74,7 +71,7 @@ namespace IMS.Api.Contents
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSubject(int id, [FromBody] CreateUpdateSubjectDto input)
+        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] CreateUpdateSubjectDto input)
         {
             var data = await _subjectService.GetById(id);
             if (data == null)
