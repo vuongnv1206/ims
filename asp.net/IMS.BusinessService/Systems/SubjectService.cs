@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using IMS.BusinessService.Service;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Assignments;
 using IMS.Contract.Contents.Subjects;
 using IMS.Domain.Contents;
 using IMS.Infrastructure.EnityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,9 +25,27 @@ namespace IMS.BusinessService.Systems
             _mapper = mapper;
         }
 
-        public async Task<SubjectReponse> GetListAllAsync(SubjectRequest request)
+        public async Task<SubjectDto> GetBySubjectByIdAsync(int subjectId)
         {
-            var subjectQuery = await context.Subjects.Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
+            var subject = await context.Subjects
+            .Include(x => x.Assignments)
+            .Include(x => x.Classes)     
+            .Include(x => x.IssueSettings)
+            .Include(x => x.SubjectUsers)
+            .FirstOrDefaultAsync(u => u.Id == subjectId);
+            
+            var subjectDto = mapper.Map<SubjectDto>(subject);
+            return subjectDto;
+        }
+
+        public async Task<SubjectReponse> GetSubjectAllAsync(SubjectRequest request)
+        {
+            var subjectQuery = await context.Subjects
+                .Include(x => x.Assignments)
+                .Include(x => x.Classes)
+                .Include(x => x.IssueSettings)
+                .Include(x => x.SubjectUsers)
+                .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
             || u.Name.Contains(request.KeyWords)
             || u.Description.Contains(request.KeyWords)).ToListAsync();
 
@@ -40,5 +60,7 @@ namespace IMS.BusinessService.Systems
 
             return response;
         }
+
+
     }
 }
