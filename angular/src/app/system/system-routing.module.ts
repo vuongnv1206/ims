@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { RoleComponent } from './role/role.component';
 import { UserComponent } from './user/user.component';
+import { SettingManagementComponent } from './setting-management/setting-management.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: 'user',
     component: UserComponent,
   },
+  {
+    path: 'setting',
+    component: SettingManagementComponent,
+  }
 ];
 
 @NgModule({
