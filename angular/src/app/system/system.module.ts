@@ -33,6 +33,7 @@ import { NightMarketSharedModule } from '../shared/modules/nightmarket-shared.mo
 import { RoleAssignComponent } from './user/role-assign/role-assign.component';
 import { RoleDetailComponent } from './role/role-detail/role-detail.component';
 import { PermissionGrantComponent } from './role/permission-grant/permission-grant.component';
+import { SettingManagementComponent } from './setting-management/setting-management.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PermissionGrantComponent } from './role/permission-grant/permission-gra
     RoleAssignComponent,
     RoleDetailComponent,
     PermissionGrantComponent,
+    SettingManagementComponent,
   ],
   imports: [
     CommonModule,
@@ -77,9 +79,6 @@ import { PermissionGrantComponent } from './role/permission-grant/permission-gra
     FileUploadModule,
     CalendarModule,
     NightMarketSharedModule,
-
-
-  ]
+  ],
 })
-
-export class SystemModule { }
+export class SystemModule {}
