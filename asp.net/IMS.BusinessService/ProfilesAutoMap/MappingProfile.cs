@@ -1,6 +1,7 @@
 using AutoMapper;
 using IMS.Contract.Contents.Assignments;
 using IMS.Contract.Contents.Labels;
+using IMS.Contract.Contents.Settings;
 using IMS.Contract.Contents.Subjects;
 using IMS.Contract.Systems.Roles;
 using IMS.Contract.Systems.Users;
@@ -34,6 +35,10 @@ public class MappingProfile : Profile
         //Subject 
         CreateMap<CreateUpdateSubjectDto, Subject>().ReverseMap();
         CreateMap<SubjectDto, Subject>().ReverseMap();
+
+		// setting
+		CreateMap<SettingDto, Setting>().ReverseMap();
+		CreateMap<CreateUpdateSetting, Setting>().ReverseMap();
 
     }
 }

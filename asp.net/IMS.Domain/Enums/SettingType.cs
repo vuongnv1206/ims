@@ -8,5 +8,7 @@ namespace IMS.Domain.Enums
 {
     public enum SettingType
     {
+        Semester = 1,
+        Domain = 2
     }
 }
