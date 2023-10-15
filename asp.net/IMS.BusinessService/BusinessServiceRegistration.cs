@@ -4,6 +4,7 @@ using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Assignments;
 using IMS.Contract.Contents.Labels;
+using IMS.Contract.Contents.Settings;
 using IMS.Contract.Contents.Subjects;
 using IMS.Contract.Systems.Authentications;
 using IMS.Contract.Systems.Firebase;
@@ -49,6 +50,9 @@ public static class BusinessServiceRegistration
 
 		//email
 		services.AddSingleton<IEmailSender, EmailService>();
+
+		// setting
+		services.AddScoped<ISettingService, SettingService>();
 
         return services;
     }
