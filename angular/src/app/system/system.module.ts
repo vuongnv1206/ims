@@ -34,6 +34,7 @@ import { RoleAssignComponent } from './user/role-assign/role-assign.component';
 import { RoleDetailComponent } from './role/role-detail/role-detail.component';
 import { PermissionGrantComponent } from './role/permission-grant/permission-grant.component';
 import { SettingManagementComponent } from './setting-management/setting-management.component';
+import { SettingDetailComponent } from './setting-management/setting-detail/setting-detail.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SettingManagementComponent } from './setting-management/setting-managem
     RoleDetailComponent,
     PermissionGrantComponent,
     SettingManagementComponent,
+    SettingDetailComponent,
   ],
   imports: [
     CommonModule,

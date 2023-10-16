@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   SettingClient,
   SettingDto,
@@ -9,26 +9,27 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { SettingDetailComponent } from './setting-detail/setting-detail.component';
+import { MessageConstants } from 'src/app/shared/constants/message.const';
 
 @Component({
   selector: 'app-setting-management',
   templateUrl: './setting-management.component.html',
   styleUrls: ['./setting-management.component.scss'],
 })
-export class SettingManagementComponent implements OnInit {
+export class SettingManagementComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
 
   public items: SettingDto[];
   public selectedItems: SettingDto[] = [];
-  public keyword: string = '';
 
   //Paging variables
   public page: number = 1;
   public itemsPerPage: number = 3;
   public totalCount: number;
-  public keyWords: string | null;
+  public keyWords: string;
   public skip: number | null;
   public take: number | null;
   public sortField: string | null;
@@ -53,6 +54,11 @@ export class SettingManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   loadData(selectionId = null) {
@@ -86,7 +92,21 @@ export class SettingManagementComponent implements OnInit {
   onSettingTypeChange(event: any) {
     this.settingTypeFilter = event.value;
     this.loadData();
-    // Bây giờ bạn có thể thực hiện xử lý dựa trên giá trị đã chọn
+  }
+
+  showAddModal() {
+    const ref = this.dialogService.open(SettingDetailComponent, {
+      header: 'Add new setting',
+      width: '50%',
+    });
+
+    ref.onClose.subscribe((data: SettingDto) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+        this.selectedItems = [];
+        this.loadData();
+      }
+    });
   }
 
   private toggleBlockUI(enabled: boolean) {

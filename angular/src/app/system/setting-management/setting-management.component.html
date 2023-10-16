@@ -23,14 +23,16 @@
               id="txtKeyword"
               pInputText
               placeholder="Nhập từ khóa..."
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyWords"
               type="text"
             />
           </div>
-          <button type="button" pButton>Tìm</button>
+          <button type="button" pButton (click)="loadData()">Tìm</button>
         </div>
       </div>
       <div class="col-4">
-        <button type="button" pButton>Add new</button>
+        <button type="button" pButton label="Add New" (click)="showAddModal()"></button>
       </div>
     </div>
     <p-table
