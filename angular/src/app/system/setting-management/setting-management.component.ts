@@ -34,11 +34,8 @@ export class SettingManagementComponent implements OnInit, OnDestroy {
   public take: number | null;
   public sortField: string | null;
 
-  selectedSettingType: SettingType;
-  settingTypes: SelectItem[] = [
-    { label: 'Semester', value: SettingType.Semester },
-    { label: 'Domain', value: SettingType.Domain },
-  ];
+  settingTypes: any[]; // Mảng tùy chọn
+  selectedSettingType: SettingType; // Trường được chọn
 
   // filter
   settingTypeFilter: SettingType;
@@ -50,7 +47,14 @@ export class SettingManagementComponent implements OnInit, OnDestroy {
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService
-  ) {}
+  ) {
+    this.settingTypes = Object.keys(SettingType)
+      .filter((v) => isNaN(Number(v)))
+      .map((key) => ({
+        label: key,
+        value: SettingType[key],
+      }));
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -65,7 +69,7 @@ export class SettingManagementComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
     this.settingService
       .settingGET(
-        this.settingTypeFilter,
+        this.selectedSettingType,
         this.keyWords,
         this.page,
         this.itemsPerPage,
@@ -90,7 +94,6 @@ export class SettingManagementComponent implements OnInit, OnDestroy {
   }
 
   onSettingTypeChange(event: any) {
-    this.settingTypeFilter = event.value;
     this.loadData();
   }
 
