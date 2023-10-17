@@ -15,9 +15,11 @@
           ></p-dropdown>
           <p-dropdown
             class="mr-2"
-            [(ngModel)]="selectedSettingType"
-            optionLabel="name"
-            placeholder="Action"
+            [(ngModel)]="selectedActiveTypes"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Status"
+            [options]="activeTypes"
           ></p-dropdown>
           <div class="field">
             <input
@@ -66,15 +68,35 @@
           <td>
             {{ row.active }}
           </td>
-          <td></td>
+          <td>
+            <button
+              pButton
+              type="button"
+              label="Sửa"
+              class="ml-1 p-button-help"
+              (click)="showEditModal(row.id)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              label="Xóa"
+              class="ml-1 p-button-danger"
+              (click)="deleteItem(row.id)"
+            ></button>
+          </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="summary">
-        <!-- <div style="text-align: left">Tổng số: {{ totalCount | number }}</div> -->
+        <div style="text-align: left">Tổng số: {{ totalCount | number }}</div>
       </ng-template>
     </p-table>
 
-    <p-paginator [rowsPerPageOptions]="[10, 20, 50, 100]"></p-paginator>
+    <p-paginator
+      [rows]="itemsPerPage"
+      [totalRecords]="totalCount"
+      (onPageChange)="pageChanged($event)"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+    ></p-paginator>
 
     <p-blockUI [target]="pnl">
       <p-progressSpinner

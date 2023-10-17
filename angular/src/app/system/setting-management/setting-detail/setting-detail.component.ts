@@ -75,7 +75,7 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      // this.loadDetail(this.config.data.id);
+      this.loadDetail(this.config.data.id);
       this.saveBtnName = 'Update Setting';
       this.closeBtnName = 'Cancel';
     } else {
@@ -84,9 +84,25 @@ export class SettingDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  loadDetail(id: number) {
+    this.toggleBlockUI(true);
+    this.settingService
+      .settingGET2(id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (reponse: SettingDto) => {
+          this.selectedEntity = reponse;
+          this.buildForm();
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
+  }
+
   saveChange() {
     this.toggleBlockUI(true);
-
     this.saveData();
   }
 

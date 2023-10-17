@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IMS.BusinessService.Service;
+using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Settings;
 using IMS.Domain.Contents;
 using IMS.Infrastructure.EnityFrameworkCore;
@@ -27,12 +28,12 @@ public class SettingService : ServiceBase<Setting>, ISettingService
             settings = settings.Where(x => x.Type == request.Type).ToList();
         }
 
-        var settingMap = mapper.Map<List<SettingDto>>(settings);
+        var settingMap = mapper.Map<List<SettingDto>>(settings).Paginate(request).ToList();
 
         return new SettingResponse
         {
             Settings = settingMap,
-            Page = GetPagingResponse(request, settingMap.Count)
+            Page = GetPagingResponse(request, settings.Count)
         };
 
     }
