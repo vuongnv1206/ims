@@ -966,3 +966,8 @@ export interface IssueSetting {
   class?: Class;
   issues?: Issues[] | undefined;
 }
+
+export enum ActiveType {
+  Activate = 0,
+  Deactivate = 1,
+}
