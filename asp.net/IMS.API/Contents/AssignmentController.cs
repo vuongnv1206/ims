@@ -31,7 +31,7 @@ namespace IMS.Api.Contents
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AssignmentResponse>> GetAssignmentId(int id)
+        public async Task<ActionResult<AssignmentDTO>> GetAssignmentId(int id)
         {
             try
             {
