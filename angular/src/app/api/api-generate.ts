@@ -15,6 +15,346 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase, HttpContext } 
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IAssignmentClient {
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    assignments(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<AssignmentResponse>;
+    /**
+     * @return Success
+     */
+    assignmentGET(id: number): Observable<AssignmentResponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    assignmentPUT(id: number, body?: CreateUpdateAssignmentDTO | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteAssignment(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    assignmentPOST(body?: CreateUpdateAssignmentDTO | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AssignmentClient implements IAssignmentClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    assignments(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<AssignmentResponse> {
+        let url_ = this.baseUrl + "/api/Assignment/assignments?";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAssignments(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAssignments(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<AssignmentResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<AssignmentResponse>;
+        }));
+    }
+
+    protected processAssignments(response: HttpResponseBase): Observable<AssignmentResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AssignmentResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    assignmentGET(id: number, httpContext?: HttpContext): Observable<AssignmentResponse> {
+        let url_ = this.baseUrl + "/api/Assignment/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAssignmentGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAssignmentGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<AssignmentResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<AssignmentResponse>;
+        }));
+    }
+
+    protected processAssignmentGET(response: HttpResponseBase): Observable<AssignmentResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AssignmentResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    assignmentPUT(id: number, body?: CreateUpdateAssignmentDTO | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Assignment/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAssignmentPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAssignmentPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processAssignmentPUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteAssignment(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Assignment/delete-assignment/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteAssignment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteAssignment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteAssignment(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    assignmentPOST(body?: CreateUpdateAssignmentDTO | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Assignment";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAssignmentPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAssignmentPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processAssignmentPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IAuthClient {
     /**
      * @param body (optional) 
@@ -31,9 +371,17 @@ export interface IAuthClient {
      * @return Success
      */
     authenWithOauth2(body?: OauthRequest | undefined): Observable<Token>;
+    /**
+     * @param token (optional) 
+     * @param email (optional) 
+     * @return Success
+     */
+    confirmEmail(token?: string | undefined, email?: string | undefined): Observable<void>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthClient implements IAuthClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -208,6 +556,404 @@ export class AuthClient implements IAuthClient {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param token (optional) 
+     * @param email (optional) 
+     * @return Success
+     */
+    confirmEmail(token?: string | undefined, email?: string | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/auth/ConfirmEmail?";
+        if (token === null)
+            throw new Error("The parameter 'token' cannot be null.");
+        else if (token !== undefined)
+            url_ += "token=" + encodeURIComponent("" + token) + "&";
+        if (email === null)
+            throw new Error("The parameter 'email' cannot be null.");
+        else if (email !== undefined)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processConfirmEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processConfirmEmail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processConfirmEmail(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface ILabelClient {
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    labels(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<LabelResponse>;
+    /**
+     * @return Success
+     */
+    labelGET(id: number): Observable<LabelResponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    labelPUT(id: number, body?: CreateUpdateLabelDTO | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteLabel(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    labelPOST(body?: CreateUpdateLabelDTO | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class LabelClient implements ILabelClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    labels(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<LabelResponse> {
+        let url_ = this.baseUrl + "/api/Label/labels?";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLabels(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLabels(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<LabelResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<LabelResponse>;
+        }));
+    }
+
+    protected processLabels(response: HttpResponseBase): Observable<LabelResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as LabelResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    labelGET(id: number, httpContext?: HttpContext): Observable<LabelResponse> {
+        let url_ = this.baseUrl + "/api/Label/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLabelGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLabelGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<LabelResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<LabelResponse>;
+        }));
+    }
+
+    protected processLabelGET(response: HttpResponseBase): Observable<LabelResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as LabelResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    labelPUT(id: number, body?: CreateUpdateLabelDTO | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Label/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLabelPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLabelPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processLabelPUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteLabel(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Label/delete-label/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteLabel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteLabel(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteLabel(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    labelPOST(body?: CreateUpdateLabelDTO | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Label";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLabelPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLabelPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processLabelPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export interface IRoleClient {
@@ -251,7 +997,9 @@ export interface IRoleClient {
     permissionsPUT(body?: PermissionDto | undefined): Observable<void>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RoleClient implements IRoleClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -667,6 +1415,698 @@ export class RoleClient implements IRoleClient {
     }
 }
 
+export interface ISettingClient {
+    /**
+     * @param type (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    settingGET(type?: SettingType | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<SettingResponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    settingPOST(body?: CreateUpdateSetting | undefined): Observable<SettingDto>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    settingPUT(id: number, body?: CreateUpdateSetting | undefined): Observable<SettingDto>;
+    /**
+     * @return Success
+     */
+    settingDELETE(id: number): Observable<void>;
+    /**
+     * @return Success
+     */
+    settingGET2(id: number): Observable<SettingDto>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SettingClient implements ISettingClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param type (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    settingGET(type?: SettingType | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<SettingResponse> {
+        let url_ = this.baseUrl + "/api/Setting?";
+        if (type === null)
+            throw new Error("The parameter 'type' cannot be null.");
+        else if (type !== undefined)
+            url_ += "Type=" + encodeURIComponent("" + type) + "&";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSettingGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSettingGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SettingResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SettingResponse>;
+        }));
+    }
+
+    protected processSettingGET(response: HttpResponseBase): Observable<SettingResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SettingResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    settingPOST(body?: CreateUpdateSetting | undefined, httpContext?: HttpContext): Observable<SettingDto> {
+        let url_ = this.baseUrl + "/api/Setting";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSettingPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSettingPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SettingDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SettingDto>;
+        }));
+    }
+
+    protected processSettingPOST(response: HttpResponseBase): Observable<SettingDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SettingDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    settingPUT(id: number, body?: CreateUpdateSetting | undefined, httpContext?: HttpContext): Observable<SettingDto> {
+        let url_ = this.baseUrl + "/api/Setting/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSettingPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSettingPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SettingDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SettingDto>;
+        }));
+    }
+
+    protected processSettingPUT(response: HttpResponseBase): Observable<SettingDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SettingDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    settingDELETE(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Setting/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSettingDELETE(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSettingDELETE(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSettingDELETE(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    settingGET2(id: number, httpContext?: HttpContext): Observable<SettingDto> {
+        let url_ = this.baseUrl + "/api/Setting/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSettingGET2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSettingGET2(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SettingDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SettingDto>;
+        }));
+    }
+
+    protected processSettingGET2(response: HttpResponseBase): Observable<SettingDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SettingDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface ISubjectClient {
+    /**
+     * @return Success
+     */
+    subjectGET(id: number): Observable<SubjectReponse>;
+    /**
+     * @return Success
+     */
+    subjectDELETE(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    subjectPUT(id: number, body?: CreateUpdateSubjectDto | undefined): Observable<void>;
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    subject(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<SubjectReponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    subjectPOST(body?: CreateUpdateSubjectDto | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SubjectClient implements ISubjectClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    subjectGET(id: number, httpContext?: HttpContext): Observable<SubjectReponse> {
+        let url_ = this.baseUrl + "/api/Subject/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubjectGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubjectGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SubjectReponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SubjectReponse>;
+        }));
+    }
+
+    protected processSubjectGET(response: HttpResponseBase): Observable<SubjectReponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SubjectReponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    subjectDELETE(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Subject/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubjectDELETE(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubjectDELETE(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSubjectDELETE(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    subjectPUT(id: number, body?: CreateUpdateSubjectDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Subject/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubjectPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubjectPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSubjectPUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    subject(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<SubjectReponse> {
+        let url_ = this.baseUrl + "/api/Subject/subject?";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubject(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubject(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SubjectReponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SubjectReponse>;
+        }));
+    }
+
+    protected processSubject(response: HttpResponseBase): Observable<SubjectReponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as SubjectReponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    subjectPOST(body?: CreateUpdateSubjectDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Subject";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSubjectPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSubjectPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSubjectPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IUserClient {
     /**
      * @param keyWords (optional) 
@@ -693,10 +2133,15 @@ export interface IUserClient {
      */
     userGET(id: string): Observable<UserDto>;
     /**
-     * @param body (optional) 
+     * @param fullName (optional) 
+     * @param birthDay (optional) 
+     * @param avatar (optional) 
+     * @param address (optional) 
+     * @param phoneNumber (optional) 
+     * @param fileImage (optional) 
      * @return Success
      */
-    userPUT(id: string, body?: UpdateUserDto | undefined): Observable<void>;
+    userPUT(id: string, fullName?: string | undefined, birthDay?: Date | undefined, avatar?: string | undefined, address?: string | undefined, phoneNumber?: string | undefined, fileImage?: FileParameter | undefined): Observable<void>;
     /**
      * @param body (optional) 
      * @return Success
@@ -704,7 +2149,9 @@ export interface IUserClient {
     userPOST(body?: CreateUserDto | undefined): Observable<void>;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UserClient implements IUserClient {
     private http: HttpClient;
     private baseUrl: string;
@@ -960,17 +2407,46 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param body (optional) 
+     * @param fullName (optional) 
+     * @param birthDay (optional) 
+     * @param avatar (optional) 
+     * @param address (optional) 
+     * @param phoneNumber (optional) 
+     * @param fileImage (optional) 
      * @return Success
      */
-    userPUT(id: string, body?: UpdateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
+    userPUT(id: string, fullName?: string | undefined, birthDay?: Date | undefined, avatar?: string | undefined, address?: string | undefined, phoneNumber?: string | undefined, fileImage?: FileParameter | undefined, httpContext?: HttpContext): Observable<void> {
         let url_ = this.baseUrl + "/api/User/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
+        const content_ = new FormData();
+        if (fullName === null || fullName === undefined)
+            throw new Error("The parameter 'fullName' cannot be null.");
+        else
+            content_.append("FullName", fullName.toString());
+        if (birthDay === null || birthDay === undefined)
+            throw new Error("The parameter 'birthDay' cannot be null.");
+        else
+            content_.append("BirthDay", birthDay.toJSON());
+        if (avatar === null || avatar === undefined)
+            throw new Error("The parameter 'avatar' cannot be null.");
+        else
+            content_.append("Avatar", avatar.toString());
+        if (address === null || address === undefined)
+            throw new Error("The parameter 'address' cannot be null.");
+        else
+            content_.append("Address", address.toString());
+        if (phoneNumber === null || phoneNumber === undefined)
+            throw new Error("The parameter 'phoneNumber' cannot be null.");
+        else
+            content_.append("PhoneNumber", phoneNumber.toString());
+        if (fileImage === null || fileImage === undefined)
+            throw new Error("The parameter 'fileImage' cannot be null.");
+        else
+            content_.append("FileImage", fileImage.data, fileImage.fileName ? fileImage.fileName : "FileImage");
 
         let options_ : any = {
             body: content_,
@@ -978,7 +2454,6 @@ export class UserClient implements IUserClient {
             responseType: "blob",
             context: httpContext,
             headers: new HttpHeaders({
-                "Content-Type": "application/json",
             })
         };
 
@@ -1069,6 +2544,57 @@ export class UserClient implements IUserClient {
     }
 }
 
+export interface AppUser {
+    id?: string;
+    userName?: string | undefined;
+    normalizedUserName?: string | undefined;
+    email?: string | undefined;
+    normalizedEmail?: string | undefined;
+    emailConfirmed?: boolean;
+    passwordHash?: string | undefined;
+    securityStamp?: string | undefined;
+    concurrencyStamp?: string | undefined;
+    phoneNumber?: string | undefined;
+    phoneNumberConfirmed?: boolean;
+    twoFactorEnabled?: boolean;
+    lockoutEnd?: Date | undefined;
+    lockoutEnabled?: boolean;
+    accessFailedCount?: number;
+    fullName?: string | undefined;
+    address?: string | undefined;
+    avatar?: string | undefined;
+    birthDay?: Date | undefined;
+    creationTime?: Date | undefined;
+    subjectUsers?: SubjectUser[] | undefined;
+    issues?: Issues[] | undefined;
+    classStudents?: ClassStudent[] | undefined;
+    projectMembers?: ProjectMember[] | undefined;
+}
+
+export interface Assignment {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+    subject?: Subject;
+}
+
+export interface AssignmentDTO {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+}
+
+export interface AssignmentResponse {
+    page?: PagingResponseInfo;
+    assignments?: AssignmentDTO[] | undefined;
+}
+
 export interface AuthResponse {
     id?: string;
     userName?: string | undefined;
@@ -1076,7 +2602,60 @@ export interface AuthResponse {
     token?: string | undefined;
 }
 
+export interface Class {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+    settingId?: number;
+    setting?: Setting;
+    subject?: Subject;
+    classStudents?: ClassStudent[] | undefined;
+    milestones?: Milestone[] | undefined;
+    projects?: Project[] | undefined;
+    issueSettings?: IssueSetting[] | undefined;
+}
+
+export interface ClassStudent {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    userId?: string;
+    classId?: number;
+    class?: Class;
+    user?: AppUser;
+}
+
+export interface CreateUpdateAssignmentDTO {
+    name?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+}
+
+export interface CreateUpdateLabelDTO {
+    name?: string | undefined;
+    issueId?: number;
+    issues?: Issues;
+}
+
 export interface CreateUpdateRoleDto {
+    name?: string | undefined;
+    description?: string | undefined;
+}
+
+export interface CreateUpdateSetting {
+    type?: SettingType;
+    description?: string | undefined;
+    name?: string | undefined;
+}
+
+export interface CreateUpdateSubjectDto {
     name?: string | undefined;
     description?: string | undefined;
 }
@@ -1091,9 +2670,85 @@ export interface CreateUserDto {
     address?: string | undefined;
 }
 
+export interface IssueSetting {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    projectId?: number | undefined;
+    classId?: number | undefined;
+    subjectId?: number | undefined;
+    project?: Project;
+    subject?: Subject;
+    class?: Class;
+    issues?: Issues[] | undefined;
+}
+
+export interface Issues {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    assigneeId?: string;
+    isOpen?: boolean;
+    projectId?: number;
+    issueSettingId?: number | undefined;
+    milestoneId?: number;
+    assignee?: AppUser;
+    milestone?: Milestone;
+    project?: Project;
+    issueSetting?: IssueSetting;
+    labels?: Label[] | undefined;
+}
+
+export interface Label {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    issueId?: number;
+    issues?: Issues;
+}
+
+export interface LabelDTO {
+    id?: number;
+    name?: string | undefined;
+    issueId?: number;
+    issues?: Issues;
+}
+
+export interface LabelResponse {
+    page?: PagingResponseInfo;
+    labels?: LabelDTO[] | undefined;
+}
+
 export interface LoginModel {
     username?: string | undefined;
     password?: string | undefined;
+}
+
+export interface Milestone {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    projectId?: number | undefined;
+    project?: Project;
+    classId?: number | undefined;
+    class?: Class;
+    issues?: Issues[] | undefined;
 }
 
 export interface OauthRequest {
@@ -1110,6 +2765,36 @@ export interface PagingResponseInfo {
 export interface PermissionDto {
     roleId?: string | undefined;
     roleClaims?: RoleClaimDto[] | undefined;
+}
+
+export interface Project {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    avatarUrl?: string | undefined;
+    status?: number;
+    classId?: number;
+    class?: Class;
+    projectMembers?: ProjectMember[] | undefined;
+    milestones?: Milestone[] | undefined;
+    issues?: Issues[] | undefined;
+    issueSettings?: IssueSetting[] | undefined;
+}
+
+export interface ProjectMember {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    userId?: string;
+    projectId?: number;
+    user?: AppUser;
+    project?: Project;
 }
 
 export interface RegisterModel {
@@ -1136,18 +2821,79 @@ export interface RoleResponse {
     roles?: RoleDto[] | undefined;
 }
 
+export interface Setting {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    type?: SettingType;
+    description?: string | undefined;
+    name?: string | undefined;
+    classes?: Class[] | undefined;
+}
+
+export interface SettingDto {
+    id?: number;
+    type?: SettingType;
+    description?: string | undefined;
+    name?: string | undefined;
+}
+
+export interface SettingResponse {
+    page?: PagingResponseInfo;
+    settings?: SettingDto[] | undefined;
+}
+
+export enum SettingType {
+    _1 = 1,
+    _2 = 2,
+}
+
+export interface Subject {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    assignments?: Assignment[] | undefined;
+    classes?: Class[] | undefined;
+    issueSettings?: IssueSetting[] | undefined;
+    subjectUsers?: SubjectUser[] | undefined;
+}
+
+export interface SubjectDto {
+    name?: string | undefined;
+    description?: string | undefined;
+    assignments?: Assignment[] | undefined;
+    classes?: Class[] | undefined;
+    issueSettings?: IssueSetting[] | undefined;
+    subjectUsers?: SubjectUser[] | undefined;
+}
+
+export interface SubjectReponse {
+    page?: PagingResponseInfo;
+    subjects?: SubjectDto[] | undefined;
+}
+
+export interface SubjectUser {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    userId?: string;
+    subjectId?: number;
+    subject?: Subject;
+    user?: AppUser;
+}
+
 export interface Token {
     accessToken?: string | undefined;
     expire?: Date;
     user?: UserDto;
-}
-
-export interface UpdateUserDto {
-    fullName?: string | undefined;
-    birthDay?: Date | undefined;
-    avatar?: string | undefined;
-    address?: string | undefined;
-    phoneNumber?: string | undefined;
 }
 
 export interface UserDto {
@@ -1156,8 +2902,8 @@ export interface UserDto {
     userName?: string | undefined;
     email?: string | undefined;
     phoneNumber?: string | undefined;
-    birthDay?: Date;
-    creationTime?: Date;
+    birthDay?: Date | undefined;
+    creationTime?: Date | undefined;
     avatar?: string | undefined;
     roles?: string[] | undefined;
 }
@@ -1165,6 +2911,11 @@ export interface UserDto {
 export interface UserResponse {
     page?: PagingResponseInfo;
     users?: UserDto[] | undefined;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class ApiException extends Error {

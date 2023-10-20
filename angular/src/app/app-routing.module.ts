@@ -34,6 +34,11 @@ const routes: Routes = [
     loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
     component: AppLayoutComponent
   },
+  {
+    path: 'content',
+    loadChildren: () => import('./content/content.module').then(m => m.ContentModule),
+    component: AppLayoutComponent
+  },
 ];
 
 @NgModule({

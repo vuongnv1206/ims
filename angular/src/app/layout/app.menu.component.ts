@@ -44,12 +44,12 @@ export class AppMenuComponent implements OnInit {
         ],
       },
       {
-        label: 'UI Components',
+        label: 'Content ',
         items: [
           {
-            label: 'Form Layout',
+            label: 'Subject List',
             icon: 'pi pi-fw pi-id-card',
-            routerLink: ['/uikit/formlayout'],
+            routerLink: ['/content/subject'],
           },
           {
             label: 'Input',
