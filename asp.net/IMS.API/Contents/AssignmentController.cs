@@ -31,12 +31,13 @@ namespace IMS.Api.Contents
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AssignmentResponse>> GetAssignmentId(int id)
+        public async Task<ActionResult<AssignmentDTO>> GetAssignmentId(int id)
         {
             try
             {
                 var data = await _assignService.GetById(id);
-                return Ok(data);
+                var result = _mapper.Map<AssignmentDTO>(data);
+                return Ok(result);
             }
             catch (Exception ex)
             {
