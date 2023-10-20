@@ -2,6 +2,7 @@
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Subjects;
 using IMS.Domain.Contents;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.Contents
@@ -23,13 +24,13 @@ namespace IMS.Api.Contents
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SubjectReponse>> GetAssignmentId(int id)
+        [HttpGet("GetSubjectById")]
+        public async Task<ActionResult<SubjectDto>> GetSubjectById(int subjectId)
         {
             try
             {
-                var data = await _subjectService.GetById(id);
-                return Ok(data);
+                var subject = await _subjectService.GetBySubjectByIdAsync(subjectId);
+                return Ok(subject);
             }
             catch (Exception ex)
             {
@@ -37,15 +38,43 @@ namespace IMS.Api.Contents
             }
         }
 
-        [HttpGet("subject")]
-        public async Task<ActionResult<SubjectReponse>> GetAllAssignment([FromQuery] SubjectRequest request)
+        [HttpGet]
+        public async Task<ActionResult<SubjectReponse>> GetAllSubject([FromQuery] SubjectRequest request)
         {
-            var data = await _subjectService.GetListAllAsync(request);
-            return Ok(data);
+            var subjectList = await _subjectService.GetSubjectAllAsync(request);
+            return Ok(subjectList);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateNewSubject([FromBody] CreateUpdateSubjectDto data)
+        {
+            var map = _mapper.Map<Subject>(data);
+            var result = await _subjectService.InsertAsync(map);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok("Add successfully ");
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSubject(int id, [FromBody] CreateUpdateSubjectDto input)
+        {
+            var data = await _subjectService.GetById(id);
+            if (data == null)
+            {
+                return NotFound("Not found subject");
+            }
+            else
+            {
+                var map = _mapper.Map(input, data);
+                var result = await _subjectService.UpdateAsync(map);
+                await _unitOfWork.SaveChangesAsync();
+                return Ok("Update Successfully");
+            }
+
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAssignment(int id)
+        public async Task<IActionResult> DeleteSubject(int id)
         {
             var data = await _subjectService.GetById(id);
             if (data != null)
@@ -56,34 +85,7 @@ namespace IMS.Api.Contents
             }
             else
             {
-                return BadRequest();
-            }
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateNewAssignment([FromBody] CreateUpdateSubjectDto data)
-        {
-            var map = _mapper.Map<Subject>(data);
-            var result = await _subjectService.InsertAsync(map);
-            await _unitOfWork.SaveChangesAsync();
-            return Ok("Add successfully ");
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] CreateUpdateSubjectDto input)
-        {
-            var data = await _subjectService.GetById(id);
-            if (data == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                var map = _mapper.Map(input, data);
-                var result = await _subjectService.UpdateAsync(map);
-                await _unitOfWork.SaveChangesAsync();
-                return Ok("Update Successfully");
+                return NotFound("Not found subject");
             }
         }
     }
