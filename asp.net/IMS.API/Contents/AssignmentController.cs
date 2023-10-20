@@ -36,7 +36,8 @@ namespace IMS.Api.Contents
             try
             {
                 var data = await _assignService.GetById(id);
-                return Ok(data);
+                var result = _mapper.Map<AssignmentDTO>(data);
+                return Ok(result);
             }
             catch (Exception ex)
             {
