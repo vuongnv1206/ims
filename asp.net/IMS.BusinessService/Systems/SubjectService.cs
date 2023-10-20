@@ -23,12 +23,29 @@ namespace IMS.BusinessService.Systems
             _mapper = mapper;
         }
 
-        public async Task<SubjectReponse> GetListAllAsync(SubjectRequest request)
+        public async Task<SubjectDto> GetBySubjectByIdAsync(int subjectId)
         {
-            var subjectQuery = await context.Subjects.Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
+            var subject = await context.Subjects
+            .Include(x => x.Assignments)
+            .Include(x => x.Classes)
+            .Include(x => x.IssueSettings)
+            .Include(x => x.SubjectUsers)
+            .FirstOrDefaultAsync(u => u.Id == subjectId);
+
+            var subjectDto = mapper.Map<SubjectDto>(subject);
+            return subjectDto;
+        }
+
+        public async Task<SubjectReponse> GetSubjectAllAsync(SubjectRequest request)
+        {
+            var subjectQuery = await context.Subjects
+                .Include(x => x.Assignments)
+                .Include(x => x.Classes)
+                .Include(x => x.IssueSettings)
+                .Include(x => x.SubjectUsers)
+                .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
             || u.Name.Contains(request.KeyWords)
             || u.Description.Contains(request.KeyWords)).ToListAsync();
-
             var subjects = subjectQuery.Paginate(request);
             var subjectDtos = mapper.Map<List<SubjectDto>>(subjects);
 

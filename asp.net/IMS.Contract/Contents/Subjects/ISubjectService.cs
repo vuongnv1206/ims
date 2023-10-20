@@ -10,6 +10,7 @@ namespace IMS.Contract.Contents.Subjects
 {
     public interface ISubjectService : IGenericRepository<Subject>
     {
-        Task<SubjectReponse> GetListAllAsync(SubjectRequest request);
+        Task<SubjectReponse> GetSubjectAllAsync(SubjectRequest request);
+        Task<SubjectDto> GetBySubjectByIdAsync(int subjectId);
     }
 }
