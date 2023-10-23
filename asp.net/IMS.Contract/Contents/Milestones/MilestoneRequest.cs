@@ -9,5 +9,7 @@ namespace IMS.Contract.Contents.Milestones
 {
     public class MilestoneRequest : PagingRequestBase
     {
+        public int? ProjectId { get; set; }
+        public int? ClassId { get; set; }
     }
 }

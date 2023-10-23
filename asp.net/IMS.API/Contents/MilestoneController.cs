@@ -61,14 +61,14 @@ namespace IMS.Api.Contents
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateMilestone([FromBody] CreateMilestoneDto data)
-        //{
-        //    var map = _mapper.Map<Milestone>(data);
-        //    var result = await _milestoneService.InsertAsync(map);
-        //    await _unitOfWork.SaveChangesAsync();
-        //    return Ok("Add Successfully !!!");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateMilestone([FromBody] CreateMilestoneDto data)
+        {
+            var map = _mapper.Map<Milestone>(data);
+            var result = await _milestoneService.InsertAsync(map);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok("Add Successfully !!!");
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMilestone(int id ,[FromBody] UpdateMilestoneDto data)
