@@ -27,6 +27,14 @@ namespace IMS.BusinessService.Systems
                         || u.Description.Contains(request.KeyWords)).ToListAsync();
 
             var milestones = milestoneQuery.Paginate(request);
+            if(request.ProjectId != null)
+            {
+                milestones = milestones.Where(x => x.ProjectId == request.ProjectId);
+            }
+            if(request.ClassId != null)
+            {
+                milestones = milestones.Where(x => x.ClassId == request.ClassId);
+            }
             var milestoneDtos = mapper.Map<List<MilestoneDto>>(milestones);
 
 
