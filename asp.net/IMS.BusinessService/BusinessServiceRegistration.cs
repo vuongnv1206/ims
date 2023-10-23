@@ -4,6 +4,7 @@ using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Assignments;
 using IMS.Contract.Contents.Labels;
+using IMS.Contract.Contents.Milestones;
 using IMS.Contract.Contents.Settings;
 using IMS.Contract.Contents.Subjects;
 using IMS.Contract.Systems.Authentications;
@@ -44,7 +45,8 @@ public static class BusinessServiceRegistration
 
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
+		//Milestone
+		services.AddScoped<IMilestoneService, MilestoneService>();
 		// firebase
 		services.AddScoped<IFirebaseService, FirebaseService>();
 
