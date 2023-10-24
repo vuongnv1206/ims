@@ -24,12 +24,12 @@ namespace IMS.Api.Contents
         }
 
 
-        [HttpGet("GetSubjectById")]
-        public async Task<ActionResult<SubjectDto>> GetSubjectById(int subjectId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SubjectDto>> GetSubjectById(int id)
         {
             try
             {
-                var subject = await _subjectService.GetBySubjectByIdAsync(subjectId);
+                var subject = await _subjectService.GetBySubjectByIdAsync(id);
                 return Ok(subject);
             }
             catch (Exception ex)

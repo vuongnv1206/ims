@@ -28,11 +28,20 @@ import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { NightMarketSharedModule } from '../shared/modules/nightmarket-shared.module';
 import { SubjectComponent } from './subject/subject.component';
-
+import { ContentRoutingModule } from './content-routing.module';
+import { ClassComponent } from './class/class.component';
+import { IssueComponent } from './issue/issue.component';
+import { AccordionModule } from 'primeng/accordion';
+import { SubjectDetailComponent } from './subject/subject-detail/subject-detail.component';
+import { SubjectModalComponent } from './subject/subject-modal/subject-modal.component';
 
 @NgModule({
   declarations: [
     SubjectComponent,
+    ClassComponent,
+    IssueComponent,
+    SubjectDetailComponent,
+    SubjectModalComponent,
   ],
   imports: [
     CommonModule,
@@ -53,7 +62,6 @@ import { SubjectComponent } from './subject/subject.component';
     ImageModule,
     ConfirmDialogModule,
     CalendarModule,
-    SystemRoutingModule,
     PickListModule,
     KeyFilterModule,
     FormsModule,
@@ -67,6 +75,8 @@ import { SubjectComponent } from './subject/subject.component';
     FileUploadModule,
     CalendarModule,
     NightMarketSharedModule,
+    ContentRoutingModule,
+    AccordionModule
   ],
 })
 export class ContentModule { }
