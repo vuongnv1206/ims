@@ -31,6 +31,10 @@ namespace IMS.BusinessService.Systems
                         || u.Description.Contains(request.KeyWords)).ToListAsync();
 
             var assignments = assignmentQuery.Paginate(request);
+            if(request.SubjectId != null) 
+            { 
+                assignments = assignments.Where(x => x.SubjectId == request.SubjectId);
+            }
             var assignmentDtos = mapper.Map<List<AssignmentDTO>>(assignments);
 
             

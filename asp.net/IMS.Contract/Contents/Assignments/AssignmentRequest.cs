@@ -9,6 +9,6 @@ namespace IMS.Contract.Contents.Assignments
 {
     public class AssignmentRequest : PagingRequestBase
     {
-
+        public int? SubjectId { get; set; }
     }
 }
