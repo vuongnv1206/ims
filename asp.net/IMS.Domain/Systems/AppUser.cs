@@ -22,6 +22,8 @@ namespace IMS.Domain.Systems
         public ICollection<Issues> Issues { get; set; }
         public ICollection<ClassStudent> ClassStudents { get; set; }
         public ICollection<ProjectMember> ProjectMembers { get; set; }
+		public ICollection<Class> Class { get; set; }
+        public ICollection<Subject> Subjects { get; set; }
 
     }
 }

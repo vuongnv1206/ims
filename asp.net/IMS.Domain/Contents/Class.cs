@@ -1,4 +1,5 @@
 ﻿using IMS.Domain.Abstracts;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,9 +14,14 @@ namespace IMS.Domain.Contents
         public string Name { get; set; }
         public string? Description { get; set; }
     
+        public int AssigneeId { get; set; }
+
         public int SubjectId { get; set; }
        
         public int SettingId { get; set; }
+
+        [ForeignKey(nameof(AssigneeId))]
+        public virtual AppUser Assignee { get; set; }
 
         [ForeignKey(nameof(SettingId))]
         public virtual Setting Setting { get; set; }
