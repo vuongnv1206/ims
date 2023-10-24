@@ -38,7 +38,7 @@ namespace IMS.BusinessService.Common.UnitOfWorks
 
 		public async Task SaveChangesAsync()
 		{
-			var username = _httpContextAccessor.HttpContext.User.FindFirst(CustomClaimType.Uid)?.Value;
+			var username = _httpContextAccessor.HttpContext.User.Identity.Name;
 
 			await _context.SaveChangesAsync(username);
 		}
