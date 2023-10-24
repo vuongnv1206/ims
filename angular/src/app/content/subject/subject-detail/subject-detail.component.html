@@ -1,3 +1,46 @@
 
+<div class="animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
+    <p-header> Assignment Management </p-header>
+    <div class="grid">
+      <div class="col-3">
+        <div class="formgroup-inline">
+          <div class="field">
+            <input id="txtKeyword" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyWords" placeholder="Enter subject..." type="text" />
+          </div>
+          <button pButton type="button" pButton (click)="loadData()">Find</button>
+        </div>
+      </div>
+    </div>
 
-<p>Subject detail</p>
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"  (click)="showAddModal()" ></button>
+        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" *ngIf="selectedItems.length > 0" (click)="deleteItems()"  ></button>
+        <button pButton pRiffle label="Update" icon="pi pi-pencil" class="p-button-help"  *ngIf="selectedItems.length === 1" (click)="showEditModal()" ></button>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+        <!-- <button pButton pRipple label="Export Excel" icon="pi pi-file-excel" class="p-button-help mr-2" (click)="exportExcel()"></button>
+        <button type="button" pButton pRipple label="Export PDF" icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button> -->
+      </ng-template>
+    </p-toolbar>
+
+
+    <p-accordion [activeIndex]="activeIndex">
+      <p-accordionTab *ngFor="let assignment of items; let i = index" [header]="assignment.name" (click)="onTabClick(i)">
+        <p>{{ assignment.description }}</p>
+      </p-accordionTab>
+    </p-accordion>
+
+
+
+  <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+    <p-progressSpinner
+      [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>
+</div>

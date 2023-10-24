@@ -17,6 +17,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IAssignmentClient {
     /**
+     * @param subjectId (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -25,7 +26,7 @@ export interface IAssignmentClient {
      * @param sortField (optional) 
      * @return Success
      */
-    assignments(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<AssignmentResponse>;
+    assignments(subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<AssignmentResponse>;
     /**
      * @return Success
      */
@@ -60,6 +61,7 @@ export class AssignmentClient implements IAssignmentClient {
     }
 
     /**
+     * @param subjectId (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -68,8 +70,12 @@ export class AssignmentClient implements IAssignmentClient {
      * @param sortField (optional) 
      * @return Success
      */
-    assignments(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<AssignmentResponse> {
+    assignments(subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<AssignmentResponse> {
         let url_ = this.baseUrl + "/api/Assignment/assignments?";
+        if (subjectId === null)
+            throw new Error("The parameter 'subjectId' cannot be null.");
+        else if (subjectId !== undefined)
+            url_ += "SubjectId=" + encodeURIComponent("" + subjectId) + "&";
         if (keyWords === null)
             throw new Error("The parameter 'keyWords' cannot be null.");
         else if (keyWords !== undefined)
@@ -937,6 +943,358 @@ export class LabelClient implements ILabelClient {
     }
 
     protected processLabelPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IMilestoneClient {
+    /**
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<MilestoneResponse>;
+    /**
+     * @return Success
+     */
+    milestoneGET(id: number): Observable<MilestoneDto>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    milestonePUT(id: number, body?: UpdateMilestoneDto | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteMilestone(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    milestonePOST(body?: CreateMilestoneDto | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MilestoneClient implements IMilestoneClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<MilestoneResponse> {
+        let url_ = this.baseUrl + "/api/Milestone/milestone?";
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMilestone(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMilestone(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MilestoneResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MilestoneResponse>;
+        }));
+    }
+
+    protected processMilestone(response: HttpResponseBase): Observable<MilestoneResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MilestoneResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    milestoneGET(id: number, httpContext?: HttpContext): Observable<MilestoneDto> {
+        let url_ = this.baseUrl + "/api/Milestone/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMilestoneGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMilestoneGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MilestoneDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MilestoneDto>;
+        }));
+    }
+
+    protected processMilestoneGET(response: HttpResponseBase): Observable<MilestoneDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MilestoneDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    milestonePUT(id: number, body?: UpdateMilestoneDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Milestone/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMilestonePUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMilestonePUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processMilestonePUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteMilestone(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Milestone/delete-milestone/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteMilestone(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteMilestone(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteMilestone(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    milestonePOST(body?: CreateMilestoneDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Milestone";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMilestonePOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMilestonePOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processMilestonePOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -2632,6 +2990,14 @@ export interface ClassStudent {
     user?: AppUser;
 }
 
+export interface CreateMilestoneDto {
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    projectId?: number | undefined;
+    classId?: number | undefined;
+}
+
 export interface CreateUpdateAssignmentDTO {
     name?: string | undefined;
     description?: string | undefined;
@@ -2749,6 +3115,20 @@ export interface Milestone {
     classId?: number | undefined;
     class?: Class;
     issues?: Issues[] | undefined;
+}
+
+export interface MilestoneDto {
+    id?: number;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    projectId?: number | undefined;
+    classId?: number | undefined;
+}
+
+export interface MilestoneResponse {
+    page?: PagingResponseInfo;
+    milestones?: MilestoneDto[] | undefined;
 }
 
 export interface OauthRequest {
@@ -2891,6 +3271,12 @@ export interface Token {
     accessToken?: string | undefined;
     expire?: Date;
     user?: UserDto;
+}
+
+export interface UpdateMilestoneDto {
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
 }
 
 export interface UserDto {
