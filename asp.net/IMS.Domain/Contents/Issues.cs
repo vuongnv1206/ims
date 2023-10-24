@@ -30,7 +30,7 @@ namespace IMS.Domain.Contents
 
         [ForeignKey(nameof(IssueSettingId))]
         public virtual IssueSetting? IssueSetting { get; set; }
-        public virtual ICollection<Label> Labels { get; set; }
+        
 
     }
 }
