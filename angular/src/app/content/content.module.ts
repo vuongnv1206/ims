@@ -34,6 +34,7 @@ import { IssueComponent } from './issue/issue.component';
 import { AccordionModule } from 'primeng/accordion';
 import { SubjectDetailComponent } from './subject/subject-detail/subject-detail.component';
 import { SubjectModalComponent } from './subject/subject-modal/subject-modal.component';
+import { AssignmentDetailComponent } from './subject/subject-detail/assignment-detail/assignment-detail.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SubjectModalComponent } from './subject/subject-modal/subject-modal.com
     IssueComponent,
     SubjectDetailComponent,
     SubjectModalComponent,
+    AssignmentDetailComponent,
   ],
   imports: [
     CommonModule,
