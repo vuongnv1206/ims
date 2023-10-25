@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -13,6 +13,12 @@ import { HOME_URL } from 'src/app/shared/constants/url.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { authCodeFlowConfig } from './authCodeFlowConfig';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { ExternalAuthDto } from 'src/app/shared/models/auth-model.dto';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { environment } from 'src/environments/environment';
+import { CredentialResponse } from 'google-one-tap';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -50,7 +56,7 @@ import { authCodeFlowConfig } from './authCodeFlowConfig';
     `,
   ],
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   code: string = '';
@@ -58,8 +64,12 @@ export class LoginComponent implements OnDestroy {
 
   loginForm: FormGroup;
   public blockedPanel: boolean = false;
-
+  user: SocialUser;
+  loggedIn: boolean;
   constructor(
+    private _ngZone: NgZone,
+    private socialAuthService: SocialAuthService,
+    private authService: AuthService,
     public layoutService: LayoutService,
     private fb: FormBuilder,
     private router: Router,
@@ -75,6 +85,26 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
+
+    // @ts-ignore
+  window.onGoogleLibraryLoad = () => {
+    // @ts-ignore
+    google.accounts.id.initialize({
+      client_id: environment.clientId,
+      callback: this.handleCredentialResponse.bind(this),
+      auto_select: false,
+      cancel_on_tap_outside: true
+    });
+    // @ts-ignore
+    google.accounts.id.renderButton(
+    // @ts-ignore
+    document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large", width: 400 }
+    );
+    // @ts-ignore
+    google.accounts.id.prompt((notification: PromptMomentNotification) => {});
+  };
+
     this.route.queryParams.subscribe((params) => {
       this.code = params['code'];
       this.state = params['state'];
@@ -84,7 +114,23 @@ export class LoginComponent implements OnDestroy {
         localStorage.clear();
       }
     });
+
+
+
   }
+
+
+  async handleCredentialResponse(response: CredentialResponse) {
+    await this.authService.LoginWithGoogle(response.credential).subscribe(
+      (x:any) => {
+        this._ngZone.run(() => {
+          this.router.navigate(['/logout']);
+        })},
+      (error:any) => {
+          console.log(error);
+        }
+      );
+}
 
   login() {
     this.toggleBlockUI(true);
@@ -169,4 +215,7 @@ export class LoginComponent implements OnDestroy {
         },
       });
   }
+
+
+
 }
