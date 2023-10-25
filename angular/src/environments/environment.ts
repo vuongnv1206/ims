@@ -12,5 +12,6 @@ export const environment = {
   },
   production: true,
   API_URL: 'https://localhost:5001',
-  clientId:"7251294134-cepnjsgg1e8u45t6bgbqhdrvje01q7o0.apps.googleusercontent.com"
+  clientId:
+    '664259369195-qfbf6ts8m75am72rus0u671qqg319mha.apps.googleusercontent.com',
 };
