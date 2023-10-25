@@ -14,7 +14,7 @@ namespace IMS.Domain.Contents
         public string Name { get; set; }
         public string? Description { get; set; }
     
-        public int AssigneeId { get; set; }
+        public Guid AssigneeId { get; set; }
 
         public int SubjectId { get; set; }
        

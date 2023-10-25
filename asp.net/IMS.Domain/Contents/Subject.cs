@@ -15,7 +15,7 @@ namespace IMS.Domain.Contents
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        public int ManagerId { get; set; }
+        public Guid ManagerId { get; set; }
 
         [ForeignKey(nameof(ManagerId))]
         public virtual AppUser Manager { get; set; }
