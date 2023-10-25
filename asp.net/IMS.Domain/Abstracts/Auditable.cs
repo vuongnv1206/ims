@@ -14,6 +14,6 @@ namespace IMS.Domain.Abstracts
 		public DateTime? LastModificationTime { get; set; }
 		public string? LastModifiedBy { get; set; }
 
-		public Boolean IsActive { get; set; }
+		public bool? IsActive { get; set; }
 	}
 }

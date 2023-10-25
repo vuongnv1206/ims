@@ -14,7 +14,7 @@ namespace IMS.Domain.Contents
         public SettingType Type { get; set; }
         public string? Description { get; set; }
         public string? Name { get; set; }
-        public ICollection<Class> Classes { get; set; }
+        public virtual ICollection<Class>? Classes { get; set; }
 
     }
 }

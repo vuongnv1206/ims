@@ -20,7 +20,7 @@ namespace IMS.Domain.Contents
         public int? ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
         public virtual Class? Class { get; set; }
-        public ICollection<Issues> Issues { get; set; } 
+        public virtual ICollection<Issues>? Issues { get; set; } 
 
     }
 }

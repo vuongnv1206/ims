@@ -3,7 +3,6 @@ using IMS.BusinessService.Common.UnitOfWorks;
 using IMS.BusinessService.Systems;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Contents.Labels;
 using IMS.Contract.Contents.Milestones;
 using IMS.Contract.Contents.Projects;
 using IMS.Contract.Contents.Settings;
@@ -35,8 +34,6 @@ public static class BusinessServiceRegistration
 		//AssignmentService
 		services.AddScoped<IAssignmentService, AssignmentService>();
 
-        //LabelService
-        services.AddScoped<ILabelService, LabelService>();
 
 		//SubjectService
 		services.AddScoped<ISubjectService, SubjectService>();

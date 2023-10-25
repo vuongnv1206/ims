@@ -2,19 +2,11 @@
 using IMS.Domain.Contents;
 using IMS.Domain.Systems;
 using IMS.Infrastructure.Seedings;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using Label = IMS.Domain.Contents.Label;
 
 namespace IMS.Infrastructure.EnityFrameworkCore
 {
@@ -36,8 +28,6 @@ namespace IMS.Infrastructure.EnityFrameworkCore
         public DbSet<IssueSetting> IssueSettings { get; set; }
         public DbSet<SubjectUser> SubjectUsers { get; set; }
         public DbSet<ProjectMember> ProjectMembers { get; set; }
-        public DbSet<Label> Labels { get; set; }
-
 
 
         protected override void OnModelCreating(ModelBuilder builder)

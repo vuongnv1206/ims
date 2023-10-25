@@ -21,17 +21,12 @@ namespace IMS.Domain.Contents
         public int? IssueSettingId { get; set; }
         public int MilestoneId { get; set; }
 
-        public Guid StudentId { get; set; }
-
-        [ForeignKey(nameof(StudentId))] 
-        public AppUser Student { get; set; }
-
         [ForeignKey(nameof(AssigneeId))]
-        public virtual AppUser Assignee{ get; set; }
+        public virtual AppUser? Assignee{ get; set; }
         [ForeignKey(nameof(MilestoneId))]
-        public virtual Milestone Milestone { get; set; }
+        public virtual Milestone? Milestone { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        public virtual Project Project { get; set; }
+        public virtual Project? Project { get; set; }
 
         [ForeignKey(nameof(IssueSettingId))]
         public virtual IssueSetting? IssueSetting { get; set; }

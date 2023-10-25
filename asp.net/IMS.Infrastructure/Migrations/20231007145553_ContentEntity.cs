@@ -328,29 +328,6 @@ namespace IMS.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Labels",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssueId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Labels", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Labels_Issues_IssueId",
-                        column: x => x.IssueId,
-                        principalTable: "Issues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SubjectId",
@@ -391,11 +368,6 @@ namespace IMS.Infrastructure.Migrations
                 name: "IX_Issues_UserId",
                 table: "Issues",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Labels_IssueId",
-                table: "Labels",
-                column: "IssueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Milestones_ClassId",
@@ -441,9 +413,6 @@ namespace IMS.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ClassStudents");
-
-            migrationBuilder.DropTable(
-                name: "Labels");
 
             migrationBuilder.DropTable(
                 name: "ProjectMembers");
