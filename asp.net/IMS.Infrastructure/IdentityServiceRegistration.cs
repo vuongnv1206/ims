@@ -18,9 +18,7 @@ namespace IMS.Infrastructure
 		public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
 		{
 
-			//services.AddIdentity<AppUser,AppRole>()
-			//	.AddEntityFrameworkStores<IMSDbContext>()
-			//	.AddDefaultTokenProviders();
+
 			services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
 				.AddEntityFrameworkStores<IMSDbContext>()
 				.AddDefaultTokenProviders();
@@ -35,16 +33,18 @@ namespace IMS.Infrastructure
 			{
 				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+				//options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 			}).AddJwtBearer(options =>
 			{
 				options.SaveToken = true;
-				options.RequireHttpsMetadata = false;
+				//options.RequireHttpsMetadata = false;
 				options.TokenValidationParameters = new TokenValidationParameters()
 				{
 					ValidateIssuer = true,
 					ValidateAudience = true,
-					ValidAudience = configuration["JwtSettings:Audience"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidAudience = configuration["JwtSettings:Audience"],
 					ValidIssuer = configuration["JwtSettings:Issuer"],
 					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
 				};

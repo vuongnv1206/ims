@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -32,7 +33,8 @@ import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FileService } from './shared/services/file.service';
-import { AngularFireModule } from '@angular/fire/compat';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,6 +49,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     FormsModule,
     ReactiveFormsModule,
     ImageModule,
+    SocialLoginModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
@@ -56,6 +59,24 @@ import { AngularFireModule } from '@angular/fire/compat';
     provideStorage(() => getStorage()),
   ],
   providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: true,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              environment.clientId,
+            )
+          },
+
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    },
     { provide: API_BASE_URL, useValue: environment.API_URL },
     TokenService,
     AuthClient,
@@ -68,6 +89,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     UtilityService,
     FileService,
     UserClientCustom,
+
   ],
   bootstrap: [AppComponent],
 })

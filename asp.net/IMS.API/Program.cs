@@ -24,22 +24,34 @@ namespace IMS.Api
 
 			builder.Services.Configure<JwtSetting>(configuration.GetSection("JwtSettings"));
 
-
-			builder.Services.AddCors(o =>
-			{
-				o.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
-				.AllowAnyMethod()
-				.AllowAnyHeader());
-			});
-			builder.Services.ConfigureSettingServices(configuration);
+            var IMSCorsPolicy = "IMSCorsPolicy";
+            builder.Services.AddCors(o => o.AddPolicy(IMSCorsPolicy, builder =>
+            {
+                builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins(configuration["AllowedOrigins"])
+                    .AllowCredentials();
+            }));
+            builder.Services.ConfigureSettingServices(configuration);
             builder.Services.AddHttpClient();
             builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
-			
 
-			var app = builder.Build();
+            //
+
+            builder.Services.AddAuthentication().AddGoogle(options =>
+            {
+                IConfigurationSection authenticationSection = configuration.GetSection("Authentication");
+                string googleClientId = authenticationSection["Google:ClientId"];
+                string googleClientSecret = authenticationSection["Google:ClientSecret"];
+                options.ClientId = googleClientId;
+                options.ClientSecret = googleClientSecret;
+                //options.CallbackPath = "/Auth/Signin-google";
+            });
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 
@@ -51,8 +63,8 @@ namespace IMS.Api
 			}
 
 
-			app.UseCors("CorsPolicy");
-			app.UseHttpsRedirection();
+            app.UseCors(IMSCorsPolicy);
+            app.UseHttpsRedirection();
 			app.UseAuthentication();
 			app.UseAuthorization();
 			
