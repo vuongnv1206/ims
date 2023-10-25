@@ -20,7 +20,12 @@ namespace IMS.Domain.Contents
         public int ProjectId { get; set; }
         public int? IssueSettingId { get; set; }
         public int MilestoneId { get; set; }
- 
+
+        public Guid StudentId { get; set; }
+
+        [ForeignKey(nameof(StudentId))] 
+        public AppUser Student { get; set; }
+
         [ForeignKey(nameof(AssigneeId))]
         public virtual AppUser Assignee{ get; set; }
         [ForeignKey(nameof(MilestoneId))]
@@ -30,7 +35,7 @@ namespace IMS.Domain.Contents
 
         [ForeignKey(nameof(IssueSettingId))]
         public virtual IssueSetting? IssueSetting { get; set; }
-        public virtual ICollection<Label> Labels { get; set; }
+        
 
     }
 }

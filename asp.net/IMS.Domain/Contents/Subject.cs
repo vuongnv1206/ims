@@ -1,6 +1,8 @@
 ﻿using IMS.Domain.Abstracts;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -12,6 +14,12 @@ namespace IMS.Domain.Contents
     {
         public string Name { get; set; }
         public string? Description { get; set; }
+
+        public Guid ManagerId { get; set; }
+
+        [ForeignKey(nameof(ManagerId))]
+        public virtual AppUser Manager { get; set; }
+
         [JsonIgnore]
         public ICollection<Assignment> Assignments { get; set; }
         [JsonIgnore]
