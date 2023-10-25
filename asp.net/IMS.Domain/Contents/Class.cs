@@ -14,23 +14,22 @@ namespace IMS.Domain.Contents
         public string Name { get; set; }
         public string? Description { get; set; }
     
-        public Guid AssigneeId { get; set; }
+        public Guid? AssigneeId { get; set; }
 
         public int SubjectId { get; set; }
        
         public int SettingId { get; set; }
-
         [ForeignKey(nameof(AssigneeId))]
-        public virtual AppUser Assignee { get; set; }
+        public virtual AppUser? Assignee { get; set; }
 
         [ForeignKey(nameof(SettingId))]
-        public virtual Setting Setting { get; set; }
+        public virtual Setting? Setting { get; set; }
 
         [ForeignKey(nameof(SubjectId))]
-        public virtual Subject Subject { get; set; }
-        public virtual ICollection<ClassStudent> ClassStudents { get; set; }
-        public virtual ICollection<Milestone> Milestones { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
+        public virtual Subject? Subject { get; set; }
+        public virtual ICollection<ClassStudent>? ClassStudents { get; set; }
+        public virtual ICollection<Milestone>? Milestones { get; set; }
+        public virtual ICollection<Project>? Projects { get; set; }
         public virtual ICollection<IssueSetting>? IssueSettings { get; set; }
     }
 }

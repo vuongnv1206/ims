@@ -14,8 +14,8 @@ namespace IMS.Domain.Contents
         public Guid UserId { get; set; }
         public int ProjectId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public AppUser User { get; set; }
+        public virtual AppUser? User { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        public Project Project { get; set; }
+        public virtual Project? Project { get; set; }
     }
 }

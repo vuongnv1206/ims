@@ -14,9 +14,8 @@ namespace IMS.Domain.Contents
         public Guid UserId { get; set; }
         public int SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
-        public Subject Subject { get; set; }
+        public virtual Subject? Subject { get; set; }
         [ForeignKey(nameof(UserId))]
-        public AppUser User { get; set; }
-
+        public virtual AppUser? User { get; set; }
     }
 }

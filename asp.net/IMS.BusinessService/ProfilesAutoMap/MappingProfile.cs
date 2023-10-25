@@ -1,6 +1,5 @@
 using AutoMapper;
 using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Contents.Labels;
 using IMS.Contract.Contents.Milestones;
 using IMS.Contract.Contents.Projects;
 using IMS.Contract.Contents.Settings;
@@ -29,10 +28,7 @@ public class MappingProfile : Profile
 		//Assignment
 		CreateMap<CreateUpdateAssignmentDTO ,Assignment>().ReverseMap();
 		CreateMap<AssignmentDTO , Assignment>().ReverseMap();
-
-        //Label
-        CreateMap<CreateUpdateLabelDTO, Label>().ReverseMap();
-        CreateMap<LabelDTO, Label>().ReverseMap();
+		
 
         //Subject 
         CreateMap<CreateUpdateSubjectDto, Subject>().ReverseMap();

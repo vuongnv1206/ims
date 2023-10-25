@@ -18,15 +18,11 @@ namespace IMS.Domain.Contents
         public ProjectStatus Status { get; set; }
         public int ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
-        public Class Class { get; set; }
-        [JsonIgnore]
-        public ICollection<ProjectMember> ProjectMembers { get; set; }
-        [JsonIgnore]
-        public ICollection<Milestone> Milestones { get; set; } 
-        [JsonIgnore]
-        public ICollection<Issues> Issues { get; set; }
-        [JsonIgnore]
-        public ICollection<IssueSetting>? IssueSettings{ get; set; }
+        public virtual Class? Class { get; set; }
+        public virtual ICollection<ProjectMember>? ProjectMembers { get; set; }
+        public virtual ICollection<Milestone>? Milestones { get; set; } 
+        public virtual ICollection<Issues>? Issues { get; set; }
+        public virtual ICollection<IssueSetting>? IssueSettings{ get; set; }
      
     }
 }

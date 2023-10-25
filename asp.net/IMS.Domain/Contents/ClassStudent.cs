@@ -16,8 +16,8 @@ namespace IMS.Domain.Contents
 
 
         [ForeignKey(nameof(ClassId))]
-        public Class Class { get; set; }
+        public virtual Class? Class { get; set; }
         [ForeignKey(nameof(UserId))]
-        public AppUser User{ get; set; }
+        public virtual AppUser? User{ get; set; }
     }
 }

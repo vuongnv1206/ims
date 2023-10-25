@@ -15,18 +15,16 @@ namespace IMS.Domain.Contents
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        public Guid ManagerId { get; set; }
-
+        public Guid? ManagerId { get; set; }
         [ForeignKey(nameof(ManagerId))]
-        public virtual AppUser Manager { get; set; }
-
+        public virtual AppUser? Manager { get; set; }
         [JsonIgnore]
-        public ICollection<Assignment> Assignments { get; set; }
+        public virtual ICollection<Assignment>? Assignments { get; set; }
         [JsonIgnore]
-        public ICollection<Class> Classes { get; set; }
+        public virtual ICollection<Class>? Classes { get; set; }
         [JsonIgnore]
-        public ICollection<IssueSetting>? IssueSettings { get; set; }
+        public virtual ICollection<IssueSetting>? IssueSettings { get; set; }
         [JsonIgnore]
-        public ICollection<SubjectUser> SubjectUsers { get; set; }
+        public virtual ICollection<SubjectUser>? SubjectUsers { get; set; }
     }
 }
