@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using Google.Apis.Auth;
 using IMS.Contract.Common.Requests.LoginRequest;
 using IMS.Contract.Common.Responses;
 using IMS.Contract.Common.Responses.LoginResponse;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
@@ -27,7 +29,9 @@ namespace IMS.Api.APIControllers.Systems
         private readonly GitlabSetting gitlabSetting;
         private readonly UserManager<AppUser> userManager;
         private readonly IEmailSender emailSender;
+        private readonly GoogleSetting googleSetting;
         public AuthController(
+            IOptions<GoogleSetting> googleSetting,
             IAuthService authenticationService,
             IAuthService authService,
             HttpClient httpClient,
@@ -41,6 +45,7 @@ namespace IMS.Api.APIControllers.Systems
             this.gitlabSetting = gitlabSetting.Value;
             this.userManager = userManager;
             this.emailSender = emailSender;
+            this.googleSetting = googleSetting.Value;
         }
 
 
@@ -122,6 +127,52 @@ namespace IMS.Api.APIControllers.Systems
                 return Ok("Successfully email");
             }
             return BadRequest();
+        }
+
+        [HttpPost("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle([FromBody] string credential)
+        {
+            var setting = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string> { googleSetting.ClientId }
+            };
+
+            var payload = await GoogleJsonWebSignature.ValidateAsync(credential, setting);
+
+            if (payload == null)
+            {
+                return BadRequest("Invalid External Google Authentication");
+            }
+            var info = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
+
+            var user = await userManager.FindByEmailAsync(payload.Email);
+
+            if (user != null)
+            {
+                await userManager.AddLoginAsync(user, info);
+            }
+            else
+            {
+                user = new AppUser
+                {
+                    Email = payload.Email,
+                    UserName = payload.Email,
+                };
+                await userManager.CreateAsync(user);
+                await userManager.AddToRoleAsync(user, "User");
+                await userManager.AddLoginAsync(user, info);
+            }
+
+            if (user == null)
+                return BadRequest("Invalid External Authentication.");
+
+            var jwtSecurityToken = await authService.GenerateToken(user);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            return Ok(new
+            {
+                token= token,
+                username = user.UserName
+            });
         }
     }
 }

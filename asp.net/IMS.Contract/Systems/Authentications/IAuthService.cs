@@ -4,6 +4,7 @@ using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,6 @@ namespace IMS.Contract.Systems.Authentications
         Task<AppUser> Register(RegisterModel input);
         Task ForgotPassword(string email);
         Task<Token> GetFromTokenAsync(string token);
-
-      
-
+        Task<JwtSecurityToken> GenerateToken(AppUser user);
     }
 }

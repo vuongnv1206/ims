@@ -119,7 +119,7 @@ namespace IMS.BusinessService.Systems
             }
         }
 
-        private async Task<JwtSecurityToken> GenerateToken(AppUser user)
+        public async Task<JwtSecurityToken> GenerateToken(AppUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
