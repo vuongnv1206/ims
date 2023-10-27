@@ -85,25 +85,37 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     // @ts-ignore
-  window.onGoogleLibraryLoad = () => {
-    // @ts-ignore
-    google.accounts.id.initialize({
-      client_id: environment.clientId,
-      callback: this.handleCredentialResponse.bind(this),
-      auto_select: false,
-      cancel_on_tap_outside: true
-    });
-    // @ts-ignore
-    google.accounts.id.renderButton(
-    // @ts-ignore
-    document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large", width: 400 }
-    );
-    // @ts-ignore
-    google.accounts.id.prompt((notification: PromptMomentNotification) => {});
-  };
+    window.onGoogleLibraryLoad = () => {
+      // @ts-ignore
+      google.accounts.id.initialize({
+        client_id: environment.clientId,
+        callback: this.handleCredentialResponse.bind(this),
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      // @ts-ignore
+      google.accounts.id.renderButton(
+        // @ts-ignore
+        document.getElementById('buttonDiv'),
+        { theme: 'outline', size: 'large', width: 400 }
+      );
+      // @ts-ignore
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed()) {
+          console.log('getNotDisplayedReason: ', notification.getNotDisplayedReason());
+        }
+         if (notification.isSkippedMoment()) {
+           console.log('isSkippedMoment: ', notification.getSkippedReason());
+         }
+         if (notification.isDismissedMoment()) {
+           console.log(
+             'isDismissedMoment: ',
+             notification.getDismissedReason()
+           );
+         }
+      });
+    };
 
     this.route.queryParams.subscribe((params) => {
       this.code = params['code'];
@@ -114,23 +126,21 @@ export class LoginComponent implements OnInit, OnDestroy {
         localStorage.clear();
       }
     });
-
-
-
   }
-
 
   async handleCredentialResponse(response: CredentialResponse) {
     await this.authService.LoginWithGoogle(response.credential).subscribe(
-      (x:any) => {
+      (x: any) => {
         this._ngZone.run(() => {
-          this.router.navigate(['/logout']);
-        })},
-      (error:any) => {
-          console.log(error);
-        }
-      );
-}
+          this.tokenService.saveToken(x.token);
+          this.router.navigate([HOME_URL]);
+        })
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
 
   login() {
     this.toggleBlockUI(true);
@@ -215,7 +225,4 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
       });
   }
-
-
-
 }
