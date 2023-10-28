@@ -22,7 +22,7 @@ namespace IMS.Domain.Contents
         public virtual Subject? Subject { get; set; }
         [ForeignKey(nameof(ClassId))]
         public virtual Class? Class { get; set; }
-        public virtual ICollection<Issues>? Issues { get; set; }
+        public virtual ICollection<Issue>? Issues { get; set; }
 
     }
 }
