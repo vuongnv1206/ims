@@ -43,6 +43,10 @@ namespace IMS.BusinessService.Systems
             {
                 issues = issues.Where(x => x.MilestoneId == request.MilestoneId);
             }
+            if (request.Name != null)
+            {
+                issues = issues.Where(x => x.Name == request.Name);
+            }
             if (request.StartDate != null && request.DueDate != null)
             {
                 issues = issues.Where(x => x.StartDate == request.StartDate && x.DueDate == request.DueDate) ;
