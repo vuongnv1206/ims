@@ -1,5 +1,6 @@
 using AutoMapper;
 using IMS.Contract.Contents.Assignments;
+using IMS.Contract.Contents.Classes;
 using IMS.Contract.Contents.Milestones;
 using IMS.Contract.Contents.Projects;
 using IMS.Contract.Contents.Settings;
@@ -46,6 +47,10 @@ public class MappingProfile : Profile
         //Project 
         CreateMap<CreateAndUpdateProjectDto, Project>().ReverseMap();
         CreateMap<ProjectDto, Project>().ReverseMap();
+
+        //Class
+        CreateMap<CreateAndUpdateClassDto, Class>().ReverseMap();
+        CreateMap<ClassDto, Class>().ReverseMap();
 
     }
 }

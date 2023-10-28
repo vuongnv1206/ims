@@ -31,6 +31,14 @@ namespace IMS.Api.Contents
             return Ok(data);
         }
 
+        [HttpGet("projectId")]
+        public async Task<ActionResult<ProjectReponse>> GetProjectById(int projectId)
+        {
+            var data = await _projectService.GetProjectById(projectId);
+            return Ok(data);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateNewSubject([FromBody] CreateAndUpdateProjectDto data)
         {

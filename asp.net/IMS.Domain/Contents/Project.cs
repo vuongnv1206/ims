@@ -19,9 +19,13 @@ namespace IMS.Domain.Contents
         public int ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
         public virtual Class? Class { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ProjectMember>? ProjectMembers { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Milestone>? Milestones { get; set; } 
+        [JsonIgnore]
         public virtual ICollection<Issues>? Issues { get; set; }
+        [JsonIgnore]
         public virtual ICollection<IssueSetting>? IssueSettings{ get; set; }
      
     }
