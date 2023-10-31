@@ -1,4 +1,5 @@
-﻿using IMS.Contract.Common.UnitOfWorks;
+﻿using IMS.Contract.Common.Paging;
+using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Milestones;
 using IMS.Domain.Contents;
 using System;
@@ -12,5 +13,6 @@ namespace IMS.Contract.Contents.Issues
     public interface IIssueService : IGenericRepository<Issue>
     {
         Task<IssueResponse> GetIssue(IssueRequest request);
+        Task<IssueDto> GetIssueById(int issueId);
     }
 }

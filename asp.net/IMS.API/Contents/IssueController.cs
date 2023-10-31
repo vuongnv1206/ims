@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using IMS.Contract.Common.Paging;
 using IMS.Contract.Common.UnitOfWorks;
 using IMS.Contract.Contents.Issues;
 using IMS.Contract.Contents.Milestones;
+using IMS.Contract.Contents.Projects;
 using IMS.Domain.Contents;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,20 +31,13 @@ namespace IMS.Api.Contents
             return Ok(data);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IssueDto>> GetIssueId(int id)
+        [HttpGet("Id")]
+        public async Task<ActionResult<IssueDto>> GetIssueByid(int Id)
         {
-            try
-            {
-                var data = await _issueService.GetById(id);
-                var result = _mapper.Map<IssueDto>(data);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var data = await _issueService.GetIssueById(Id);
+            return Ok(data);
         }
+
 
         [HttpDelete("delete-issue/{id}")]
         public async Task<IActionResult> DeleteIssue(int id)

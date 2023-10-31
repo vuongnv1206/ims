@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IMS.BusinessService.Service;
+using IMS.Contract.Common.Paging;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Issues;
 using IMS.Contract.Contents.Milestones;
@@ -23,47 +24,66 @@ namespace IMS.BusinessService.Systems
         public async Task<IssueResponse> GetIssue(IssueRequest request)
         {
             var issueQuery = await context.Issues
+                .Include(x => x.Milestone)
+                .Include(x => x.Project)
+                .Include(x => x.Assignee)
+                .Include(x => x.IssueSetting)
                  .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
                          || u.Name.Contains(request.KeyWords)).ToListAsync();
 
-            var issues = issueQuery.Paginate(request);
+           
             if (request.ProjectId != null)
             {
-                issues = issues.Where(x => x.ProjectId == request.ProjectId);
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.ProjectId == request.ProjectId);
             }
             if (request.AssigneeId != null)
             {
-                issues = issues.Where(x => x.AssigneeId == request.AssigneeId);
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.AssigneeId == request.AssigneeId);
             }
             if (request.IssueSettingId != null)
             {
-                issues = issues.Where(x => x.IssueSettingId == request.IssueSettingId);
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.IssueSettingId == request.IssueSettingId);
             }
             if (request.MilestoneId != null)
             {
-                issues = issues.Where(x => x.MilestoneId == request.MilestoneId);
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.MilestoneId == request.MilestoneId);
             }
-            if (request.Name != null)
+            if (request.StartDate != null )
             {
-                issues = issues.Where(x => x.Name == request.Name);
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.StartDate >= request.StartDate ) ;
             }
-            if (request.StartDate != null && request.DueDate != null)
+            if ( request.DueDate != null)
             {
-                issues = issues.Where(x => x.StartDate == request.StartDate && x.DueDate == request.DueDate) ;
+                issueQuery = (List<Issue>)issueQuery.Where(x => x.DueDate <= request.DueDate);
             }
-            var issueDtos = mapper.Map<List<IssueDto>>(issues);
 
+            var issueDtos = mapper.Map<List<IssueDto>>(issueQuery);
 
+            var issues = issueQuery.Paginate(request);
 
             var response = new IssueResponse
             {
                 Issues = issueDtos,
-                Page = GetPagingResponse(request, issueQuery.Count()),
+                Page = GetPagingResponse(request, issues.Count()),
             };
 
             return response;
         }
 
-        
+        public async Task<IssueDto> GetIssueById(int Id)
+        {
+            var issue = await context.Issues
+                .Include(x => x.Milestone)
+                .Include(x => x.Project)
+                .Include(x => x.Assignee)
+                .Include(x => x.IssueSetting)
+            .FirstOrDefaultAsync(u => u.Id == Id);
+
+            var issueDto = mapper.Map<IssueDto>(issue);
+            return issueDto;
+        }
+
+
+
     }
 }

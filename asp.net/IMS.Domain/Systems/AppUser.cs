@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace IMS.Domain.Systems
@@ -19,6 +20,7 @@ namespace IMS.Domain.Systems
 		public DateTime? BirthDay { set; get; }
 		public DateTime? CreationTime { get; set; }
         public ICollection<SubjectUser> SubjectUsers { get; set; }
+        [JsonIgnore]
         public ICollection<Issue> Issues { get; set; }
         public ICollection<ClassStudent> ClassStudents { get; set; }
         public ICollection<ProjectMember> ProjectMembers { get; set; }

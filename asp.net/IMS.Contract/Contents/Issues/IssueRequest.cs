@@ -1,4 +1,5 @@
 ﻿using IMS.Contract.Common.Paging;
+using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace IMS.Contract.Contents.Issues
 {
     public class IssueRequest : PagingRequestBase
     {
-        public string? Name { get; set; }
+        public int? Id { get; set; }
         public Guid? AssigneeId { get; set; }
         public int? ProjectId { get; set; }
         public int? IssueSettingId { get; set; }
