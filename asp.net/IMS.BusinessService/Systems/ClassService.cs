@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using IMS.BusinessService.Service;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Classes;
@@ -33,7 +33,6 @@ namespace IMS.BusinessService.Systems
              || u.Name.Contains(request.KeyWords)
              || u.Description.Contains(request.KeyWords)).ToListAsync();
 
-            var classes = classQuery.Paginate(request);
             if(request.SubjectId != null)
             {
                 classes = classes.Where(x => x.SubjectId == request.SubjectId);
@@ -42,6 +41,8 @@ namespace IMS.BusinessService.Systems
             {
                 classes = classes.Where(x => x.SettingId == request.SettingId);
             }
+            
+            var classes = classQuery.Paginate(request);
             var classDtos = mapper.Map<List<ClassDto>>(classes);
 
             var response = new ClassReponse
