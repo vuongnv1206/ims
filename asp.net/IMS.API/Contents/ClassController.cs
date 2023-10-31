@@ -39,7 +39,7 @@ namespace IMS.Api.Contents
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewAssignment([FromBody] CreateAndUpdateClassDto data)
+        public async Task<IActionResult> CreateNewClass([FromBody] CreateAndUpdateClassDto data)
         {
             var map = _mapper.Map<Class>(data);
             var result = await _classService.InsertAsync(map);
@@ -48,7 +48,7 @@ namespace IMS.Api.Contents
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAssignment(int id, [FromBody] CreateAndUpdateClassDto input)
+        public async Task<IActionResult> UpdateClass(int id, [FromBody] CreateAndUpdateClassDto input)
         {
             var data = await _classService.GetById(id);
             if (data == null)

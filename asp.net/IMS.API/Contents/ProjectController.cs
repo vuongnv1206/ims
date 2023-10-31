@@ -40,7 +40,7 @@ namespace IMS.Api.Contents
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewSubject([FromBody] CreateAndUpdateProjectDto data)
+        public async Task<IActionResult> CreateNewProject([FromBody] CreateAndUpdateProjectDto data)
         {
             var map = _mapper.Map<Project>(data);
             var result = await _projectService.InsertAsync(map);
