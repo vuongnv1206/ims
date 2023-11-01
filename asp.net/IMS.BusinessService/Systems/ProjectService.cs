@@ -32,8 +32,15 @@ namespace IMS.BusinessService.Systems
                 .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
             || u.Name.Contains(request.KeyWords)
             || u.Description.Contains(request.KeyWords)).ToListAsync();
+            
             var projects = projectQuery.Paginate(request);
+            if (request.ClassId != null)
+            {
+                projects = projects.Where(x => x.ClassId == request.ClassId);
+            }
+
             var projectDtos = mapper.Map<List<ProjectDto>>(projects);
+
 
             var response = new ProjectReponse
             {
@@ -42,6 +49,19 @@ namespace IMS.BusinessService.Systems
             };
 
             return response;
+        }
+
+        public async Task<ProjectDto> GetProjectById(int Id)
+        {
+            var subject = await context.Projects
+           .Include(x => x.Issues)
+           .Include(x => x.Milestones)
+           .Include(x => x.ProjectMembers)
+           .Include(x => x.IssueSettings)
+           .FirstOrDefaultAsync(u => u.Id == Id);
+
+            var subjectDto = mapper.Map<ProjectDto>(subject);
+            return subjectDto;
         }
     }
 }

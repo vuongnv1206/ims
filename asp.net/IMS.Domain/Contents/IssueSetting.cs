@@ -27,7 +27,7 @@ namespace IMS.Domain.Contents
         [JsonIgnore]
         public virtual Class? Class { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Issue>? Issues { get; set; }
+        public virtual ICollection<Issues>? Issues { get; set; }
 
     }
 }

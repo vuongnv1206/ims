@@ -11,5 +11,6 @@ namespace IMS.Contract.Contents.Projects
     public interface IProjectService : IGenericRepository<Project>
     {
         Task<ProjectReponse> GetAllProjectAsync(ProjectRequest request);
+        Task<ProjectDto> GetProjectById(int Id);
     }
 }

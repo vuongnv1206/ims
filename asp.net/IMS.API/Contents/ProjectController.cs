@@ -31,8 +31,16 @@ namespace IMS.Api.Contents
             return Ok(data);
         }
 
+        [HttpGet("projectId")]
+        public async Task<ActionResult<ProjectReponse>> GetProjectById(int projectId)
+        {
+            var data = await _projectService.GetProjectById(projectId);
+            return Ok(data);
+        }
+
+
         [HttpPost]
-        public async Task<IActionResult> CreateNewSubject([FromBody] CreateAndUpdateProjectDto data)
+        public async Task<IActionResult> CreateNewProject([FromBody] CreateAndUpdateProjectDto data)
         {
             var map = _mapper.Map<Project>(data);
             var result = await _projectService.InsertAsync(map);

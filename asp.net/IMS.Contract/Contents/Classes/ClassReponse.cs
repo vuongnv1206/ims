@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Contract.Contents.Projects
+namespace IMS.Contract.Contents.Classes
 {
-    public class ProjectRequest : PagingRequestBase
+    public class ClassReponse : PagingResponsse
     {
-        public int? ClassId { get; set; }
+        public IList<ClassDto> Classes { get; set; }
     }
 }

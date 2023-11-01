@@ -23,7 +23,7 @@ namespace IMS.Domain.Contents
         [JsonIgnore]
         public virtual ICollection<ProjectMember>? ProjectMembers { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Milestone>? Milestones { get; set; }
+        public virtual ICollection<Milestone>? Milestones { get; set; } 
         [JsonIgnore]
         public virtual ICollection<Issues>? Issues { get; set; }
         [JsonIgnore]

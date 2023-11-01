@@ -18,8 +18,9 @@ namespace IMS.Domain.Contents
         public Guid? AssigneeId { get; set; }
 
         public int SubjectId { get; set; }
-       
+     
         public int SettingId { get; set; }
+
         [ForeignKey(nameof(AssigneeId))]
         public virtual AppUser? Assignee { get; set; }
 
@@ -28,6 +29,7 @@ namespace IMS.Domain.Contents
 
         [ForeignKey(nameof(SubjectId))]
         public virtual Subject? Subject { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<ClassStudent>? ClassStudents { get; set; }
         [JsonIgnore]
