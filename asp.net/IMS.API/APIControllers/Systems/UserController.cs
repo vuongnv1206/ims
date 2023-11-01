@@ -6,12 +6,12 @@ using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static IMS.BusinessService.Constants.Permissions;
+using static IMS.Api.Common.Constants.Permissions;
 
 namespace IMS.Api.APIControllers.Systems
 {
 
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class UserController : ControllerBase
 	{

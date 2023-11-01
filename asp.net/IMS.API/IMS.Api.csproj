@@ -33,11 +33,6 @@
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-		<ProjectReference Include="..\IMS.BusinessService\IMS.BusinessService.csproj" />
-	</ItemGroup>
-
 	<ItemGroup>
 	  <Folder Include="mailssave\" />
 	</ItemGroup>
