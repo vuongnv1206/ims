@@ -1,5 +1,6 @@
 ﻿using Firebase.Auth;
 using Google.Apis.Auth;
+using IMS.Api.Common.Responses;
 using IMS.Contract.Common.Requests.LoginRequest;
 using IMS.Contract.Common.Responses;
 using IMS.Contract.Common.Responses.LoginResponse;
@@ -19,7 +20,7 @@ using System.Net.Mail;
 
 namespace IMS.Api.APIControllers.Systems
 {
-	[Route("api/auth")]
+    [Route("api/auth")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
