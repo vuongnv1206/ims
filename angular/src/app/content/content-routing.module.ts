@@ -5,6 +5,7 @@ import { NgModule } from "@angular/core";
 import { ClassComponent } from "./class/class.component";
 import { IssueComponent } from "./issue/issue.component";
 import { SubjectDetailComponent } from "./subject/subject-detail/subject-detail.component";
+import { MilestoneComponent } from "./milestone/milestone.component";
 
 
 
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'issue',
     component: IssueComponent,
+  },
+   {
+    path: 'milestone',
+    component: MilestoneComponent,
   },
   {
     path: 'subject/detail/:id',

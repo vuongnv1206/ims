@@ -35,7 +35,9 @@ import { AccordionModule } from 'primeng/accordion';
 import { SubjectDetailComponent } from './subject/subject-detail/subject-detail.component';
 import { SubjectModalComponent } from './subject/subject-modal/subject-modal.component';
 import { AssignmentDetailComponent } from './subject/subject-detail/assignment-detail/assignment-detail.component';
-
+import { MilestoneComponent } from './milestone/milestone.component';
+import { MilestoneDetailComponent } from './milestone/milestone-detail/milestone-detail.component';
+import { RadioButtonModule } from 'primeng/radiobutton';
 @NgModule({
   declarations: [
     SubjectComponent,
@@ -44,6 +46,8 @@ import { AssignmentDetailComponent } from './subject/subject-detail/assignment-d
     SubjectDetailComponent,
     SubjectModalComponent,
     AssignmentDetailComponent,
+    MilestoneComponent,
+    MilestoneDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -78,7 +82,8 @@ import { AssignmentDetailComponent } from './subject/subject-detail/assignment-d
     CalendarModule,
     NightMarketSharedModule,
     ContentRoutingModule,
-    AccordionModule
+    AccordionModule,
+    RadioButtonModule
   ],
 })
 export class ContentModule { }
