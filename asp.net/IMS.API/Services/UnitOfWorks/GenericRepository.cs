@@ -1,4 +1,5 @@
-﻿using IMS.Contract.Common.UnitOfWorks;
+﻿using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;

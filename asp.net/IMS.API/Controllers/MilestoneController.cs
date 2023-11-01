@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using IMS.Contract.Common.UnitOfWorks;
-using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Contents.Milestones;
-using IMS.Domain.Contents;
-using Microsoft.AspNetCore.Http;
+using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dtos.Milestones;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace IMS.Api.APIControllers
 {

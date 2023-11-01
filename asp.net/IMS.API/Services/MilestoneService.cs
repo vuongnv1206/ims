@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Service;
-using IMS.Contract.Common.Sorting;
-using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Contents.Milestones;
-using IMS.Domain.Contents;
 using IMS.Api.EnityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IMS.Api.Dtos.Milestones;
+using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Services
 {

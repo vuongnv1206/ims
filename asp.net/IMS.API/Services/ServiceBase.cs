@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Common.UnitOfWorks;
-
+using IMS.Api.Common.Paging;
 using IMS.Api.EnityFrameworkCore;
 using IMS.Api.Services.UnitOfWorks;
 

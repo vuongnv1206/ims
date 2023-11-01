@@ -1,21 +1,9 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Common;
-using IMS.BusinessService.Constants;
-using IMS.BusinessService.Extension;
-using IMS.BusinessService.Service;
 using IMS.Contract.Common;
 using IMS.Contract.Common.Responses;
-using IMS.Contract.Common.Responses.LoginResponse;
-using IMS.Contract.Systems.Authentications;
-using IMS.Contract.Systems.Roles;
-using IMS.Contract.Systems.Settings;
-using IMS.Contract.Systems.Tokens;
-using IMS.Contract.Systems.Users;
-using IMS.Domain.Systems;
 using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -25,6 +13,16 @@ using System.Security.Claims;
 using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
+using IMS.Api.Models.Entities;
+using IMS.Api.Interfaces;
+using IMS.Api.Helpers.Settings;
+using IMS.Api.Dtos.Authentications;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using IMS.Api.Common.Constants;
+using IMS.Api.Dtos.Roles;
+using IMS.Api.Helpers.Tokens;
+using IMS.Api.Dtos.Users;
+using IMS.Api.Common;
 
 namespace IMS.Api.Services
 {

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Systems;
-using IMS.Contract.Systems.Roles;
-using IMS.Contract.Systems.Users;
-using IMS.Domain.Systems;
-using Microsoft.AspNetCore.Authorization;
+using IMS.Api.Dtos.Users;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static IMS.Api.Common.Constants.Permissions;
 
 namespace IMS.Api.APIControllers
 {

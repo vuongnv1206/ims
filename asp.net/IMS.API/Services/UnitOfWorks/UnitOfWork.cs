@@ -1,5 +1,4 @@
-﻿using IMS.BusinessService.Constants;
-using IMS.Contract.Common.UnitOfWorks;
+﻿
 using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IMS.Api.Common.UnitOfWorks;
 
 namespace IMS.Api.Services.UnitOfWorks
 {

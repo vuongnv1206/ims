@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Firebase.Auth;
-using Firebase.Storage;
-using IMS.BusinessService.Service;
-using IMS.Contract.Systems.Firebase;
-using IMS.Contract.Systems.Settings;
-using IMS.Domain.Systems;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Helpers.Settings;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 

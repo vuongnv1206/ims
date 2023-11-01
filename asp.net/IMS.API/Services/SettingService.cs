@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Service;
-using IMS.Contract.Common.Sorting;
-using IMS.Contract.Contents.Settings;
-using IMS.Domain.Contents;
+using IMS.Api.Dtos.Settings;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Services;
 

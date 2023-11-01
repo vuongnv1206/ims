@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Systems;
-using IMS.Contract.Common.UnitOfWorks;
-using IMS.Contract.Contents.Projects;
-using IMS.Contract.Contents.Subjects;
-using IMS.Contract.Systems.Users;
-using IMS.Domain.Contents;
+using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dtos.Projects;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers
