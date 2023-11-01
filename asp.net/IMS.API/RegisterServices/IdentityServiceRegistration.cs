@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Api.RegisterServices;
+namespace IMS.Api.RegisterServices
 {
 	public static class IdentityServicesRegistration
 	{
