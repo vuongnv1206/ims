@@ -64,7 +64,7 @@ namespace IMS.BusinessService.Systems
             var response = new IssueResponse
             {
                 Issues = issueDtos,
-                Page = GetPagingResponse(request, issueDtos.Count()),
+                Page = GetPagingResponse(request, issueQuery.Count()),
             };
 
             return response;
