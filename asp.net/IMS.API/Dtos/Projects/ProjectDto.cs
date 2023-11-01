@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IMS.Api.Models.Entities;
+using IMS.Api.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;

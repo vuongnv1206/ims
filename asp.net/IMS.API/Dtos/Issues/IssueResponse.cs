@@ -1,5 +1,4 @@
-﻿using IMS.Contract.Common.Paging;
-using IMS.Contract.Contents.Milestones;
+﻿using IMS.Api.Common.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;

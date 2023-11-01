@@ -1,4 +1,6 @@
-﻿namespace IMS.Api.Dtos.Classes
+﻿using IMS.Api.Models.Entities;
+
+namespace IMS.Api.Dtos.Classes
 {
     public class ClassDto
     {

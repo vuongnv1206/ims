@@ -1,4 +1,5 @@
-﻿using IMS.Contract.Common.Paging;
+﻿using IMS.Api.Common.Paging;
+using IMS.Api.Models.Enums;
 
 namespace IMS.Api.Dtos.Settings;
 

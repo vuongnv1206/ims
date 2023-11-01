@@ -1,4 +1,4 @@
-﻿using IMS.Contract.Common.Paging;
+﻿using IMS.Api.Common.Paging;
 
 namespace IMS.Api.Dtos.Roles;
 
