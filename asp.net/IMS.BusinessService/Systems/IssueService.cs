@@ -57,14 +57,14 @@ namespace IMS.BusinessService.Systems
                 issueQuery = issueQuery.Where(x => x.DueDate <= request.DueDate).ToList();
             }
 
-            var issueDtos = mapper.Map<List<IssueDto>>(issueQuery);
+            var issueDtos = mapper.Map<List<IssueDto>>(issueQuery).Paginate(request).ToList();
 
-            var issues = issueQuery.Paginate(request);
+            
 
             var response = new IssueResponse
             {
                 Issues = issueDtos,
-                Page = GetPagingResponse(request, issues.Count()),
+                Page = GetPagingResponse(request, issueQuery.Count()),
             };
 
             return response;
