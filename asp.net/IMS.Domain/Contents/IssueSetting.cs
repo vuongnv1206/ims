@@ -18,10 +18,13 @@ namespace IMS.Domain.Contents
         public int? SubjectId { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
+        [JsonIgnore]
         public virtual Project? Project { get; set; }
         [ForeignKey(nameof(SubjectId))]
+        [JsonIgnore]
         public virtual Subject? Subject { get; set; }
         [ForeignKey(nameof(ClassId))]
+        [JsonIgnore]
         public virtual Class? Class { get; set; }
         [JsonIgnore]
         public virtual ICollection<Issues>? Issues { get; set; }

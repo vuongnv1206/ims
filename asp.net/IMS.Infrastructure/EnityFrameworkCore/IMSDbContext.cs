@@ -20,7 +20,7 @@ namespace IMS.Infrastructure.EnityFrameworkCore
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassStudent> ClassStudents { get; set; }
 
-        public DbSet<Issues> Issues { get; set; }
+        public DbSet<Issue> Issues { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Milestone> Milestones { get; set; }
         public DbSet<Setting> Settings { get; set; }
