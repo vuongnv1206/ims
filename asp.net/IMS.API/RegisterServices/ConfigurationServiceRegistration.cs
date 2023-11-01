@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IMS.Api;
+namespace IMS.Api.RegisterServices;
 
 public static class ConfigurationServiceRegistration
 {

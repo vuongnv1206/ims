@@ -1,5 +1,5 @@
 ﻿using IMS.Api.EnityFrameworkCore;
-using IMS.Domain.Systems;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Api
+namespace IMS.Api.RegisterServices;
 {
 	public static class IdentityServicesRegistration
 	{
