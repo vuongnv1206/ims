@@ -7,7 +7,7 @@ using IMS.Contract.Systems.Users;
 using IMS.Domain.Contents;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IMS.Api.Contents
+namespace IMS.Api.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]

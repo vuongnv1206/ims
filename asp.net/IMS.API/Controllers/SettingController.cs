@@ -6,7 +6,7 @@ using IMS.Domain.Contents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IMS.Api.Contents
+namespace IMS.Api.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -75,7 +75,7 @@ namespace IMS.Api.Contents
                 {
                     return NotFound("Khong tim thay");
                 }
-                var result = mapper.Map<SettingDto>(data);  
+                var result = mapper.Map<SettingDto>(data);
                 return Ok(result);
             }
             catch (Exception ex)

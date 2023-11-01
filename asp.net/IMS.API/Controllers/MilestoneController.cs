@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace IMS.Api.Contents
+namespace IMS.Api.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,7 +24,7 @@ namespace IMS.Api.Contents
             _mapper = mapper;
         }
 
-        [HttpGet("milestone")] 
+        [HttpGet("milestone")]
         public async Task<ActionResult<MilestoneResponse>> GetAllMilestone([FromQuery] MilestoneRequest request)
         {
             var data = await _milestoneService.GetMilestone(request);
@@ -36,17 +36,18 @@ namespace IMS.Api.Contents
         {
             try
             {
-                var data = await _milestoneService.GetWithDetails(x => x.Id ==id,x => x.Class,x => x.Project);
+                var data = await _milestoneService.GetWithDetails(x => x.Id == id, x => x.Class, x => x.Project);
                 var result = _mapper.Map<MilestoneDto>(data);
                 return Ok(result);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("delete-milestone/{id}")]
-        public async Task<IActionResult> DeleteMilestone (int id)
+        public async Task<IActionResult> DeleteMilestone(int id)
         {
             var data = await _milestoneService.GetById(id);
             if (data != null)
@@ -71,16 +72,17 @@ namespace IMS.Api.Contents
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMilestone(int id ,[FromBody] UpdateMilestoneDto data)
+        public async Task<IActionResult> UpdateMilestone(int id, [FromBody] UpdateMilestoneDto data)
         {
             var input = await _milestoneService.GetById(id);
             if (input != null)
             {
-                var map = _mapper.Map(data,input);
+                var map = _mapper.Map(data, input);
                 var result = await _milestoneService.UpdateAsync(map);
                 await _unitOfWork.SaveChangesAsync();
                 return Ok("Update Successfully !!!!");
-            }else { return BadRequest("Update Fail !!!"); }
+            }
+            else { return BadRequest("Update Fail !!!"); }
         }
     }
 }

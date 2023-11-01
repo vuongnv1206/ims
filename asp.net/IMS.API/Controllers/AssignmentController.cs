@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IMS.Api.Contents
+namespace IMS.Api.APIControllers
 {
     [Route("api/[controller]")]
     [ApiController]
