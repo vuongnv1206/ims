@@ -21,6 +21,7 @@ namespace IMS.Domain.Contents
         public virtual Project? Project { get; set; }
         public int? ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
+        [JsonIgnore]
         public virtual Class? Class { get; set; }
         [JsonIgnore]
         public virtual ICollection<Issues>? Issues { get; set; } 

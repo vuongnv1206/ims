@@ -83,7 +83,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           this.toggleBlockUI(false);
         },
       });
-    
+
   }
 
   public async GetFileFromFirebase(fileName: string) {
@@ -214,7 +214,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         ])
       ),
     });
-    
   }
 
   onFileChange(event: any) {
@@ -231,5 +230,5 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
 
   }
-  
+
 }

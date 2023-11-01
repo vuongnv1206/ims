@@ -18,6 +18,7 @@ namespace IMS.Domain.Contents
         public ProjectStatus Status { get; set; }
         public int ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
+        [JsonIgnore]
         public virtual Class? Class { get; set; }
         [JsonIgnore]
         public virtual ICollection<ProjectMember>? ProjectMembers { get; set; }
