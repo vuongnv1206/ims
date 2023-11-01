@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IMS.Api.Dtos.Users;
-using IMS.Contract.Systems.Authentications;
+﻿using IMS.Api.Dtos.Users;
 
 namespace IMS.Api.Interfaces
 {

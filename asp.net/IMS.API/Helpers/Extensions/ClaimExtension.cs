@@ -1,14 +1,10 @@
-﻿using IMS.Contract.Systems.Roles;
-using IMS.Domain.Systems;
+﻿
+using IMS.Api.Dtos.Roles;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Api.Helpers.Extensions
 {

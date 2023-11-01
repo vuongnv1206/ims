@@ -1,14 +1,7 @@
 ﻿using IMS.Api.Dtos.Authentications;
 using IMS.Api.Models.Entities;
 using IMS.Contract.Common.Responses;
-using IMS.Contract.Systems.Tokens;
-using IMS.Contract.Systems.Users;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Api.Interfaces
 {

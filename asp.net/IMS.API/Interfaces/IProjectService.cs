@@ -1,10 +1,6 @@
-﻿using IMS.Api.Dtos.Projects;
-using IMS.Contract.Common.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dtos.Projects;
+using IMS.Api.Models.Entities;
 namespace IMS.Api.Interfaces
 {
     public interface IProjectService : IGenericRepository<Project>

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IMS.Api.Models.Abstracts
+﻿namespace IMS.Api.Models.Abstracts
 {
-	public class Auditable
+    public class Auditable
 	{
 		public int Id { get; set; }
 		public DateTime? CreationTime { get; set; }
