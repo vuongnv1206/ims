@@ -1,6 +1,4 @@
 ﻿using IMS.Api.Models.Entities;
-using IMS.Domain.Contents;
-using IMS.Domain.Systems;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

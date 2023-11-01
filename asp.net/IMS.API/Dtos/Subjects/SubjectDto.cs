@@ -1,4 +1,4 @@
-﻿using IMS.Domain.Contents;
+﻿using IMS.Api.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

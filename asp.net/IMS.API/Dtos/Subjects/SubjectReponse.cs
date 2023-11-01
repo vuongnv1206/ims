@@ -1,4 +1,4 @@
-﻿using IMS.Contract.Common.Paging;
+﻿using IMS.Api.Common.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;

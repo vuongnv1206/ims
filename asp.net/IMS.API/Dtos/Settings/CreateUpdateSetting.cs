@@ -1,5 +1,7 @@
 ﻿
 
+using IMS.Api.Models.Enums;
+
 namespace IMS.Api.Dtos.Settings
 {
     public class CreateUpdateSetting
