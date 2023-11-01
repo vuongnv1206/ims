@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Contract.Contents.Assignments
+namespace IMS.Api.Dto.Assignments
 {
     public class AssignmentRequest : PagingRequestBase
     {

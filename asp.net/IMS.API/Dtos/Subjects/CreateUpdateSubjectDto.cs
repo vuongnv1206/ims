@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Contract.Contents.Subjects
+namespace IMS.Api.Dtos.Subjects
 {
     public class CreateUpdateSubjectDto
     {
