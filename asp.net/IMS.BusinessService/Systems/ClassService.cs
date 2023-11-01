@@ -41,8 +41,8 @@ namespace IMS.BusinessService.Systems
             {
                 classQuery = classQuery.Where(x => x.SettingId == request.SettingId).ToList();
             }
-            var classDtos = mapper.Map<List<ClassDto>>(classQuery);
-            var classes = classQuery.Paginate(request);
+
+            var classDtos = mapper.Map<List<ClassDto>>(classQuery).Paginate(request).ToList();
 
             var response = new ClassReponse
             {
