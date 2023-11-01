@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Api.Dtos.Assignments
+namespace IMS.Contract.Contents.Assignments
 {
-    public class AssignmentResponse : PagingResponsse
+    public class AssignmentRequest : PagingRequestBase
     {
-        public List<AssignmentDTO> Assignments { get; set; }
-
+        public int? SubjectId { get; set; }
     }
 }

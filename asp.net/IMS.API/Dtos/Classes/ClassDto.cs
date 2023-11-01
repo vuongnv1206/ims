@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Api.Dtos.Classes
+namespace IMS.Contract.Contents.Classes
 {
     public class ClassDto
     {
