@@ -32,18 +32,17 @@ namespace IMS.BusinessService.Systems
              .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
              || u.Name.Contains(request.KeyWords)
              || u.Description.Contains(request.KeyWords)).ToListAsync();
-
+             
             if(request.SubjectId != null)
             {
-                classes = classes.Where(x => x.SubjectId == request.SubjectId);
+                classQuery = classQuery.Where(x => x.SubjectId == request.SubjectId).ToList();
             }
             if (request.SettingId != null)
             {
-                classes = classes.Where(x => x.SettingId == request.SettingId);
+                classQuery = classQuery.Where(x => x.SettingId == request.SettingId).ToList();
             }
-            
+            var classDtos = mapper.Map<List<ClassDto>>(classQuery);
             var classes = classQuery.Paginate(request);
-            var classDtos = mapper.Map<List<ClassDto>>(classes);
 
             var response = new ClassReponse
             {
