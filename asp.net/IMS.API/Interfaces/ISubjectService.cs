@@ -1,11 +1,6 @@
-﻿using IMS.Api.Dtos.Subjects;
-using IMS.Contract.Common.UnitOfWorks;
-using IMS.Domain.Contents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dtos.Subjects;
+using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Interfaces
 {

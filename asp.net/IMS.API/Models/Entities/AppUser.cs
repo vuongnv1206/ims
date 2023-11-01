@@ -1,18 +1,9 @@
-﻿
-using IMS.Domain.Contents;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace IMS.Api.Models.Entities
 {
-	public class AppUser : IdentityUser<Guid>
+    public class AppUser : IdentityUser<Guid>
 	{
 		public string? FullName { set; get; }
 		public string? Address { set; get; }

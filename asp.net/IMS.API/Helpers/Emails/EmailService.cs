@@ -1,9 +1,10 @@
-﻿using IMS.Contract.Systems.Settings;
-using MailKit.Security;
+﻿
+
+using IMS.Api.Helpers.Settings;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MimeKit;
+
 
 namespace IMS.Api.Helpers.Emails;
 

@@ -1,11 +1,5 @@
-﻿
-using IMS.Api.Models.Abstracts;
-using System;
-using System.Collections.Generic;
+﻿using IMS.Api.Models.Abstracts;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Api.Models.Entities
 {
