@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Service;
-using IMS.Contract.Common.Sorting;
-using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Contents.Subjects;
-using IMS.Domain.Contents;
+using IMS.Api.Dtos.Subjects;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

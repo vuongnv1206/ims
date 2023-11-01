@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
-using IMS.BusinessService.Service;
-using IMS.Contract.Common.Sorting;
-using IMS.Contract.Contents.Assignments;
-using IMS.Contract.Systems.Users;
-using IMS.Domain.Contents;
 using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
+using IMS.Api.Dtos.Assignments;
+using IMS.Api.Dto.Assignments;
+using IMS.Api.Models.Entities;
+using IMS.Api.Interfaces;
 
 namespace IMS.Api.Services
 {
@@ -49,11 +47,6 @@ namespace IMS.Api.Services
 
 
 
-        }
-
-        public Task<CreateUpdateAssignmentDTO> GetAssignmentBySubjectId(Guid id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

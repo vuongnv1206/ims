@@ -1,13 +1,13 @@
-﻿using Firebase.Auth;
+﻿
 using Google.Apis.Auth;
+using IMS.Api.Common.Requests;
 using IMS.Api.Common.Responses;
-using IMS.Contract.Common.Requests.LoginRequest;
+using IMS.Api.Dtos.Authentications;
+using IMS.Api.Helpers.Settings;
+using IMS.Api.Helpers.Tokens;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using IMS.Contract.Common.Responses;
-using IMS.Contract.Common.Responses.LoginResponse;
-using IMS.Contract.Systems.Authentications;
-using IMS.Contract.Systems.Settings;
-using IMS.Contract.Systems.Tokens;
-using IMS.Domain.Systems;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;

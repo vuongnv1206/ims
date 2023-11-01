@@ -1,9 +1,5 @@
-﻿using IMS.BusinessService.Constants;
-using IMS.BusinessService.Systems;
-using IMS.Contract.Common.Responses;
-using IMS.Contract.Systems.Authentications;
-using IMS.Contract.Systems.Roles;
-using Microsoft.AspNetCore.Authorization;
+﻿using IMS.Api.Dtos.Roles;
+using IMS.Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers

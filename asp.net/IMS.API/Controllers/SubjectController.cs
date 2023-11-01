@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using IMS.Contract.Common.UnitOfWorks;
-using IMS.Contract.Contents.Subjects;
-using IMS.Domain.Contents;
-using Microsoft.AspNetCore.Http.HttpResults;
+using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dtos.Subjects;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers

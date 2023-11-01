@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using IMS.Contract.Common.UnitOfWorks;
-using IMS.Contract.Contents.Assignments;
-using IMS.Domain.Contents;
+using IMS.Api.Common.UnitOfWorks;
+using IMS.Api.Dto.Assignments;
+using IMS.Api.Dtos.Assignments;
+using IMS.Api.Interfaces;
+using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
