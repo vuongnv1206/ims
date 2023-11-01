@@ -22,7 +22,7 @@ namespace IMS.Contract.Contents.Projects
         [NotMapped]
         public IList<Milestone> Milestones { get; set; }
         [NotMapped]
-        public IList<Issues> Issues { get; set; }
+        public IList<Issue> Issues { get; set; }
         [NotMapped]
         public IList<IssueSetting>? IssueSettings { get; set; }
     }
