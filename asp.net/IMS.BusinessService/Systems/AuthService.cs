@@ -12,7 +12,7 @@ using IMS.Contract.Systems.Settings;
 using IMS.Contract.Systems.Tokens;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

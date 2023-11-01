@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Infrastructure.Seedings
+namespace IMS.Api.Seedings
 {
 	public static class SeedingDataIdentity
 	{

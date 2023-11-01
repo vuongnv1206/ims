@@ -5,7 +5,7 @@ using IMS.BusinessService.Service;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Systems.Roles;
 using IMS.Domain.Systems;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

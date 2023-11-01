@@ -25,7 +25,7 @@ namespace IMS.Domain.Contents
         [JsonIgnore]
         public virtual ICollection<Milestone>? Milestones { get; set; } 
         [JsonIgnore]
-        public virtual ICollection<Issues>? Issues { get; set; }
+        public virtual ICollection<Issue>? Issues { get; set; }
         [JsonIgnore]
         public virtual ICollection<IssueSetting>? IssueSettings{ get; set; }
      

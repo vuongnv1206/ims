@@ -1,6 +1,6 @@
 ﻿using IMS.BusinessService.Constants;
 using IMS.Contract.Common.UnitOfWorks;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

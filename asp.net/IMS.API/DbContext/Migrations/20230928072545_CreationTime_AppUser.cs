@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IMS.Infrastructure.Migrations
+namespace IMS.Api.Migrations
 {
     /// <inheritdoc />
     public partial class CreationTime_AppUser : Migration

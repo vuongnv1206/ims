@@ -3,7 +3,7 @@ using IMS.BusinessService.Service;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Settings;
 using IMS.Domain.Contents;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 
 namespace IMS.BusinessService.Systems;
 

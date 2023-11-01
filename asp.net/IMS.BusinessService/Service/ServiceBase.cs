@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using IMS.BusinessService.Common.UnitOfWorks;
 using IMS.Contract.Common.Paging;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 
 namespace IMS.BusinessService.Service;
 

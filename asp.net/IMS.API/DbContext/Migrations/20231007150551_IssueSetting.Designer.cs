@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.Infrastructure.Migrations
+namespace IMS.Api.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
-    [Migration("20231007145553_ContentEntity")]
-    partial class ContentEntity
+    [Migration("20231007150551_IssueSetting")]
+    partial class IssueSetting
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,6 +139,46 @@ namespace IMS.Infrastructure.Migrations
                     b.ToTable("ClassStudents");
                 });
 
+            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("IssueSettings");
+                });
+
             modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
                 {
                     b.Property<int>("Id")
@@ -147,7 +187,7 @@ namespace IMS.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AssignedId")
+                    b.Property<Guid>("AssigneeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
@@ -165,7 +205,7 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IssueSettingId")
+                    b.Property<int?>("IssueSettingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModificationTime")
@@ -187,16 +227,15 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("IssueSettingId");
 
                     b.HasIndex("MilestoneId");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Issues");
                 });
@@ -722,8 +761,39 @@ namespace IMS.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
+                {
+                    b.HasOne("IMS.Domain.Contents.Class", "Class")
+                        .WithMany("IssueSettings")
+                        .HasForeignKey("ClassId");
+
+                    b.HasOne("IMS.Domain.Contents.Project", "Project")
+                        .WithMany("IssueSettings")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("IMS.Domain.Contents.Subject", "Subject")
+                        .WithMany("IssueSettings")
+                        .HasForeignKey("SubjectId");
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
                 {
+                    b.HasOne("IMS.Domain.Systems.AppUser", "Assignee")
+                        .WithMany("Issues")
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IMS.Domain.Contents.IssueSetting", "IssueSetting")
+                        .WithMany("Issues")
+                        .HasForeignKey("IssueSettingId");
+
                     b.HasOne("IMS.Domain.Contents.Milestone", "Milestone")
                         .WithMany("Issues")
                         .HasForeignKey("MilestoneId")
@@ -736,15 +806,13 @@ namespace IMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IMS.Domain.Systems.AppUser", "User")
-                        .WithMany("Issues")
-                        .HasForeignKey("UserId");
+                    b.Navigation("Assignee");
+
+                    b.Navigation("IssueSetting");
 
                     b.Navigation("Milestone");
 
                     b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.Label", b =>
@@ -877,9 +945,16 @@ namespace IMS.Infrastructure.Migrations
                 {
                     b.Navigation("ClassStudents");
 
+                    b.Navigation("IssueSettings");
+
                     b.Navigation("Milestones");
 
                     b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
+                {
+                    b.Navigation("Issues");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
@@ -894,6 +969,8 @@ namespace IMS.Infrastructure.Migrations
 
             modelBuilder.Entity("IMS.Domain.Contents.Project", b =>
                 {
+                    b.Navigation("IssueSettings");
+
                     b.Navigation("Issues");
 
                     b.Navigation("Milestones");
@@ -911,6 +988,8 @@ namespace IMS.Infrastructure.Migrations
                     b.Navigation("Assignments");
 
                     b.Navigation("Classes");
+
+                    b.Navigation("IssueSettings");
 
                     b.Navigation("SubjectUsers");
                 });

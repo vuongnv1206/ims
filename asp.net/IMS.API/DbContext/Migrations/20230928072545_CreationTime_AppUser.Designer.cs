@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.Infrastructure.Migrations
+namespace IMS.Api.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
     [Migration("20230928072545_CreationTime_AppUser")]

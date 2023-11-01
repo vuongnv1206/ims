@@ -4,7 +4,7 @@ using IMS.Contract.Common.Sorting;
 using IMS.Contract.Contents.Assignments;
 using IMS.Contract.Contents.Subjects;
 using IMS.Domain.Contents;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

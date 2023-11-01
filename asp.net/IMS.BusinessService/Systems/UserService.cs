@@ -6,7 +6,7 @@ using IMS.Contract.Systems.Firebase;
 using IMS.Contract.Common.Sorting;
 using IMS.Contract.Systems.Users;
 using IMS.Domain.Systems;
-using IMS.Infrastructure.EnityFrameworkCore;
+using IMS.Api.EnityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

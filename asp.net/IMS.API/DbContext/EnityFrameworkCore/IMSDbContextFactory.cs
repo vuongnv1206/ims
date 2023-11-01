@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Infrastructure.EnityFrameworkCore
+namespace IMS.Api.EnityFrameworkCore
 {
 	public class IMSDbContextFactory : IDesignTimeDbContextFactory<IMSDbContext>
 	{

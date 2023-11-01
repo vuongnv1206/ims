@@ -33,7 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\IMS.Contract\IMS.Contract.csproj" />
     <ProjectReference Include="..\IMS.Domain\IMS.Domain.csproj" />
-    <ProjectReference Include="..\IMS.Infrastructure\IMS.Infrastructure.csproj" />
   </ItemGroup>
 
  

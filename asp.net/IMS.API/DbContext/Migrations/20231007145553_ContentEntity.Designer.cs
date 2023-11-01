@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.Infrastructure.Migrations
+namespace IMS.Api.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
-    [Migration("20231025065253_Update_database")]
-    partial class Update_database
+    [Migration("20231007145553_ContentEntity")]
+    partial class ContentEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,6 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -73,9 +70,6 @@ namespace IMS.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("AssigneeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -84,9 +78,6 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -105,8 +96,6 @@ namespace IMS.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssigneeId");
 
                     b.HasIndex("SettingId");
 
@@ -132,9 +121,6 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
@@ -153,49 +139,6 @@ namespace IMS.Infrastructure.Migrations
                     b.ToTable("ClassStudents");
                 });
 
-            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("IssueSettings");
-                });
-
             modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
                 {
                     b.Property<int>("Id")
@@ -204,7 +147,7 @@ namespace IMS.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AssigneeId")
+                    b.Property<Guid>("AssignedId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
@@ -219,13 +162,10 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("IssueSettingId")
+                    b.Property<int>("IssueSettingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModificationTime")
@@ -247,17 +187,52 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("AssigneeId");
-
-                    b.HasIndex("IssueSettingId");
 
                     b.HasIndex("MilestoneId");
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Issues");
+                });
+
+            modelBuilder.Entity("IMS.Domain.Contents.Label", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IssueId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("Labels");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.Milestone", b =>
@@ -282,9 +257,6 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -330,9 +302,6 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
@@ -366,9 +335,6 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -408,9 +374,6 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
@@ -445,25 +408,17 @@ namespace IMS.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ManagerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ManagerId");
 
                     b.ToTable("Subjects");
                 });
@@ -481,9 +436,6 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreationTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -535,22 +487,6 @@ namespace IMS.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"),
-                            Description = "User role",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"),
-                            Description = "Admin role",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("IMS.Domain.Systems.AppUser", b =>
@@ -632,42 +568,6 @@ namespace IMS.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "407d2e60-410c-438e-b3a1-ff14ef2dec90",
-                            Email = "admin@gmail.com",
-                            EmailConfirmed = true,
-                            FullName = "System",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@GMAIL.COM",
-                            NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEM6WyTmmmhV9SWZnCPqtCgLqDMf7ST+tRVIknmNI7SmD4k+LZdu19wZP4OGYt49Nkw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "bba12435-928f-4926-90d0-0ff3009a5149",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@gmail.com"
-                        },
-                        new
-                        {
-                            Id = new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "8534f8fc-eb77-4667-812c-f7a711718c92",
-                            Email = "user@gmail.com",
-                            EmailConfirmed = true,
-                            FullName = "User",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "USER@GMAIL.COM",
-                            NormalizedUserName = "USER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIQt1Gp/F+pLbHho9f/kTKLf6U/PuvZ1NX/8QdRzklqJ2bo/ZsC4cG2phI3KTTi7Cg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2e257193-654d-46b6-b10c-2986c18797f2",
-                            TwoFactorEnabled = false,
-                            UserName = "user@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -752,18 +652,6 @@ namespace IMS.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
-                            RoleId = new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf")
-                        },
-                        new
-                        {
-                            UserId = new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
-                            RoleId = new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -798,10 +686,6 @@ namespace IMS.Infrastructure.Migrations
 
             modelBuilder.Entity("IMS.Domain.Contents.Class", b =>
                 {
-                    b.HasOne("IMS.Domain.Systems.AppUser", "Assignee")
-                        .WithMany("Class")
-                        .HasForeignKey("AssigneeId");
-
                     b.HasOne("IMS.Domain.Contents.Setting", "Setting")
                         .WithMany("Classes")
                         .HasForeignKey("SettingId")
@@ -813,8 +697,6 @@ namespace IMS.Infrastructure.Migrations
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Assignee");
 
                     b.Navigation("Setting");
 
@@ -840,39 +722,8 @@ namespace IMS.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
-                {
-                    b.HasOne("IMS.Domain.Contents.Class", "Class")
-                        .WithMany("IssueSettings")
-                        .HasForeignKey("ClassId");
-
-                    b.HasOne("IMS.Domain.Contents.Project", "Project")
-                        .WithMany("IssueSettings")
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("IMS.Domain.Contents.Subject", "Subject")
-                        .WithMany("IssueSettings")
-                        .HasForeignKey("SubjectId");
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
                 {
-                    b.HasOne("IMS.Domain.Systems.AppUser", "Assignee")
-                        .WithMany("Issues")
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IMS.Domain.Contents.IssueSetting", "IssueSetting")
-                        .WithMany("Issues")
-                        .HasForeignKey("IssueSettingId");
-
                     b.HasOne("IMS.Domain.Contents.Milestone", "Milestone")
                         .WithMany("Issues")
                         .HasForeignKey("MilestoneId")
@@ -885,13 +736,26 @@ namespace IMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assignee");
-
-                    b.Navigation("IssueSetting");
+                    b.HasOne("IMS.Domain.Systems.AppUser", "User")
+                        .WithMany("Issues")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Milestone");
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("IMS.Domain.Contents.Label", b =>
+                {
+                    b.HasOne("IMS.Domain.Contents.Issues", "Issues")
+                        .WithMany("Labels")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Issues");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.Milestone", b =>
@@ -937,15 +801,6 @@ namespace IMS.Infrastructure.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IMS.Domain.Contents.Subject", b =>
-                {
-                    b.HasOne("IMS.Domain.Systems.AppUser", "Manager")
-                        .WithMany("Subjects")
-                        .HasForeignKey("ManagerId");
-
-                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.SubjectUser", b =>
@@ -1022,16 +877,14 @@ namespace IMS.Infrastructure.Migrations
                 {
                     b.Navigation("ClassStudents");
 
-                    b.Navigation("IssueSettings");
-
                     b.Navigation("Milestones");
 
                     b.Navigation("Projects");
                 });
 
-            modelBuilder.Entity("IMS.Domain.Contents.IssueSetting", b =>
+            modelBuilder.Entity("IMS.Domain.Contents.Issues", b =>
                 {
-                    b.Navigation("Issues");
+                    b.Navigation("Labels");
                 });
 
             modelBuilder.Entity("IMS.Domain.Contents.Milestone", b =>
@@ -1041,8 +894,6 @@ namespace IMS.Infrastructure.Migrations
 
             modelBuilder.Entity("IMS.Domain.Contents.Project", b =>
                 {
-                    b.Navigation("IssueSettings");
-
                     b.Navigation("Issues");
 
                     b.Navigation("Milestones");
@@ -1061,15 +912,11 @@ namespace IMS.Infrastructure.Migrations
 
                     b.Navigation("Classes");
 
-                    b.Navigation("IssueSettings");
-
                     b.Navigation("SubjectUsers");
                 });
 
             modelBuilder.Entity("IMS.Domain.Systems.AppUser", b =>
                 {
-                    b.Navigation("Class");
-
                     b.Navigation("ClassStudents");
 
                     b.Navigation("Issues");
@@ -1077,8 +924,6 @@ namespace IMS.Infrastructure.Migrations
                     b.Navigation("ProjectMembers");
 
                     b.Navigation("SubjectUsers");
-
-                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

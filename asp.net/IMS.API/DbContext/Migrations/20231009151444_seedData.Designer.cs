@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.Infrastructure.Migrations
+namespace IMS.Api.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
-    [Migration("20231007150551_IssueSetting")]
-    partial class IssueSetting
+    [Migration("20231009151444_seedData")]
+    partial class seedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -526,6 +526,22 @@ namespace IMS.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf"),
+                            Description = "User role",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf"),
+                            Description = "Admin role",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("IMS.Domain.Systems.AppUser", b =>
@@ -607,6 +623,42 @@ namespace IMS.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b0d9aeaa-4ece-4672-8b78-f2b00404840d",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            FullName = "System",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA6HWYTA0Wrm8rIaFKXLsgw+Xn7LpAG2hYszDVP4B4Jy7x+rRHtgjQXCpXAaqadBrA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "e053f4ff-c705-437a-a41b-e1a1904a52e2",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "685bc55e-d355-4b60-a610-0bcea4d59916",
+                            Email = "user@gmail.com",
+                            EmailConfirmed = true,
+                            FullName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@GMAIL.COM",
+                            NormalizedUserName = "USER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAELy5OhOIcNrBybX6m3P1o28mDx5R1cY+Dt2DctzDPPNCSsTWOmg/Z8v/6wRtKVxwBQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3f97dc9e-b9d0-4b55-96a8-5bed903c6563",
+                            TwoFactorEnabled = false,
+                            UserName = "user@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -691,6 +743,18 @@ namespace IMS.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb9"),
+                            RoleId = new Guid("cbc43a8e-f7bb-4445-baaf-1add431ffbbf")
+                        },
+                        new
+                        {
+                            UserId = new Guid("9e224968-33e4-4652-b7b7-8574d048cdb9"),
+                            RoleId = new Guid("cac43a6e-f7bb-4448-baaf-1add431ccbbf")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
