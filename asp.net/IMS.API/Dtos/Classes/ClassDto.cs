@@ -1,12 +1,4 @@
-﻿using IMS.Domain.Contents;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IMS.Contract.Contents.Classes
+﻿namespace IMS.Api.Dtos.Classes
 {
     public class ClassDto
     {

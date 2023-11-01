@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Api.Dtos.Authentications
+namespace IMS.Api.Dto.Assignments
 {
     public class AssignmentDTO
     {
