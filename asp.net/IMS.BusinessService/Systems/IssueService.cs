@@ -34,27 +34,27 @@ namespace IMS.BusinessService.Systems
            
             if (request.ProjectId != null)
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.ProjectId == request.ProjectId);
+                issueQuery = issueQuery.Where(x => x.ProjectId == request.ProjectId).ToList();
             }
             if (request.AssigneeId != null)
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.AssigneeId == request.AssigneeId);
+                issueQuery = issueQuery.Where(x => x.AssigneeId == request.AssigneeId).ToList();
             }
             if (request.IssueSettingId != null)
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.IssueSettingId == request.IssueSettingId);
+                issueQuery = issueQuery.Where(x => x.IssueSettingId == request.IssueSettingId).ToList()
             }
             if (request.MilestoneId != null)
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.MilestoneId == request.MilestoneId);
+                issueQuery = issueQuery.Where(x => x.MilestoneId == request.MilestoneId).ToList();
             }
             if (request.StartDate != null )
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.StartDate >= request.StartDate ) ;
+                issueQuery = issueQuery.Where(x => x.StartDate >= request.StartDate).ToList();
             }
             if ( request.DueDate != null)
             {
-                issueQuery = (List<Issue>)issueQuery.Where(x => x.DueDate <= request.DueDate);
+                issueQuery = issueQuery.Where(x => x.DueDate <= request.DueDate).ToList();
             }
 
             var issueDtos = mapper.Map<List<IssueDto>>(issueQuery);
