@@ -4,7 +4,7 @@ using IMS.Api.Helpers.Settings;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
+using MimeKit;
 
 namespace IMS.Api.Helpers.Emails;
 
@@ -25,7 +25,7 @@ public class EmailService : IEmailSender
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
-        var message = new MimeMessage();
+        var message = new MimeKit.MimeMessage();
         message.Sender = new MailboxAddress(emailSettings.Username, emailSettings.Gmail);
         message.From.Add(new MailboxAddress(emailSettings.Username, emailSettings.Gmail));
         message.To.Add(MailboxAddress.Parse(email));
@@ -40,7 +40,7 @@ public class EmailService : IEmailSender
 
         try
         {
-            smtp.Connect(emailSettings.SmtpServer, emailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Connect(emailSettings.SmtpServer, emailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
             smtp.Authenticate(emailSettings.Gmail, emailSettings.Password);
             await smtp.SendAsync(message);
         }

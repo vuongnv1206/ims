@@ -1,6 +1,5 @@
 ﻿using IMS.Api.Models.Abstracts;
-
-using IMS.Domain.Enums;
+using IMS.Api.Models.Enums;
 
 using System;
 using System.Collections.Generic;

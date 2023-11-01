@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using IMS.Api.Dtos.Projects;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Helpers.Extensions;
+using IMS.Api.Interfaces;
 using IMS.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;

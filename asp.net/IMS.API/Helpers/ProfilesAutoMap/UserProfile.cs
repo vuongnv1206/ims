@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IMS.Contract.Systems.Users;
-using IMS.Domain.Systems;
+using IMS.Api.Dtos.Users;
+using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Helpers.ProfilesAutoMap;
 

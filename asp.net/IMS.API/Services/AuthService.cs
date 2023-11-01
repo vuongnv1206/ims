@@ -23,6 +23,7 @@ using IMS.Api.Dtos.Roles;
 using IMS.Api.Helpers.Tokens;
 using IMS.Api.Dtos.Users;
 using IMS.Api.Common;
+using IMS.Api.Helpers.Extensions;
 
 namespace IMS.Api.Services
 {

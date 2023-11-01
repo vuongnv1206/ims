@@ -5,6 +5,7 @@ using IMS.Api.Helpers.Settings;
 using IMS.Api.Interfaces;
 using IMS.Api.Services;
 using IMS.Api.Services.UnitOfWorks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Reflection;
 
 namespace IMS.Api.RegisterServices;

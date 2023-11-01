@@ -1,14 +1,9 @@
-
-
-using IMS.BusinessService;
-using IMS.BusinessService.Common;
-using IMS.Infrastructure;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
+using IMS.Api.Helpers.Settings;
+using IMS.Api.RegisterServices;
 
 namespace IMS.Api
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{

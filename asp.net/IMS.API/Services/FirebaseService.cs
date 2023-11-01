@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Firebase.Storage;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Helpers.Firebase;
 using IMS.Api.Helpers.Settings;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Http;

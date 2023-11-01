@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IMS.Api.Models.Entities;
 using IMS.Api.Dtos.Issues;
+using IMS.Api.Interfaces;
+using IMS.Api.Helpers.Extensions;
 
 namespace IMS.Api.Services
 {

@@ -1,8 +1,14 @@
 using AutoMapper;
+using IMS.Api.Dto.Assignments;
+using IMS.Api.Dtos.Assignments;
+using IMS.Api.Dtos.Classes;
+using IMS.Api.Dtos.Milestones;
+using IMS.Api.Dtos.Projects;
 using IMS.Api.Dtos.Roles;
-using IMS.Contract.Contents.Classes;
-
-using IMS.Contract.Contents.Subjects;
+using IMS.Api.Dtos.Settings;
+using IMS.Api.Dtos.Subjects;
+using IMS.Api.Dtos.Users;
+using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Helpers.ProfilesAutoMap;
 

@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using IMS.Api.EnityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IMS.Api.Dtos.Assignments;
 using IMS.Api.Dto.Assignments;
 using IMS.Api.Models.Entities;
 using IMS.Api.Interfaces;
+using IMS.Api.Helpers.Extensions;
 
 namespace IMS.Api.Services
 {

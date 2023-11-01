@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using IMS.Api.Dtos.Settings;
 using IMS.Api.EnityFrameworkCore;
+using IMS.Api.Helpers.Extensions;
+using IMS.Api.Interfaces;
 using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Services;
