@@ -1,11 +1,10 @@
-﻿using IMS.Domain.Abstracts;
-using IMS.Domain.Contents;
-using IMS.Domain.Systems;
+﻿using IMS.Api.Models.Abstracts;
+using IMS.Api.Models.Entities;
+using IMS.Api.Seedings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Data.SqlClient.DataClassification;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Reflection.Emit;
+
 
 namespace IMS.Api.EnityFrameworkCore
 {
