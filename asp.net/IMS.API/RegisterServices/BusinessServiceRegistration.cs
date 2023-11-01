@@ -1,9 +1,10 @@
+using IMS.Api.Common.UnitOfWorks;
 using IMS.Api.Helpers.Emails;
+using IMS.Api.Helpers.Firebase;
+using IMS.Api.Helpers.Settings;
+using IMS.Api.Interfaces;
+using IMS.Api.Services;
 using IMS.Api.Services.UnitOfWorks;
-using IMS.BusinessService.Common.Emails;
-using IMS.BusinessService.Common.UnitOfWorks;
-using IMS.BusinessService.Systems;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Reflection;
 
 namespace IMS.Api.RegisterServices;
@@ -15,7 +16,7 @@ public static class BusinessServiceRegistration
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 		//
-		services.AddScoped<Common.JwtSetting>();
+		services.AddScoped<JwtSetting>();
 
 		//AuthService
 		services.AddScoped<IAuthService, AuthService>();

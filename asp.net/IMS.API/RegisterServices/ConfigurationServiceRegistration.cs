@@ -1,6 +1,4 @@
-﻿using IMS.Contract.Systems.Settings;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using IMS.Api.Helpers.Settings;
 
 namespace IMS.Api.RegisterServices;
 
