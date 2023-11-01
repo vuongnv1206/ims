@@ -22,7 +22,7 @@ namespace IMS.BusinessService.Systems
 
         public async Task<MilestoneResponse> GetMilestone(MilestoneRequest request)
         {
-            var milestoneQuery = await context.Milestones
+            var milestoneQuery = await context.Milestones.Include(x => x.Project).Include(x => x.Class)
                 .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
                         || u.Description.Contains(request.KeyWords)).ToListAsync();
 

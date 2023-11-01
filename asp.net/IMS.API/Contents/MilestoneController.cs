@@ -36,7 +36,7 @@ namespace IMS.Api.Contents
         {
             try
             {
-                var data = await _milestoneService.GetById(id);
+                var data = await _milestoneService.GetWithDetails(x => x.Id ==id,x => x.Class,x => x.Project);
                 var result = _mapper.Map<MilestoneDto>(data);
                 return Ok(result);
             }catch (Exception ex)

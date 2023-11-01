@@ -1,0 +1,71 @@
+<form
+  class="form-horizontal form-label-left"
+  skipValidation
+  [formGroup]="form"
+  (ngSubmit)="saveChange()"
+>
+  <p-panel #pnlDetail header="Thông tin" [toggleable]="true" [collapsed]="false">
+    <div class="formgrid grid">
+      <div class="field col-12 md:col-6">
+        <label for="startDate" class="block">Start Date<span class="required">*</span></label>
+        <!-- <p-calendar id="startDate" class="w-full" [showIcon]="true" formControlName="startDate"></p-calendar> -->
+        <input pRipple dateFormat="yyyy-MM-dd" type="datetime-local"  pInputText formControlName="startDate" class="w-full"/>
+        <app-validation-message [entityForm]="form" fieldName="startDate" [validationMessages]="validationMessages"></app-validation-message>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label class="block">Due Date<span class="required">*</span></label>
+        <!-- <p-calendar [showIcon]="true" class="w-full" formControlName="dueDate"></p-calendar> -->
+        <input pRipple dateFormat="yyyy-MM-dd" type="datetime-local"  pInputText formControlName="dueDate" class="w-full"/>
+        <app-validation-message [entityForm]="form" fieldName="dueDate" [validationMessages]="validationMessages"></app-validation-message>
+      </div>
+      <div *ngIf="!isUpdating" class="flex flex-wrap gap-3 ml-3 mb-3">
+        <div *ngFor="let category of categories" class="flex align-items-center">
+          <p-radioButton [inputId]="category.key" [value]="category" formControlName="selectedCategory" (click)="onRadioButtonClick(category.key)"></p-radioButton>
+          <label [for]="category.key" class="ml-2">{{ category.name }}</label>
+        </div>
+      </div>
+
+      <div  class="field col-12" *ngIf="showProjectDropdown" >
+        <label class="block">Project<span class="required">*</span></label>
+        <p-dropdown [options]="projectList" formControlName="projectId" placeholder="Chọn project" [showClear]="true" [style]="{ width:'100%'}"></p-dropdown>
+        <app-validation-message [entityForm]="form" fieldName="projectId" [validationMessages]="validationMessages"></app-validation-message>
+      </div>
+
+      <div class="field col-12" *ngIf="showClassDropdown">
+        <label class="block">Class<span class="required">*</span></label>
+        <p-dropdown [options]="classList" formControlName="classId" placeholder="Chọn class" [showClear]="true" [style]="{ width:'100%'}"></p-dropdown>
+        <app-validation-message [entityForm]="form" fieldName="classId" [validationMessages]="validationMessages"></app-validation-message>
+      </div>
+
+
+      <div class="field col-12">
+        <label for="description" class="block">Mô tả</label>
+        <textarea id="description" pInputTextarea class="w-full" formControlName="description"></textarea>
+      </div>
+
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple type="submit" class="btn btn-primary" [disabled]="!form.valid || btnDisabled">
+        {{ saveBtnName }}
+      </button>
+    </ng-template>
+
+    <p-blockUI [target]="pnlDetail" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration="0.5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</form>
+
+
+
+
+
+
+
+
+
+
