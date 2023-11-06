@@ -32,10 +32,10 @@ namespace IMS.Api.APIControllers
         }
 
 
-        [HttpGet("classId")]
-        public async Task<ActionResult<ClassDto>> GetClassByid(int classId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClassDto>> GetClassByid(int id)
         {
-            var data = await _classService.GetClassById(classId);
+            var data = await _classService.GetClassById(id);
             return Ok(data);
         }
 
