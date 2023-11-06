@@ -15,15 +15,15 @@ using System.Text;
 using System.Text.Encodings.Web;
 using IMS.Api.Models.Entities;
 using IMS.Api.Interfaces;
-using IMS.Api.Helpers.Settings;
-using IMS.Api.Dtos.Authentications;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using IMS.Api.Common.Constants;
-using IMS.Api.Dtos.Roles;
-using IMS.Api.Helpers.Tokens;
-using IMS.Api.Dtos.Users;
 using IMS.Api.Common;
-using IMS.Api.Helpers.Extensions;
+using IMS.Api.Models.Dtos.Authentications;
+using IMS.Api.Models.Dtos.Roles;
+using IMS.Api.Models.Dtos.Users;
+using IMS.Api.Common.Helpers.Extensions;
+using IMS.Api.Common.Helpers.Settings;
+using IMS.Api.Common.Helpers.Tokens;
 
 namespace IMS.Api.Services
 {

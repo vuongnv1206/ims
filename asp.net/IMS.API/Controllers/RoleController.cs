@@ -1,5 +1,5 @@
-﻿using IMS.Api.Dtos.Roles;
-using IMS.Api.Interfaces;
+﻿using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Roles;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers

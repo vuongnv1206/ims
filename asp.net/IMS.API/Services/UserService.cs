@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using IMS.Api.Dtos.Users;
+using IMS.Api.Common.Helpers.Extensions;
+using IMS.Api.Common.Helpers.Firebase;
 using IMS.Api.EnityFrameworkCore;
-using IMS.Api.Helpers.Extensions;
-using IMS.Api.Helpers.Firebase;
 using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Users;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

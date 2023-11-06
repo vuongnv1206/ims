@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using IMS.Api.Common.UnitOfWorks;
-using IMS.Api.Dtos.Projects;
 using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Projects;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 

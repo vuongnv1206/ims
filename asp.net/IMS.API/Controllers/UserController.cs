@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IMS.Api.Dtos.Users;
 using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Users;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

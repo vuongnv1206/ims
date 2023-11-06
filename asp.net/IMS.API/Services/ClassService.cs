@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IMS.Api.Models.Entities;
-using IMS.Api.Dtos.Classes;
 using IMS.Api.Interfaces;
-using IMS.Api.Helpers.Extensions;
+using IMS.Api.Models.Dtos.Classes;
+using IMS.Api.Common.Helpers.Extensions;
 
 namespace IMS.Api.Services
 {

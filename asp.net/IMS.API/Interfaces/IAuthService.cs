@@ -1,5 +1,5 @@
-﻿using IMS.Api.Dtos.Authentications;
-using IMS.Api.Helpers.Tokens;
+﻿using IMS.Api.Common.Helpers.Tokens;
+using IMS.Api.Models.Dtos.Authentications;
 using IMS.Api.Models.Entities;
 using IMS.Contract.Common.Responses;
 using System.IdentityModel.Tokens.Jwt;

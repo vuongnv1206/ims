@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using IMS.Api.Common.Constants;
-using IMS.Api.Dtos.Roles;
+using IMS.Api.Common.Helpers.Extensions;
 using IMS.Api.EnityFrameworkCore;
-using IMS.Api.Helpers.Extensions;
 using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Roles;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace IMS.Api.Services
 {
-	public class RoleService : ServiceBase<AppRole>, IRoleService
+    public class RoleService : ServiceBase<AppRole>, IRoleService
 	{
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly UserManager<AppUser> _userManager;

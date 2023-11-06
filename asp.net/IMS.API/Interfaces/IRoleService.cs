@@ -1,4 +1,4 @@
-﻿using IMS.Api.Dtos.Roles;
+﻿using IMS.Api.Models.Dtos.Roles;
 
 namespace IMS.Api.Interfaces
 {

@@ -1,5 +1,5 @@
 ﻿using IMS.Api.Common.UnitOfWorks;
-using IMS.Api.Dtos.Settings;
+using IMS.Api.Models.Dtos.Settings;
 using IMS.Api.Models.Entities;
 
 namespace IMS.Api.Interfaces;

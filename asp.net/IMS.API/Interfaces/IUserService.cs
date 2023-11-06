@@ -1,4 +1,4 @@
-﻿using IMS.Api.Dtos.Users;
+﻿using IMS.Api.Models.Dtos.Users;
 
 namespace IMS.Api.Interfaces
 {

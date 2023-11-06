@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using IMS.Api.EnityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IMS.Api.Dtos.Assignments;
-using IMS.Api.Dto.Assignments;
 using IMS.Api.Models.Entities;
 using IMS.Api.Interfaces;
-using IMS.Api.Helpers.Extensions;
+using IMS.Api.Models.Dtos.Assignments;
+using IMS.Api.Common.Helpers.Extensions;
 
 namespace IMS.Api.Services
 {

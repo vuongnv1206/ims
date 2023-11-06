@@ -1,11 +1,11 @@
 ﻿
 using Google.Apis.Auth;
+using IMS.Api.Common.Helpers.Settings;
+using IMS.Api.Common.Helpers.Tokens;
 using IMS.Api.Common.Requests;
 using IMS.Api.Common.Responses;
-using IMS.Api.Dtos.Authentications;
-using IMS.Api.Helpers.Settings;
-using IMS.Api.Helpers.Tokens;
 using IMS.Api.Interfaces;
+using IMS.Api.Models.Dtos.Authentications;
 using IMS.Api.Models.Entities;
 using IMS.Contract.Common.Responses;
 using Microsoft.AspNetCore.Identity;

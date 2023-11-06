@@ -1,5 +1,5 @@
-using IMS.Api.Helpers.Settings;
-using IMS.Api.RegisterServices;
+using IMS.Api.Common.Helpers.RegisterServices;
+using IMS.Api.Common.Helpers.Settings;
 
 namespace IMS.Api
 {
