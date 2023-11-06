@@ -52,7 +52,10 @@ public static class BusinessServiceRegistration
 
         //ClassSeervice
         services.AddScoped<IClassService, ClassService>();
-        
-		return services;
+
+        //IssueService
+        services.AddScoped<IIssueService, IssueService>();
+
+        return services;
     }
 }
