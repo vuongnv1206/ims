@@ -11,5 +11,7 @@ namespace IMS.Api.Models.Dtos.Milestones
     {
         public int? ProjectId { get; set; }
         public int? ClassId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

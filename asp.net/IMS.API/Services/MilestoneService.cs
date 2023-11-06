@@ -34,6 +34,14 @@ namespace IMS.Api.Services
             {
                 milestones = milestones.Where(x => x.ClassId == request.ClassId);
             }
+            if(request.StartDate != null ) 
+            {
+                milestones = milestones.Where(x => x.StartDate >= request.StartDate).ToList();
+            }
+            if(request.DueDate != null )
+            {
+                milestones = milestones.Where(x => x.DueDate <= request.DueDate).ToList();
+            }
             var milestoneDtos = mapper.Map<List<MilestoneDto>>(milestones);
 
 
