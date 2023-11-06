@@ -22,11 +22,12 @@ namespace IMS.Api.Services
                         || u.Name.Contains(request.KeyWords)
                         || u.Description.Contains(request.KeyWords)).ToListAsync();
 
+            var assignments = assignmentQuery.Paginate(request);
             if(request.SubjectId != null) 
             { 
-                assignmentQuery = assignmentQuery.Where(x => x.SubjectId == request.SubjectId).ToList();
+                assignments = assignments.Where(x => x.SubjectId == request.SubjectId);
             }
-            var assignmentDtos = mapper.Map<List<AssignmentDTO>>(assignmentQuery).ToList();
+            var assignmentDtos = mapper.Map<List<AssignmentDTO>>(assignments);
 
             
 
