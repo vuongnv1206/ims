@@ -2,6 +2,7 @@ using AutoMapper;
 using IMS.Api.Dto.Assignments;
 using IMS.Api.Dtos.Assignments;
 using IMS.Api.Dtos.Classes;
+using IMS.Api.Dtos.Issues;
 using IMS.Api.Dtos.Milestones;
 using IMS.Api.Dtos.Projects;
 using IMS.Api.Dtos.Roles;
@@ -51,6 +52,10 @@ public class MappingProfile : Profile
         //Class
         CreateMap<CreateAndUpdateClassDto, Class>().ReverseMap();
         CreateMap<ClassDto, Class>().ReverseMap();
+
+        //Issue
+        CreateMap<CreateUpdateIssueDto, Class>().ReverseMap();
+        CreateMap<IssueDto, Issue>().ReverseMap();
 
     }
 }
