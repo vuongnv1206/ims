@@ -9,6 +9,6 @@ namespace IMS.Api.Models.Dtos.Classes
 {
     public class ClassReponse : PagingResponsse
     {
-        public IList<ClassDto> Classes { get; set; }
+        public List<ClassDto> Classes { get; set; }
     }
 }

@@ -28,12 +28,12 @@ namespace IMS.Api.APIControllers
         public async Task<ActionResult<ClassReponse>> GetAllClass([FromQuery] ClassRequest request)
         {
             var data = await _classService.GetAllClass(request);
-            return Ok(data);
+            return Ok(data); 
         }
 
 
         [HttpGet("classId")]
-        public async Task<ActionResult<ProjectReponse>> GetClassByid(int classId)
+        public async Task<ActionResult<ClassDto>> GetClassByid(int classId)
         {
             var data = await _classService.GetClassById(classId);
             return Ok(data);

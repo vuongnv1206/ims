@@ -29,11 +29,14 @@ namespace IMS.Api.Services
              .Include(x => x.Milestones)
              .Include(x => x.Projects)
              .Include(x => x.IssueSettings)
+             .Include(x => x.Subject)
+             .Include(x => x.Setting)
+             .Include(x => x.Assignee)
              .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
              || u.Name.Contains(request.KeyWords)
              || u.Description.Contains(request.KeyWords)).ToListAsync();
 
-            if(request.SubjectId != null)
+            if (request.SubjectId != null)
             {
                 classQuery = classQuery.Where(x => x.SubjectId == request.SubjectId).ToList();
             }
@@ -60,7 +63,10 @@ namespace IMS.Api.Services
                  .Include(x => x.Milestones)
                  .Include(x => x.Projects)
                  .Include(x => x.IssueSettings)
-            .FirstOrDefaultAsync(u => u.Id == classId);
+                 .Include(x => x.Subject)
+                 .Include(x => x.Setting)
+                 .Include(x => x.Assignee)
+                 .FirstOrDefaultAsync(u => u.Id == classId);
 
             var classDto = mapper.Map<ClassDto>(classes);
             return classDto;
