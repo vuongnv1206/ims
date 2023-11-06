@@ -25,24 +25,23 @@ namespace IMS.Api.Services
                 .Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
                         || u.Description.Contains(request.KeyWords)).ToListAsync();
 
-            var milestones = milestoneQuery.Paginate(request);
             if(request.ProjectId != null)
             {
-                milestones = milestones.Where(x => x.ProjectId == request.ProjectId);
+                milestoneQuery = milestoneQuery.Where(x => x.ProjectId == request.ProjectId).ToList();
             }
             if(request.ClassId != null)
             {
-                milestones = milestones.Where(x => x.ClassId == request.ClassId);
+                milestoneQuery = milestoneQuery.Where(x => x.ClassId == request.ClassId).ToList();
             }
             if(request.StartDate != null ) 
             {
-                milestones = milestones.Where(x => x.StartDate >= request.StartDate).ToList();
+                milestoneQuery = milestoneQuery.Where(x => x.StartDate >= request.StartDate).ToList();
             }
             if(request.DueDate != null )
             {
-                milestones = milestones.Where(x => x.DueDate <= request.DueDate).ToList();
+                milestoneQuery = milestoneQuery.Where(x => x.DueDate <= request.DueDate).ToList();
             }
-            var milestoneDtos = mapper.Map<List<MilestoneDto>>(milestones);
+            var milestoneDtos = mapper.Map<List<MilestoneDto>>(milestoneQuery).Paginate(request).ToList();
 
 
 
