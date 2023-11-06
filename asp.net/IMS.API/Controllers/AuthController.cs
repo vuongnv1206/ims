@@ -75,7 +75,7 @@ namespace IMS.Api.APIControllers
 
                 var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
                 {
-                    Credentials = new NetworkCredential("b9d30cb10cb39e", "3bea5e7cfe3f25"),
+                    Credentials = new NetworkCredential("9cd54bc71362df", "d47b83bca4ce59"),
                     EnableSsl = true
                 };
                 client.Send("swdgroup6@gmail.com", $"{user.Email}", "Confirmation email link!", confirmationLink);
@@ -86,7 +86,7 @@ namespace IMS.Api.APIControllers
             catch (Exception ex)
             {
                 // Xử lý lỗi và trả về trạng thái lỗi
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
         [HttpPost("authenWithOauth2")]
@@ -145,6 +145,11 @@ namespace IMS.Api.APIControllers
                 return BadRequest("Invalid External Google Authentication");
             }
             var info = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
+
+            if (!authService.CheckMailSetting(payload.Email, @"@.*"))
+            {
+                return BadRequest($"{payload.Email} invalid");
+            }
 
             var user = await userManager.FindByEmailAsync(payload.Email);
 

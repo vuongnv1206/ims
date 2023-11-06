@@ -18,12 +18,13 @@
         class="w-full surface-card py-8 px-5 sm:px-8"
         style="border-radius: 53px"
       >
-        <form [formGroup]="">
+        <form [formGroup]="registerForm">
           <label for="userName" class="block text-900 text-lg font-medium mb-2"
             >User name</label
           >
           <input
             id="userName"
+            formControlName="username"
             type="text"
             placeholder="User name"
             pInputText
@@ -37,6 +38,7 @@
             id="email1"
             type="text"
             placeholder="Email address"
+            formControlName="email"
             pInputText
             class="w-full md:w-30rem mb-2"
             style="padding: 1rem"
@@ -48,6 +50,7 @@
           <p-password
             id="password1"
             placeholder="Password"
+            formControlName="password"
             [toggleMask]="true"
             styleClass="mb-2"
             inputStyleClass="w-full p-3 md:w-30rem"
@@ -64,7 +67,7 @@
               ></p-checkbox>
               <label for="rememberme1">Remember me</label>
             </div>
-            
+
             <a
               [routerLink]="['/auth/login']"
               class="font-medium no-underline ml-2 text-right cursor-pointer"
@@ -76,12 +79,13 @@
             pButton
             pRipple
             label="Register"
+            (click)="register()"
             class="w-full p-3 text-xl"
           ></button>
           <div class="text-center m-4 or-text">
             <span>or</span>
           </div>
-          <div class="list-button">
+          <!-- <div class="list-button">
             <p-button
               styleClass="p-button-outlined w-full flex align-items-center justify-content-center"
               type="submit"
@@ -95,8 +99,8 @@
               />
               <span class="gl-button-text"> Gitlab </span>
             </p-button>
-          </div>
-          <div class="list-button mt-2">
+          </div> -->
+          <!-- <div class="list-button mt-2">
             <p-button
               styleClass="p-button-outlined w-full flex align-items-center justify-content-center"
               type="submit"
@@ -110,7 +114,9 @@
               />
               <span class="gl-button-text"> Google </span>
             </p-button>
-          </div>
+          </div> -->
+
+          <div id="buttonDiv"></div>
         </form>
         <p-blockUI [blocked]="">
           <p-progressSpinner></p-progressSpinner>

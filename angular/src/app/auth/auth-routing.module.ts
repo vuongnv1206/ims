@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ConfirmEmailComponent } from './register/confirm-email/confirm-email.component';
 
 const routes: Routes = [
   {
@@ -14,10 +15,13 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: () => 
+    loadChildren: () =>
       import('./register/register.module').then((m) => m.RegisterModule),
-  }
-  
+  },
+  {
+    path: 'confirm-email',
+    component: ConfirmEmailComponent,
+  },
 ];
 
 @NgModule({

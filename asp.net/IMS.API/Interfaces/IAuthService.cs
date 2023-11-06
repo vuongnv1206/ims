@@ -13,5 +13,6 @@ namespace IMS.Api.Interfaces
         Task ForgotPassword(string email);
         Task<Token> GetFromTokenAsync(string token);
         Task<JwtSecurityToken> GenerateToken(AppUser user);
+        public bool CheckMailSetting(string mail, string pattern);
     }
 }
