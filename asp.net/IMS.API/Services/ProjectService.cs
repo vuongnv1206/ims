@@ -32,13 +32,13 @@ namespace IMS.Api.Services
             || u.Name.Contains(request.KeyWords)
             || u.Description.Contains(request.KeyWords)).ToListAsync();
             
-            var projects = projectQuery.Paginate(request);
+
             if (request.ClassId != null)
             {
-                projects = projects.Where(x => x.ClassId == request.ClassId);
+                projectQuery = projectQuery.Where(x => x.ClassId == request.ClassId).ToList();
             }
 
-            var projectDtos = mapper.Map<List<ProjectDto>>(projects);
+            var projectDtos = mapper.Map<List<ProjectDto>>(projectQuery).Paginate(request).ToList();
 
 
             var response = new ProjectReponse
