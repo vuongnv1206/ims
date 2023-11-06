@@ -84,7 +84,7 @@ export class RegisterComponent implements OnInit {
         });
       },
       (error: any) => {
-        console.log(error);
+        this.notificationService.showError('Lỗi đăng ký tài khoản');
       }
     );
   }
