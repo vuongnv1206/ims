@@ -24,6 +24,8 @@ using IMS.Api.Helpers.Tokens;
 using IMS.Api.Dtos.Users;
 using IMS.Api.Common;
 using IMS.Api.Helpers.Extensions;
+using IMS.Api.Models.Enums;
+using System.Text.RegularExpressions;
 
 namespace IMS.Api.Services
 {
@@ -61,6 +63,13 @@ namespace IMS.Api.Services
             if (existingUser != null)
             {
                 throw new Exception($"Username '{input.Username}' already exists.");
+            }
+
+            //pattern mail - cut string tail @fpt.edu.vn or @gmail.com
+            var pattern = @"@.*";
+            if (!CheckMailSetting(input.Email, pattern))
+            {
+                throw new Exception($"{input.Email} invalid");
             }
             //Add user into db
             var user = new AppUser
@@ -241,6 +250,19 @@ namespace IMS.Api.Services
                 Expire = expires,
                 User = userMap,
             };
+        }
+
+        public bool CheckMailSetting(string mail, string pattern)
+        {
+            var match = Regex.Match(mail, pattern);
+            if (match.Success)
+            {
+                var settingMail = context.Settings
+                    .Any(x => x.Type == SettingType.Domain
+                        && x.Name.Equals(match.Value));
+                return settingMail;
+            }
+            return true;
         }
     }
 

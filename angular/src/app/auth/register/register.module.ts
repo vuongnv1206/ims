@@ -14,9 +14,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RegisterRoutingModule } from './register-routing.module';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 
 @NgModule({
-  declarations: [RegisterComponent],
+  declarations: [RegisterComponent, ConfirmEmailComponent],
   imports: [
     RegisterRoutingModule,
     CommonModule,
