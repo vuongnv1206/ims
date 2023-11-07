@@ -76,7 +76,7 @@ namespace IMS.Api.APIControllers
             else { return BadRequest("Update Fail !!!"); }
         }
 
-        [HttpPut("UpdateBatch/{listId}")]
+        [HttpPut("UpdateBatch")]
         public async Task<IActionResult> BatchUpdateIssue(string listId, [FromBody] CreateUpdateIssueDto data)
         {
 
