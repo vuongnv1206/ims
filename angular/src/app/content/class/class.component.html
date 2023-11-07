@@ -1,3 +1,70 @@
-<p>
-  class works!
-</p>
+<div class="animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
+    <p-header> Milestone Management </p-header>
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"  (click)="showAddModal()" ></button> -->
+      </ng-template>
+    </p-toolbar>
+    <div class="grid">
+      <div class="col-3">
+            <input id="txtKeyword" pInputText placeholder="Nhập từ khóa..." (keyup.enter)="loadData()" [(ngModel)]="keyWords"type="text"/>
+            <button type="button" class="ml-1" pButton (click)="loadData()">Tìm</button>
+      </div>
+      <div class="col-3">
+        <p-dropdown [showClear]="true" [options]="subjectList" [(ngModel)]="subjectId" placeholder="Select subject" class="mr-5"></p-dropdown>
+      </div>
+
+      <div class="col-3">
+        <p-dropdown [showClear]="true" [options]="settingList" [(ngModel)]="settingId" placeholder="Select semester"></p-dropdown>
+      </div>
+    </div>
+    <p-table [value]="items" [responsive]="true" >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Assignee</th>
+          <th>Subject</th>
+          <th>Semester</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [pSelectableRow]="row">
+          <td>{{ row.name }}</td>
+          <td>{{ row.assigneId }}</td>
+          <td>{{ row.subject?.name }}</td>
+          <td>{{ row.setting?.name }}</td>
+          <!-- <td>
+            <button pButton  type="button" label="Sửa" class="ml-1 p-button-help" (click)="showEditModal(row.id)"></button>
+            <button pButton type="button" label="Xóa" class="ml-1 p-button-danger"  (click)="deleteItem(row.id)" ></button>
+          </td> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div style="text-align: left">Tổng số: {{ totalCount | number }}</div>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      [rows]="itemsPerPage"
+      [totalRecords]="totalCount"
+      (onPageChange)="pageChanged($event)"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+    ></p-paginator>
+
+    <p-blockUI [target]="pnl">
+      <p-progressSpinner
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%'
+        }"
+        strokeWidth="2"
+        animationDuration="1s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</div>

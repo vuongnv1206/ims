@@ -38,6 +38,8 @@ import { AssignmentDetailComponent } from './subject/subject-detail/assignment-d
 import { MilestoneComponent } from './milestone/milestone.component';
 import { MilestoneDetailComponent } from './milestone/milestone-detail/milestone-detail.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ClassModalComponent } from './class/class-modal/class-modal.component';
+import { ClassDetailComponent } from './class/class-detail/class-detail.component';
 @NgModule({
   declarations: [
     SubjectComponent,
@@ -48,6 +50,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     AssignmentDetailComponent,
     MilestoneComponent,
     MilestoneDetailComponent,
+    ClassModalComponent,
+    ClassDetailComponent
   ],
   imports: [
     CommonModule,

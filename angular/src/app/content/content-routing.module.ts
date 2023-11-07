@@ -6,6 +6,7 @@ import { ClassComponent } from "./class/class.component";
 import { IssueComponent } from "./issue/issue.component";
 import { SubjectDetailComponent } from "./subject/subject-detail/subject-detail.component";
 import { MilestoneComponent } from "./milestone/milestone.component";
+import { ClassDetailComponent } from "./class/class-detail/class-detail.component";
 
 
 
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'subject/detail/:id',
     component: SubjectDetailComponent,
+  },
+  {
+    path: 'class/detail/:id',
+    component: ClassDetailComponent,
   },
 
 ];

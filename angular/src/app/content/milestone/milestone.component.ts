@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MilestoneClient, MilestoneDto, MilestoneResponse, ProjectClient, ProjectDto, ProjectReponse } from 'src/app/api/api-generate';
+import { ClassClient, ClassReponse, MilestoneClient, MilestoneDto, MilestoneResponse, ProjectClient, ProjectDto, ProjectReponse } from 'src/app/api/api-generate';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { MilestoneDetailComponent } from './milestone-detail/milestone-detail.component';
 import { MessageConstants } from 'src/app/shared/constants/message.const';
@@ -37,6 +37,7 @@ public sortField: string | null;
 constructor(
   private milestoneService: MilestoneClient,
   private projectService: ProjectClient,
+  private classService : ClassClient,
   public dialogService: DialogService,
   private notificationService: NotificationService,
   private confirmationService: ConfirmationService
@@ -45,6 +46,7 @@ constructor(
 }
 ngOnInit(): void {
   this.loadProjects();
+  this.loadClasses(); 
   this.loadData();
 }
 ngOnDestroy(): void {
@@ -84,6 +86,17 @@ loadProjects() {
       this.projectList.push({
         label: project.name,
         value: project.id,
+      });
+    });
+  });
+}
+
+loadClasses() {
+  this.classService.classes().subscribe((response: ClassReponse) => {
+    response.classes.forEach(c => {
+      this.classList.push({
+        label: c.name,
+        value: c.id,
       });
     });
   });
