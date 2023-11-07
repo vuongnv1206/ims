@@ -17,7 +17,6 @@ import { BadgeModule } from 'primeng/badge';
 import { ImageModule } from 'primeng/image';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CalendarModule } from 'primeng/calendar';
-import { SystemRoutingModule } from '../system/system-routing.module';
 import { PickListModule } from 'primeng/picklist';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

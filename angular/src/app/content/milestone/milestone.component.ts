@@ -46,7 +46,7 @@ constructor(
 }
 ngOnInit(): void {
   this.loadProjects();
-  this.loadClasses(); 
+  this.loadClasses();
   this.loadData();
 }
 ngOnDestroy(): void {
@@ -60,6 +60,8 @@ loadData(selectionId = null) {
     .milestone(
       this.projectId,
       this.classId,
+      this.startDate,
+      this.dueDate,
       this.keyWords,
       this.page,
       this.itemsPerPage,
