@@ -15,7 +15,8 @@ namespace IMS.Api.Models.Entities
         public ICollection<Issue> Issues { get; set; }
         public ICollection<ClassStudent> ClassStudents { get; set; }
         public ICollection<ProjectMember> ProjectMembers { get; set; }
-		public ICollection<Class> Class { get; set; }
+        [JsonIgnore]
+        public ICollection<Class> Class { get; set; }
         public ICollection<Subject> Subjects { get; set; }
 
     }
