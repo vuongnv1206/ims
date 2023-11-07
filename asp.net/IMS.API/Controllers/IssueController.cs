@@ -22,7 +22,7 @@ namespace IMS.Api.APIControllers
             _mapper = mapper;
         }
 
-        [HttpGet("issue")]
+        [HttpGet("Issue")]
         public async Task<ActionResult<IssueResponse>> GetAllIssue([FromQuery] IssueRequest request)
         {
             var data = await _issueService.GetIssue(request);
@@ -37,7 +37,7 @@ namespace IMS.Api.APIControllers
         }
 
 
-        [HttpDelete("delete-issue/{id}")]
+        [HttpDelete("DeleteIssue/{id}")]
         public async Task<IActionResult> DeleteIssue(int id)
         {
             var data = await _issueService.GetById(id);
@@ -74,6 +74,35 @@ namespace IMS.Api.APIControllers
                 return Ok("Update Successfully !!!!");
             }
             else { return BadRequest("Update Fail !!!"); }
+        }
+
+        [HttpPut("UpdateBatch")]
+        public async Task<IActionResult> BatchUpdateIssue(string listId, [FromBody] CreateUpdateIssueDto data)
+        {
+
+            listId = listId.Replace("%2C", ",").Trim();
+            string[] split = listId.Split(',');
+
+
+            if (split != null)
+            {
+                foreach (String item in split)
+                {
+                    var input = await _issueService.GetById(Int32.Parse(item));
+                    if (input != null)
+                    {
+                        var map = _mapper.Map(data, input);
+                        var result = await _issueService.UpdateAsync(map);
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                }
+                return Ok("Update Successfully !!!!");
+            }
+            else
+            {
+                return BadRequest("Update Fail !!!");
+            }
+
         }
     }
 }
