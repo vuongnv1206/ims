@@ -13,6 +13,10 @@ namespace IMS.Api.EnityFrameworkCore
         {
         }
 
+        public IMSDbContext()
+        {
+        }
+
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassStudent> ClassStudents { get; set; }
