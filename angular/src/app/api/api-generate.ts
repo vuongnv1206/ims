@@ -17,13 +17,13 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IAssignmentClient {
     /**
-     * @param subjectId (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param subjectId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     assignments(subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<AssignmentResponse>;
@@ -32,7 +32,7 @@ export interface IAssignmentClient {
      */
     assignmentGET(id: number): Observable<AssignmentDTO>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     assignmentPUT(id: number, body?: CreateUpdateAssignmentDTO | undefined): Observable<void>;
@@ -41,7 +41,7 @@ export interface IAssignmentClient {
      */
     deleteAssignment(id: number): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     assignmentPOST(body?: CreateUpdateAssignmentDTO | undefined): Observable<void>;
@@ -61,13 +61,13 @@ export class AssignmentClient implements IAssignmentClient {
     }
 
     /**
-     * @param subjectId (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param subjectId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     assignments(subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<AssignmentResponse> {
@@ -201,7 +201,7 @@ export class AssignmentClient implements IAssignmentClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     assignmentPUT(id: number, body?: CreateUpdateAssignmentDTO | undefined, httpContext?: HttpContext): Observable<void> {
@@ -308,7 +308,7 @@ export class AssignmentClient implements IAssignmentClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     assignmentPOST(body?: CreateUpdateAssignmentDTO | undefined, httpContext?: HttpContext): Observable<void> {
@@ -363,28 +363,28 @@ export class AssignmentClient implements IAssignmentClient {
 
 export interface IAuthClient {
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     login(body?: LoginModel | undefined): Observable<AuthResponse>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     register(body?: RegisterModel | undefined): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     authenWithOauth2(body?: OauthRequest | undefined): Observable<Token>;
     /**
-     * @param token (optional)
-     * @param email (optional)
+     * @param token (optional) 
+     * @param email (optional) 
      * @return Success
      */
     confirmEmail(token?: string | undefined, email?: string | undefined): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     loginWithGoogle(body?: string | undefined): Observable<void>;
@@ -404,7 +404,7 @@ export class AuthClient implements IAuthClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     login(body?: LoginModel | undefined, httpContext?: HttpContext): Observable<AuthResponse> {
@@ -460,7 +460,7 @@ export class AuthClient implements IAuthClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     register(body?: RegisterModel | undefined, httpContext?: HttpContext): Observable<void> {
@@ -513,7 +513,7 @@ export class AuthClient implements IAuthClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     authenWithOauth2(body?: OauthRequest | undefined, httpContext?: HttpContext): Observable<Token> {
@@ -569,8 +569,8 @@ export class AuthClient implements IAuthClient {
     }
 
     /**
-     * @param token (optional)
-     * @param email (optional)
+     * @param token (optional) 
+     * @param email (optional) 
      * @return Success
      */
     confirmEmail(token?: string | undefined, email?: string | undefined, httpContext?: HttpContext): Observable<void> {
@@ -627,7 +627,7 @@ export class AuthClient implements IAuthClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     loginWithGoogle(body?: string | undefined, httpContext?: HttpContext): Observable<void> {
@@ -680,16 +680,701 @@ export class AuthClient implements IAuthClient {
     }
 }
 
+export interface IClassClient {
+    /**
+     * @param settingId (optional) 
+     * @param subjectId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    classes(settingId?: number | undefined, subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<ClassReponse>;
+    /**
+     * @param classId (optional) 
+     * @return Success
+     */
+    classId(classId?: number | undefined): Observable<ProjectReponse>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPOST(body?: CreateAndUpdateClassDto | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPUT(id: number, body?: CreateAndUpdateClassDto | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ClassClient implements IClassClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param settingId (optional) 
+     * @param subjectId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    classes(settingId?: number | undefined, subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<ClassReponse> {
+        let url_ = this.baseUrl + "/api/Class/classes?";
+        if (settingId === null)
+            throw new Error("The parameter 'settingId' cannot be null.");
+        else if (settingId !== undefined)
+            url_ += "SettingId=" + encodeURIComponent("" + settingId) + "&";
+        if (subjectId === null)
+            throw new Error("The parameter 'subjectId' cannot be null.");
+        else if (subjectId !== undefined)
+            url_ += "SubjectId=" + encodeURIComponent("" + subjectId) + "&";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClasses(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClasses(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ClassReponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ClassReponse>;
+        }));
+    }
+
+    protected processClasses(response: HttpResponseBase): Observable<ClassReponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClassReponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param classId (optional) 
+     * @return Success
+     */
+    classId(classId?: number | undefined, httpContext?: HttpContext): Observable<ProjectReponse> {
+        let url_ = this.baseUrl + "/api/Class/classId?";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "classId=" + encodeURIComponent("" + classId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClassId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClassId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProjectReponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProjectReponse>;
+        }));
+    }
+
+    protected processClassId(response: HttpResponseBase): Observable<ProjectReponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ProjectReponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPOST(body?: CreateAndUpdateClassDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Class";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClassPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClassPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processClassPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPUT(id: number, body?: CreateAndUpdateClassDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Class/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClassPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClassPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processClassPUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IIssueClient {
+    /**
+     * @param id (optional) 
+     * @param assigneeId (optional) 
+     * @param projectId (optional) 
+     * @param issueSettingId (optional) 
+     * @param milestoneId (optional) 
+     * @param startDate (optional) 
+     * @param dueDate (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    issue(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<IssueResponse>;
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    id(id?: number | undefined): Observable<IssueDto>;
+    /**
+     * @return Success
+     */
+    deleteIssue(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issuePOST(body?: CreateUpdateIssueDto | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issuePUT(id: number, body?: CreateUpdateIssueDto | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class IssueClient implements IIssueClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param id (optional) 
+     * @param assigneeId (optional) 
+     * @param projectId (optional) 
+     * @param issueSettingId (optional) 
+     * @param milestoneId (optional) 
+     * @param startDate (optional) 
+     * @param dueDate (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
+     * @return Success
+     */
+    issue(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<IssueResponse> {
+        let url_ = this.baseUrl + "/api/Issue/issue?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        if (assigneeId === null)
+            throw new Error("The parameter 'assigneeId' cannot be null.");
+        else if (assigneeId !== undefined)
+            url_ += "AssigneeId=" + encodeURIComponent("" + assigneeId) + "&";
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
+        if (issueSettingId === null)
+            throw new Error("The parameter 'issueSettingId' cannot be null.");
+        else if (issueSettingId !== undefined)
+            url_ += "IssueSettingId=" + encodeURIComponent("" + issueSettingId) + "&";
+        if (milestoneId === null)
+            throw new Error("The parameter 'milestoneId' cannot be null.");
+        else if (milestoneId !== undefined)
+            url_ += "MilestoneId=" + encodeURIComponent("" + milestoneId) + "&";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "StartDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (dueDate === null)
+            throw new Error("The parameter 'dueDate' cannot be null.");
+        else if (dueDate !== undefined)
+            url_ += "DueDate=" + encodeURIComponent(dueDate ? "" + dueDate.toISOString() : "") + "&";
+        if (keyWords === null)
+            throw new Error("The parameter 'keyWords' cannot be null.");
+        else if (keyWords !== undefined)
+            url_ += "KeyWords=" + encodeURIComponent("" + keyWords) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&";
+        if (itemsPerPage === null)
+            throw new Error("The parameter 'itemsPerPage' cannot be null.");
+        else if (itemsPerPage !== undefined)
+            url_ += "ItemsPerPage=" + encodeURIComponent("" + itemsPerPage) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "Skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "Take=" + encodeURIComponent("" + take) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "SortField=" + encodeURIComponent("" + sortField) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIssue(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIssue(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<IssueResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<IssueResponse>;
+        }));
+    }
+
+    protected processIssue(response: HttpResponseBase): Observable<IssueResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as IssueResponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    id(id?: number | undefined, httpContext?: HttpContext): Observable<IssueDto> {
+        let url_ = this.baseUrl + "/api/Issue/Id?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<IssueDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<IssueDto>;
+        }));
+    }
+
+    protected processId(response: HttpResponseBase): Observable<IssueDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as IssueDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteIssue(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Issue/delete-issue/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteIssue(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteIssue(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteIssue(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issuePOST(body?: CreateUpdateIssueDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Issue";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIssuePOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIssuePOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processIssuePOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issuePUT(id: number, body?: CreateUpdateIssueDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Issue/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIssuePUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIssuePUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processIssuePUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
 export interface IMilestoneClient {
     /**
-     * @param projectId (optional)
-     * @param classId (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<MilestoneResponse>;
@@ -698,7 +1383,7 @@ export interface IMilestoneClient {
      */
     milestoneGET(id: number): Observable<MilestoneDto>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     milestonePUT(id: number, body?: UpdateMilestoneDto | undefined): Observable<void>;
@@ -707,7 +1392,7 @@ export interface IMilestoneClient {
      */
     deleteMilestone(id: number): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     milestonePOST(body?: CreateMilestoneDto | undefined): Observable<void>;
@@ -727,14 +1412,14 @@ export class MilestoneClient implements IMilestoneClient {
     }
 
     /**
-     * @param projectId (optional)
-     * @param classId (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<MilestoneResponse> {
@@ -872,7 +1557,7 @@ export class MilestoneClient implements IMilestoneClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     milestonePUT(id: number, body?: UpdateMilestoneDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -979,7 +1664,7 @@ export class MilestoneClient implements IMilestoneClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     milestonePOST(body?: CreateMilestoneDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1034,22 +1719,28 @@ export class MilestoneClient implements IMilestoneClient {
 
 export interface IProjectClient {
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    projectGET(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<ProjectReponse>;
+    projectGET(classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<ProjectReponse>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     projectPOST(body?: CreateAndUpdateProjectDto | undefined): Observable<void>;
     /**
-     * @param body (optional)
+     * @param projectId (optional) 
+     * @return Success
+     */
+    projectId(projectId?: number | undefined): Observable<ProjectReponse>;
+    /**
+     * @param body (optional) 
      * @return Success
      */
     projectPUT(id: number, body?: CreateAndUpdateProjectDto | undefined): Observable<void>;
@@ -1069,16 +1760,21 @@ export class ProjectClient implements IProjectClient {
     }
 
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param classId (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
-    projectGET(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<ProjectReponse> {
+    projectGET(classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<ProjectReponse> {
         let url_ = this.baseUrl + "/api/Project?";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
         if (keyWords === null)
             throw new Error("The parameter 'keyWords' cannot be null.");
         else if (keyWords !== undefined)
@@ -1150,7 +1846,7 @@ export class ProjectClient implements IProjectClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     projectPOST(body?: CreateAndUpdateProjectDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1203,7 +1899,63 @@ export class ProjectClient implements IProjectClient {
     }
 
     /**
-     * @param body (optional)
+     * @param projectId (optional) 
+     * @return Success
+     */
+    projectId(projectId?: number | undefined, httpContext?: HttpContext): Observable<ProjectReponse> {
+        let url_ = this.baseUrl + "/api/Project/projectId?";
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "projectId=" + encodeURIComponent("" + projectId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processProjectId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processProjectId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProjectReponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProjectReponse>;
+        }));
+    }
+
+    protected processProjectId(response: HttpResponseBase): Observable<ProjectReponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ProjectReponse;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
      * @return Success
      */
     projectPUT(id: number, body?: CreateAndUpdateProjectDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1261,27 +2013,27 @@ export class ProjectClient implements IProjectClient {
 
 export interface IRoleClient {
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     all(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<RoleResponse>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     rolePOST(body?: CreateUpdateRoleDto | undefined): Observable<void>;
     /**
-     * @param ids (optional)
+     * @param ids (optional) 
      * @return Success
      */
     roleDELETE(ids?: string[] | undefined): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     rolePUT(id: string, body?: CreateUpdateRoleDto | undefined): Observable<void>;
@@ -1294,7 +2046,7 @@ export interface IRoleClient {
      */
     permissionsGET(roleId: string): Observable<PermissionDto>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     permissionsPUT(body?: PermissionDto | undefined): Observable<void>;
@@ -1314,12 +2066,12 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     all(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<RoleResponse> {
@@ -1395,7 +2147,7 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     rolePOST(body?: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1448,7 +2200,7 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
-     * @param ids (optional)
+     * @param ids (optional) 
      * @return Success
      */
     roleDELETE(ids?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1501,7 +2253,7 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     rolePUT(id: string, body?: CreateUpdateRoleDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1665,7 +2417,7 @@ export class RoleClient implements IRoleClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     permissionsPUT(body?: PermissionDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -1720,23 +2472,23 @@ export class RoleClient implements IRoleClient {
 
 export interface ISettingClient {
     /**
-     * @param type (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param type (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     settingGET(type?: SettingType | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<SettingResponse>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     settingPOST(body?: CreateUpdateSetting | undefined): Observable<SettingDto>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     settingPUT(id: number, body?: CreateUpdateSetting | undefined): Observable<SettingDto>;
@@ -1764,13 +2516,13 @@ export class SettingClient implements ISettingClient {
     }
 
     /**
-     * @param type (optional)
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param type (optional) 
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     settingGET(type?: SettingType | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<SettingResponse> {
@@ -1850,7 +2602,7 @@ export class SettingClient implements ISettingClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     settingPOST(body?: CreateUpdateSetting | undefined, httpContext?: HttpContext): Observable<SettingDto> {
@@ -1906,7 +2658,7 @@ export class SettingClient implements ISettingClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     settingPUT(id: number, body?: CreateUpdateSetting | undefined, httpContext?: HttpContext): Observable<SettingDto> {
@@ -2076,7 +2828,7 @@ export interface ISubjectClient {
      */
     subjectGET(id: number): Observable<SubjectDto>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     subjectPUT(id: number, body?: CreateUpdateSubjectDto | undefined): Observable<void>;
@@ -2085,17 +2837,17 @@ export interface ISubjectClient {
      */
     subjectDELETE(id: number): Observable<void>;
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     subjectGET2(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<SubjectReponse>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     subjectPOST(body?: CreateUpdateSubjectDto | undefined): Observable<void>;
@@ -2169,7 +2921,7 @@ export class SubjectClient implements ISubjectClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     subjectPUT(id: number, body?: CreateUpdateSubjectDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -2276,12 +3028,12 @@ export class SubjectClient implements ISubjectClient {
     }
 
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     subjectGET2(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<SubjectReponse> {
@@ -2357,7 +3109,7 @@ export class SubjectClient implements ISubjectClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     subjectPOST(body?: CreateUpdateSubjectDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -2412,18 +3164,18 @@ export class SubjectClient implements ISubjectClient {
 
 export interface IUserClient {
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<UserResponse>;
     /**
-     * @param userId (optional)
-     * @param body (optional)
+     * @param userId (optional) 
+     * @param body (optional) 
      * @return Success
      */
     assignRoles(userId?: string | undefined, body?: string[] | undefined): Observable<void>;
@@ -2436,17 +3188,17 @@ export interface IUserClient {
      */
     userGET(id: string): Observable<UserDto>;
     /**
-     * @param fullName (optional)
-     * @param birthDay (optional)
-     * @param avatar (optional)
-     * @param address (optional)
-     * @param phoneNumber (optional)
-     * @param fileImage (optional)
+     * @param fullName (optional) 
+     * @param birthDay (optional) 
+     * @param avatar (optional) 
+     * @param address (optional) 
+     * @param phoneNumber (optional) 
+     * @param fileImage (optional) 
      * @return Success
      */
     userPUT(id: string, fullName?: string | undefined, birthDay?: Date | undefined, avatar?: string | undefined, address?: string | undefined, phoneNumber?: string | undefined, fileImage?: FileParameter | undefined): Observable<void>;
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     userPOST(body?: CreateUserDto | undefined): Observable<void>;
@@ -2466,12 +3218,12 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param keyWords (optional)
-     * @param page (optional)
-     * @param itemsPerPage (optional)
-     * @param skip (optional)
-     * @param take (optional)
-     * @param sortField (optional)
+     * @param keyWords (optional) 
+     * @param page (optional) 
+     * @param itemsPerPage (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param sortField (optional) 
      * @return Success
      */
     users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<UserResponse> {
@@ -2547,8 +3299,8 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param userId (optional)
-     * @param body (optional)
+     * @param userId (optional) 
+     * @param body (optional) 
      * @return Success
      */
     assignRoles(userId?: string | undefined, body?: string[] | undefined, httpContext?: HttpContext): Observable<void> {
@@ -2710,12 +3462,12 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param fullName (optional)
-     * @param birthDay (optional)
-     * @param avatar (optional)
-     * @param address (optional)
-     * @param phoneNumber (optional)
-     * @param fileImage (optional)
+     * @param fullName (optional) 
+     * @param birthDay (optional) 
+     * @param avatar (optional) 
+     * @param address (optional) 
+     * @param phoneNumber (optional) 
+     * @param fileImage (optional) 
      * @return Success
      */
     userPUT(id: string, fullName?: string | undefined, birthDay?: Date | undefined, avatar?: string | undefined, address?: string | undefined, phoneNumber?: string | undefined, fileImage?: FileParameter | undefined, httpContext?: HttpContext): Observable<void> {
@@ -2794,7 +3546,7 @@ export class UserClient implements IUserClient {
     }
 
     /**
-     * @param body (optional)
+     * @param body (optional) 
      * @return Success
      */
     userPOST(body?: CreateUserDto | undefined, httpContext?: HttpContext): Observable<void> {
@@ -2869,7 +3621,6 @@ export interface AppUser {
     birthDay?: Date | undefined;
     creationTime?: Date | undefined;
     subjectUsers?: SubjectUser[] | undefined;
-    issues?: Issues[] | undefined;
     classStudents?: ClassStudent[] | undefined;
     projectMembers?: ProjectMember[] | undefined;
     class?: Class[] | undefined;
@@ -2925,6 +3676,24 @@ export interface Class {
     subject?: Subject;
 }
 
+export interface ClassDto {
+    id?: number;
+    name?: string | undefined;
+    assigneId?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+    settingId?: number;
+    classStudents?: ClassStudent[] | undefined;
+    milestones?: Milestone[] | undefined;
+    projects?: Project[] | undefined;
+    issueSettings?: IssueSetting[] | undefined;
+}
+
+export interface ClassReponse {
+    page?: PagingResponseInfo;
+    classes?: ClassDto[] | undefined;
+}
+
 export interface ClassStudent {
     id?: number;
     creationTime?: Date | undefined;
@@ -2936,6 +3705,14 @@ export interface ClassStudent {
     classId?: number;
     class?: Class;
     user?: AppUser;
+}
+
+export interface CreateAndUpdateClassDto {
+    name?: string | undefined;
+    description?: string | undefined;
+    subjectId?: number;
+    settingId?: number;
+    assigneId?: string;
 }
 
 export interface CreateAndUpdateProjectDto {
@@ -2958,6 +3735,18 @@ export interface CreateUpdateAssignmentDTO {
     name?: string | undefined;
     description?: string | undefined;
     subjectId?: number;
+}
+
+export interface CreateUpdateIssueDto {
+    name?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    assigneeId?: string;
+    isOpen?: boolean;
+    projectId?: number;
+    issueSettingId?: number | undefined;
+    milestoneId?: number;
 }
 
 export interface CreateUpdateRoleDto {
@@ -2986,23 +3775,7 @@ export interface CreateUserDto {
     address?: string | undefined;
 }
 
-export interface IssueSetting {
-    id?: number;
-    creationTime?: Date | undefined;
-    createdBy?: string | undefined;
-    lastModificationTime?: Date | undefined;
-    lastModifiedBy?: string | undefined;
-    isActive?: boolean | undefined;
-    projectId?: number | undefined;
-    classId?: number | undefined;
-    subjectId?: number | undefined;
-    project?: Project;
-    subject?: Subject;
-    class?: Class;
-    issues?: Issues[] | undefined;
-}
-
-export interface Issues {
+export interface Issue {
     id?: number;
     creationTime?: Date | undefined;
     createdBy?: string | undefined;
@@ -3013,15 +3786,45 @@ export interface Issues {
     description?: string | undefined;
     startDate?: Date | undefined;
     dueDate?: Date | undefined;
+    assigneeId?: string | undefined;
+    isOpen?: boolean;
+    projectId?: number | undefined;
+    issueSettingId?: number | undefined;
+    milestoneId?: number | undefined;
+}
+
+export interface IssueDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
     assigneeId?: string;
     isOpen?: boolean;
     projectId?: number;
     issueSettingId?: number | undefined;
     milestoneId?: number;
-    assignee?: AppUser;
+    issueSetting?: IssueSetting;
     milestone?: Milestone;
     project?: Project;
-    issueSetting?: IssueSetting;
+    assignee?: AppUser;
+}
+
+export interface IssueResponse {
+    page?: PagingResponseInfo;
+    issues?: IssueDto[] | undefined;
+}
+
+export interface IssueSetting {
+    id?: number;
+    creationTime?: Date | undefined;
+    createdBy?: string | undefined;
+    lastModificationTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+    isActive?: boolean | undefined;
+    projectId?: number | undefined;
+    classId?: number | undefined;
+    subjectId?: number | undefined;
 }
 
 export interface LoginModel {
@@ -3040,10 +3843,7 @@ export interface Milestone {
     startDate?: Date | undefined;
     dueDate?: Date | undefined;
     projectId?: number | undefined;
-    project?: Project;
     classId?: number | undefined;
-    class?: Class;
-    issues?: Issues[] | undefined;
 }
 
 export interface MilestoneDto {
@@ -3101,7 +3901,7 @@ export interface ProjectDto {
     classId?: number;
     projectMembers?: ProjectMember[] | undefined;
     milestones?: Milestone[] | undefined;
-    issues?: Issues[] | undefined;
+    issues?: Issue[] | undefined;
     issueSettings?: IssueSetting[] | undefined;
 }
 
