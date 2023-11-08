@@ -3,6 +3,7 @@ using IMS.Api.Common.Constants;
 using IMS.Api.Common.UnitOfWorks;
 using IMS.Api.Interfaces;
 using IMS.Api.Models.Dtos.Classes;
+using IMS.Api.Models.Dtos.ClassMembers;
 using IMS.Api.Models.Dtos.Projects;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +17,15 @@ namespace IMS.Api.APIControllers
     {
         private readonly IUnitOfWork _unitOfWork;
         public readonly IClassService _classService;
+        public readonly IClassStudentService _classStudentService;
         public readonly IMapper _mapper;
   
-        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork)
+        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork , IClassStudentService classStudentService)
         {
             _classService = classService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _classStudentService = classStudentService;
         }
 
         [Authorize(Permissions.Class.View)]
@@ -69,5 +72,28 @@ namespace IMS.Api.APIControllers
             }
         }
 
+        [HttpPost("add-student")]
+        public async Task<IActionResult> AddStudentForClass([FromBody] List<ClassStudentDto> data)
+        {
+            var map = _mapper.Map<List<ClassStudent>>(data);
+            var result = _classStudentService.InsertManyAsync(map);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok("Add Student Successful !!!");
+        }
+
+        [HttpDelete("delete-student/{id}")]
+        public async Task<IActionResult> DeleteStudentForClass(int id)
+        {
+            var data = await _classStudentService.GetById(id);
+            if (data != null)
+            {
+                await _classStudentService.DeleteAsync(data);
+                await _unitOfWork.SaveChangesAsync();
+                return Ok("Delete Successful !!!");
+            }else
+            {
+                return BadRequest();
+            }
+        }
     }
 }
