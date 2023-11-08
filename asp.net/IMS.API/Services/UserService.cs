@@ -101,10 +101,28 @@ namespace IMS.Api.Services
 
 			var usersQuery = _userManager.Users
 				.Where(u => string.IsNullOrWhiteSpace(request.KeyWords)
-                        || u.FullName.Contains(request.KeyWords)
+						|| u.FullName.Contains(request.KeyWords)
 						|| u.UserName.Contains(request.KeyWords));
 
-			var users = await usersQuery.Paginate(request).ToDynamicListAsync();
+
+            if (request.ProjectId != null)
+            {
+                // filter user by ProjectId
+                var projectUserIds = context.ProjectMembers.Where(pm => pm.ProjectId == request.ProjectId)
+															.Select(pm => pm.UserId).ToList();
+                usersQuery = usersQuery.Where(u => projectUserIds.Contains(u.Id));
+            }
+
+            if (request.ClassId != null)
+            {
+				// filter user by ClassId
+				var classUserIds = context.ClassStudents.Where(pm => pm.ClassId== request.ClassId)
+                                                            .Select(pm => pm.UserId).ToList();
+                usersQuery = usersQuery.Where(u => classUserIds.Contains(u.Id));
+            }
+
+
+            var users = await usersQuery.Paginate(request).ToDynamicListAsync();
 
 			var userDtos = new List<UserDto>();
 
@@ -127,10 +145,11 @@ namespace IMS.Api.Services
 				Page = GetPagingResponse(request, usersQuery.Count()),
 			};
 
-			return response;	
+			return response;
 		}
 
-		public async Task<UserDto> GetUserByIdAsync(Guid id)
+
+        public async Task<UserDto> GetUserByIdAsync(Guid id)
 		{
 			var user = await _userManager.FindByIdAsync(id.ToString());
 			if (user == null)
