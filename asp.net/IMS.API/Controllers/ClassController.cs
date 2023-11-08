@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using IMS.Api.Common.Constants;
 using IMS.Api.Common.UnitOfWorks;
 using IMS.Api.Interfaces;
 using IMS.Api.Models.Dtos.Classes;
 using IMS.Api.Models.Dtos.Projects;
 using IMS.Api.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers
@@ -15,7 +17,7 @@ namespace IMS.Api.APIControllers
         private readonly IUnitOfWork _unitOfWork;
         public readonly IClassService _classService;
         public readonly IMapper _mapper;
-
+  
         public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _classService = classService;
@@ -23,7 +25,7 @@ namespace IMS.Api.APIControllers
             _unitOfWork = unitOfWork;
         }
 
-
+        [Authorize(Permissions.Class.View)]
         [HttpGet("classes")]
         public async Task<ActionResult<ClassReponse>> GetAllClass([FromQuery] ClassRequest request)
         {
@@ -31,7 +33,7 @@ namespace IMS.Api.APIControllers
             return Ok(data); 
         }
 
-
+        [Authorize(Permissions.Class.View)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ClassDto>> GetClassByid(int id)
         {
@@ -39,6 +41,7 @@ namespace IMS.Api.APIControllers
             return Ok(data);
         }
 
+        [Authorize(Permissions.Class.Create)]
         [HttpPost]
         public async Task<IActionResult> CreateNewClass([FromBody] CreateAndUpdateClassDto data)
         {
@@ -48,6 +51,7 @@ namespace IMS.Api.APIControllers
             return Ok("Add successfully ");
         }
 
+        [Authorize(Permissions.Class.Edit)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClass(int id, [FromBody] CreateAndUpdateClassDto input)
         {

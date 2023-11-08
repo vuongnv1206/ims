@@ -2,6 +2,7 @@ using AutoMapper;
 using IMS.Api.Models.Dtos.Assignments;
 using IMS.Api.Models.Dtos.Classes;
 using IMS.Api.Models.Dtos.Issues;
+using IMS.Api.Models.Dtos.IssueSettings;
 using IMS.Api.Models.Dtos.Milestones;
 using IMS.Api.Models.Dtos.ProjectMembers;
 using IMS.Api.Models.Dtos.Projects;

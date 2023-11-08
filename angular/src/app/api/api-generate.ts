@@ -505,9 +505,8 @@ export class AuthClient implements IAuthClient {
             return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException(_responseText, status, _responseText, _headers);
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
         return _observableOf(null as any);
@@ -695,20 +694,19 @@ export interface IClassClient {
      */
     classes(settingId?: number | undefined, subjectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<ClassReponse>;
     /**
-     * @param classId (optional) 
      * @return Success
      */
-    classId(classId?: number | undefined): Observable<ProjectReponse>;
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    classPOST(body?: CreateAndUpdateClassDto | undefined): Observable<void>;
+    classGET(id: number): Observable<ClassDto>;
     /**
      * @param body (optional) 
      * @return Success
      */
     classPUT(id: number, body?: CreateAndUpdateClassDto | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPOST(body?: CreateAndUpdateClassDto | undefined): Observable<void>;
 }
 
 @Injectable({
@@ -816,15 +814,13 @@ export class ClassClient implements IClassClient {
     }
 
     /**
-     * @param classId (optional) 
      * @return Success
      */
-    classId(classId?: number | undefined, httpContext?: HttpContext): Observable<ProjectReponse> {
-        let url_ = this.baseUrl + "/api/Class/classId?";
-        if (classId === null)
-            throw new Error("The parameter 'classId' cannot be null.");
-        else if (classId !== undefined)
-            url_ += "classId=" + encodeURIComponent("" + classId) + "&";
+    classGET(id: number, httpContext?: HttpContext): Observable<ClassDto> {
+        let url_ = this.baseUrl + "/api/Class/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -837,20 +833,20 @@ export class ClassClient implements IClassClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processClassId(response_);
+            return this.processClassGET(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processClassId(response_ as any);
+                    return this.processClassGET(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ProjectReponse>;
+                    return _observableThrow(e) as any as Observable<ClassDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ProjectReponse>;
+                return _observableThrow(response_) as any as Observable<ClassDto>;
         }));
     }
 
-    protected processClassId(response: HttpResponseBase): Observable<ProjectReponse> {
+    protected processClassGET(response: HttpResponseBase): Observable<ClassDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -860,61 +856,8 @@ export class ClassClient implements IClassClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ProjectReponse;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ClassDto;
             return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    classPOST(body?: CreateAndUpdateClassDto | undefined, httpContext?: HttpContext): Observable<void> {
-        let url_ = this.baseUrl + "/api/Class";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            context: httpContext,
-            headers: new HttpHeaders({
-                "Content-Type": "application/json",
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processClassPOST(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processClassPOST(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<void>;
-        }));
-    }
-
-    protected processClassPOST(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -979,6 +922,59 @@ export class ClassClient implements IClassClient {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    classPOST(body?: CreateAndUpdateClassDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Class";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processClassPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processClassPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processClassPOST(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export interface IIssueClient {
@@ -998,7 +994,7 @@ export interface IIssueClient {
      * @param sortField (optional) 
      * @return Success
      */
-    issue(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<IssueResponse>;
+    issueGET(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<IssueResponse>;
     /**
      * @param id (optional) 
      * @return Success
@@ -1018,6 +1014,12 @@ export interface IIssueClient {
      * @return Success
      */
     issuePUT(id: number, body?: CreateUpdateIssueDto | undefined): Observable<void>;
+    /**
+     * @param listId (optional) 
+     * @param body (optional) 
+     * @return Success
+     */
+    updateBatch(listId?: string | undefined, body?: CreateUpdateIssueDto | undefined): Observable<void>;
 }
 
 @Injectable({
@@ -1049,8 +1051,8 @@ export class IssueClient implements IIssueClient {
      * @param sortField (optional) 
      * @return Success
      */
-    issue(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<IssueResponse> {
-        let url_ = this.baseUrl + "/api/Issue/issue?";
+    issueGET(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<IssueResponse> {
+        let url_ = this.baseUrl + "/api/Issue/Issue?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -1115,11 +1117,11 @@ export class IssueClient implements IIssueClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processIssue(response_);
+            return this.processIssueGET(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processIssue(response_ as any);
+                    return this.processIssueGET(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<IssueResponse>;
                 }
@@ -1128,7 +1130,7 @@ export class IssueClient implements IIssueClient {
         }));
     }
 
-    protected processIssue(response: HttpResponseBase): Observable<IssueResponse> {
+    protected processIssueGET(response: HttpResponseBase): Observable<IssueResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1209,7 +1211,7 @@ export class IssueClient implements IIssueClient {
      * @return Success
      */
     deleteIssue(id: number, httpContext?: HttpContext): Observable<void> {
-        let url_ = this.baseUrl + "/api/Issue/delete-issue/{id}";
+        let url_ = this.baseUrl + "/api/Issue/DeleteIssue/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1364,12 +1366,72 @@ export class IssueClient implements IIssueClient {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param listId (optional) 
+     * @param body (optional) 
+     * @return Success
+     */
+    updateBatch(listId?: string | undefined, body?: CreateUpdateIssueDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Issue/UpdateBatch?";
+        if (listId === null)
+            throw new Error("The parameter 'listId' cannot be null.");
+        else if (listId !== undefined)
+            url_ += "listId=" + encodeURIComponent("" + listId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateBatch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateBatch(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdateBatch(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export interface IMilestoneClient {
     /**
      * @param projectId (optional) 
      * @param classId (optional) 
+     * @param startDate (optional) 
+     * @param dueDate (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -1378,7 +1440,7 @@ export interface IMilestoneClient {
      * @param sortField (optional) 
      * @return Success
      */
-    milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<MilestoneResponse>;
+    milestone(projectId?: number | undefined, classId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<MilestoneResponse>;
     /**
      * @return Success
      */
@@ -1415,6 +1477,8 @@ export class MilestoneClient implements IMilestoneClient {
     /**
      * @param projectId (optional) 
      * @param classId (optional) 
+     * @param startDate (optional) 
+     * @param dueDate (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -1423,7 +1487,7 @@ export class MilestoneClient implements IMilestoneClient {
      * @param sortField (optional) 
      * @return Success
      */
-    milestone(projectId?: number | undefined, classId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<MilestoneResponse> {
+    milestone(projectId?: number | undefined, classId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<MilestoneResponse> {
         let url_ = this.baseUrl + "/api/Milestone/milestone?";
         if (projectId === null)
             throw new Error("The parameter 'projectId' cannot be null.");
@@ -1433,6 +1497,14 @@ export class MilestoneClient implements IMilestoneClient {
             throw new Error("The parameter 'classId' cannot be null.");
         else if (classId !== undefined)
             url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "StartDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (dueDate === null)
+            throw new Error("The parameter 'dueDate' cannot be null.");
+        else if (dueDate !== undefined)
+            url_ += "DueDate=" + encodeURIComponent(dueDate ? "" + dueDate.toISOString() : "") + "&";
         if (keyWords === null)
             throw new Error("The parameter 'keyWords' cannot be null.");
         else if (keyWords !== undefined)
@@ -3624,7 +3696,6 @@ export interface AppUser {
     subjectUsers?: SubjectUser[] | undefined;
     classStudents?: ClassStudent[] | undefined;
     projectMembers?: ProjectMember[] | undefined;
-    class?: Class[] | undefined;
     subjects?: Subject[] | undefined;
 }
 
@@ -3658,6 +3729,7 @@ export interface AuthResponse {
     userName?: string | undefined;
     email?: string | undefined;
     token?: string | undefined;
+    permissions?: string[] | undefined;
 }
 
 export interface Class {
@@ -3680,10 +3752,13 @@ export interface Class {
 export interface ClassDto {
     id?: number;
     name?: string | undefined;
-    assigneId?: string | undefined;
+    assigneeId?: string | undefined;
     description?: string | undefined;
     subjectId?: number;
     settingId?: number;
+    assignee?: AppUser;
+    subject?: Subject;
+    setting?: Setting;
     classStudents?: ClassStudent[] | undefined;
     milestones?: Milestone[] | undefined;
     projects?: Project[] | undefined;
@@ -3713,7 +3788,7 @@ export interface CreateAndUpdateClassDto {
     description?: string | undefined;
     subjectId?: number;
     settingId?: number;
-    assigneId?: string;
+    assigneeId?: string;
 }
 
 export interface CreateAndUpdateProjectDto {
@@ -3965,7 +4040,6 @@ export interface Setting {
     type?: SettingType;
     description?: string | undefined;
     name?: string | undefined;
-    classes?: Class[] | undefined;
 }
 
 export interface SettingDto {

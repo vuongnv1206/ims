@@ -9,6 +9,9 @@ const routes: Routes = [
   {
     path: 'role',
     component: RoleComponent,
+    // data: {
+    //   requiredPolicy:'Permissions.Roles.View',
+    // },
   },
   {
     path: 'user',

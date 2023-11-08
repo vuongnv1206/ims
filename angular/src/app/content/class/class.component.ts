@@ -6,6 +6,7 @@ import { ClassClient, ClassDto, ClassReponse, SettingClient, SettingResponse, Su
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ClassModalComponent } from './class-modal/class-modal.component';
 import { MessageConstants } from 'src/app/shared/constants/message.const';
+import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
   selector: 'app-class',
@@ -39,7 +40,8 @@ constructor(
   private settingService: SettingClient,
   public dialogService: DialogService,
   private notificationService: NotificationService,
-  private confirmationService: ConfirmationService
+  private confirmationService: ConfirmationService,
+  private utilService : UtilityService,
 ) {
 
 }
@@ -115,12 +117,9 @@ constructor(
     });
   }
 
-  showEditModal() {
-    if (this.selectedItem) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    var id = this.selectedItem.id;
+
+
+  showEditModal(id: number) {
     const ref = this.dialogService.open(ClassModalComponent, {
       data: {
         id: id,
@@ -137,6 +136,13 @@ constructor(
       }
     });
   }
+
+
+  showDetail(classDto: ClassDto) {
+    let url: string = "detail/" + classDto.id;
+    this.utilService.navigate(url);
+  }
+
 
   pageChanged(event: any) {
     this.page = event.page + 1;

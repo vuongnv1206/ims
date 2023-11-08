@@ -1,15 +1,22 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { TokenService } from '../shared/services/token.service';
+import { LOGIN_URL } from '../shared/constants/url.const';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './app.menu.component.html',
+  styles: [' .hidden { display: none; } ']
 })
 export class AppMenuComponent implements OnInit {
   model: any[] = [];
 
-  constructor(public layoutService: LayoutService) {}
+  constructor(public layoutService: LayoutService,
+    private tokenService: TokenService,
+    public router: Router,
+    ) {}
 
   ngOnInit() {
     this.model = [
@@ -30,11 +37,17 @@ export class AppMenuComponent implements OnInit {
             label: 'Role Manager',
             icon: 'pi pi-fw pi-eye',
             routerLink: ['/system/role'],
+            attributes: {
+              "policyName": "Permissions.Roles.View"
+            }
           },
           {
             label: 'User Manager',
             icon: 'pi pi-fw pi-user',
             routerLink: ['/system/user'],
+            attributes: {
+              "policyName": "Permissions.Users.View"
+            }
           },
           {
             label: 'Setting Manager',
@@ -284,5 +297,38 @@ export class AppMenuComponent implements OnInit {
         ],
       },
     ];
+
+
+    var user = this.tokenService.getUser();
+    if (user == null) {
+      this.router.navigate([LOGIN_URL]);
+    }
+
+    const permissions = user.permissions;
+
+    // this.model.forEach(menu => {
+    //   menu.items = menu.items.filter(item => this.hasPermission(permissions, item.attributes?.policyName));
+    // });
+
+    // Duyệt qua các mục menu cha
+    for (let index = 0; index < this.model.length; index++) {
+      // Duyệt qua các mục con (nếu có)
+      for (let childIndex = 0; childIndex < this.model[index].items?.length; childIndex++) {
+        const menuItem = this.model[index].items[childIndex];
+
+        if (menuItem.attributes && menuItem.attributes.policyName) {
+          // Kiểm tra xem quyền của menu này có trong danh sách quyền của người dùng không
+          if (!permissions.includes(menuItem.attributes.policyName)) {
+            // Nếu quyền không có trong danh sách, ẩn menu bằng cách thiết lập class
+            menuItem.class = 'hidden';
+          }
+        }
+      }
+    }
+
+  }
+
+  private hasPermission(permissions: string[], policyName: string): boolean {
+    return permissions.includes(policyName);
   }
 }
