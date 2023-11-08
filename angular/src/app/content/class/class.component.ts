@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { ClassClient, ClassDto, ClassReponse, SettingClient, SettingResponse, SubjectClient, SubjectReponse } from 'src/app/api/api-generate';
+import { ClassClient, ClassDto, ClassReponse, SettingClient, SettingResponse, SettingType, SubjectClient, SubjectReponse } from 'src/app/api/api-generate';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ClassModalComponent } from './class-modal/class-modal.component';
 import { MessageConstants } from 'src/app/shared/constants/message.const';
@@ -93,13 +93,13 @@ constructor(
 
   loadSettings() {
     this.settingService.settingGET().subscribe((response: SettingResponse) => {
-      response.settings.forEach(c => {
-        this.settingList.push({
-          label: c.name,
-          value: c.id,
-        });
-      });
-    });
+      this.settingList = response.settings
+      .filter(setting => setting.type === SettingType._1)
+      .map(setting => ({
+        label: setting.name,
+        value: setting.id,
+      }));
+  });
   }
 
   showAddModal() {
