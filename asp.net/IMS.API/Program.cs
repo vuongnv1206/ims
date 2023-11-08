@@ -53,7 +53,7 @@ namespace IMS.Api
             });
 
 
-            /*////Them doan nay ->
+            ////Them doan nay ->
             builder.Services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "IMS API", Version = "V1" });
@@ -84,7 +84,7 @@ namespace IMS.Api
                             new List<string>()
                             }
                         });
-            });*/
+            });
 
 
             var app = builder.Build();
