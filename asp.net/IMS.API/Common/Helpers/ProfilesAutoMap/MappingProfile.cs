@@ -4,6 +4,7 @@ using IMS.Api.Models.Dtos.Classes;
 using IMS.Api.Models.Dtos.Issues;
 using IMS.Api.Models.Dtos.IssueSettings;
 using IMS.Api.Models.Dtos.Milestones;
+using IMS.Api.Models.Dtos.ProjectMembers;
 using IMS.Api.Models.Dtos.Projects;
 using IMS.Api.Models.Dtos.Roles;
 using IMS.Api.Models.Dtos.Settings;
@@ -57,9 +58,9 @@ public class MappingProfile : Profile
         CreateMap<CreateUpdateIssueDto, Issue>().ReverseMap();
         CreateMap<IssueDto, Issue>().ReverseMap();
 
-        //Issue
-        CreateMap<CreateUpdateIssueSettingDto, IssueSetting>().ReverseMap();
-        CreateMap<IssueSettingDto, IssueSetting>().ReverseMap();
+        //ProjectMember
+        CreateMap<ProjectMemberDto, ProjectMember>().ReverseMap();
+
 
     }
 }
