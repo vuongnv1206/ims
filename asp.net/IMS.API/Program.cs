@@ -1,5 +1,7 @@
+using IMS.Api.Common.Helpers.Extensions;
 using IMS.Api.Common.Helpers.RegisterServices;
 using IMS.Api.Common.Helpers.Settings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
 namespace IMS.Api
@@ -13,6 +15,7 @@ namespace IMS.Api
 			// Add services to the container.
 			builder.Services.AddHttpContextAccessor();
 
+
 			builder.Services.ConfigureInfrastructureServices(configuration);
 			builder.Services.ConfigureIdentityServices(configuration);
 			builder.Services.ConfigureApplicationServices();
@@ -21,6 +24,8 @@ namespace IMS.Api
 			builder.Services.Configure<JwtSetting>(configuration.GetSection("JwtSettings"));
 
             var IMSCorsPolicy = "IMSCorsPolicy";
+            builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
             builder.Services.AddCors(o => o.AddPolicy(IMSCorsPolicy, builder =>
             {
                 builder.AllowAnyMethod()

@@ -116,7 +116,8 @@ namespace IMS.Api.Services
                     Id = user.Id,
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                     Email = user.Email,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    Permissions = await GetPermissionsByUserIdAsync(user.Id.ToString())
                 };
                 return response;
             }
@@ -141,13 +142,11 @@ namespace IMS.Api.Services
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserName),
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(CustomClaimType.Uid, user.Id.ToString()),
                 new Claim(CustomClaimType.Permissions, System.Text.Json.JsonSerializer.Serialize(permissions)),
-                new Claim(CustomClaimType.Uid, user.Id.ToString()),
-                new Claim(CustomClaimType.Uid, user.Id.ToString()),
             }
             .Union(userClaims)
             .Union(roleClaims);

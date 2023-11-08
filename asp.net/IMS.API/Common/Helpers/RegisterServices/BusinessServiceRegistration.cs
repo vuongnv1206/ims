@@ -56,7 +56,7 @@ public static class BusinessServiceRegistration
         //IssueService
         services.AddScoped<IIssueService, IssueService>();
 
-        //IssueService
+        //IssueSettingService
         services.AddScoped<IIssueSettingService, IssueSettingService>();
 
         return services;
