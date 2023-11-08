@@ -28,12 +28,14 @@
       </div>
       <div class="field col-12 md:col-12">
         <label for="type">Type<span class="required">*</span></label>
-        <p-dropdown optionLabel="label"
-        optionValue="value"
-         formControlName="type"
-         [style]="{ width: '100%' }"
-         [(ngModel)]="selectedSettingType"
-         [options]="settingTypes">
+        <p-dropdown
+          optionLabel="label"
+          optionValue="value"
+          formControlName="type"
+          [style]="{ width: '100%' }"
+          [(ngModel)]="selectedSettingType"
+          [options]="settingTypes"
+        >
         </p-dropdown>
       </div>
       <div class="field col-12 md:col-12">

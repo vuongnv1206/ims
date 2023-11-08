@@ -39,6 +39,7 @@ import { MilestoneDetailComponent } from './milestone/milestone-detail/milestone
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ClassModalComponent } from './class/class-modal/class-modal.component';
 import { ClassDetailComponent } from './class/class-detail/class-detail.component';
+import { IssueDetailComponent } from './issue/issue-detail/issue-detail.component';
 @NgModule({
   declarations: [
     SubjectComponent,
@@ -50,7 +51,8 @@ import { ClassDetailComponent } from './class/class-detail/class-detail.componen
     MilestoneComponent,
     MilestoneDetailComponent,
     ClassModalComponent,
-    ClassDetailComponent
+    ClassDetailComponent,
+    IssueDetailComponent,
   ],
   imports: [
     CommonModule,

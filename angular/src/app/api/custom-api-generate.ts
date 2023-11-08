@@ -736,6 +736,559 @@ export class SettingClient implements ISettingClient {
   }
 }
 
+
+export interface IIssueClient {
+  /**
+   * @param id (optional)
+   * @param assigneeId (optional)
+   * @param projectId (optional)
+   * @param issueSettingId (optional)
+   * @param milestoneId (optional)
+   * @param startDate (optional)
+   * @param dueDate (optional)
+   * @param keyWords (optional)
+   * @param page (optional)
+   * @param itemsPerPage (optional)
+   * @param skip (optional)
+   * @param take (optional)
+   * @param sortField (optional)
+   * @return Success
+   */
+  issue(
+    assigneeId?: string | undefined,
+    projectId?: number | undefined,
+    issueSettingId?: number | undefined,
+    milestoneId?: number | undefined,
+    startDate?: Date | undefined,
+    dueDate?: Date | undefined,
+    keyWords?: string | undefined,
+    page?: number | undefined,
+    itemsPerPage?: number | undefined,
+    skip?: number | undefined,
+    take?: number | undefined,
+    sortField?: string | undefined
+  ): Observable<IssueResponse>;
+  /**
+   * @param id (optional)
+   * @return Success
+   */
+  id(id?: number | undefined): Observable<IssueDto>;
+  /**
+   * @return Success
+   */
+  deleteIssue(id: number): Observable<void>;
+  /**
+   * @param body (optional)
+   * @return Success
+   */
+  issuePOST(body?: CreateUpdateIssueDto | undefined): Observable<void>;
+  /**
+   * @param body (optional)
+   * @return Success
+   */
+  issuePUT(
+    id: number,
+    body?: CreateUpdateIssueDto | undefined
+  ): Observable<void>;
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class IssueClient implements IIssueClient {
+  private http: HttpClient;
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    @Inject(HttpClient) http: HttpClient,
+    @Optional() @Inject(API_BASE_URL) baseUrl?: string
+  ) {
+    this.http = http;
+    this.baseUrl = 'https://localhost:5001';
+  }
+
+  /**
+   * @param id (optional)
+   * @param assigneeId (optional)
+   * @param projectId (optional)
+   * @param issueSettingId (optional)
+   * @param milestoneId (optional)
+   * @param startDate (optional)
+   * @param dueDate (optional)
+   * @param keyWords (optional)
+   * @param page (optional)
+   * @param itemsPerPage (optional)
+   * @param skip (optional)
+   * @param take (optional)
+   * @param sortField (optional)
+   * @return Success
+   */
+  issue(
+    assigneeId?: string | undefined,
+    projectId?: number | undefined,
+    issueSettingId?: number | undefined,
+    milestoneId?: number | undefined,
+    startDate?: Date | undefined,
+    dueDate?: Date | undefined,
+    keyWords?: string | undefined,
+    page?: number | undefined,
+    itemsPerPage?: number | undefined,
+    skip?: number | undefined,
+    take?: number | undefined,
+    sortField?: string | undefined,
+    httpContext?: HttpContext
+  ): Observable<IssueResponse> {
+    let url_ = this.baseUrl + '/api/Issue/issue?';
+    if (assigneeId === null)
+      throw new Error("The parameter 'assigneeId' cannot be null.");
+    else if (assigneeId !== undefined)
+      url_ += 'AssigneeId=' + encodeURIComponent('' + assigneeId) + '&';
+    if (projectId === null)
+      throw new Error("The parameter 'projectId' cannot be null.");
+    else if (projectId !== undefined)
+      url_ += 'ProjectId=' + encodeURIComponent('' + projectId) + '&';
+    if (issueSettingId === null)
+      throw new Error("The parameter 'issueSettingId' cannot be null.");
+    else if (issueSettingId !== undefined)
+      url_ += 'IssueSettingId=' + encodeURIComponent('' + issueSettingId) + '&';
+    if (milestoneId === null)
+      throw new Error("The parameter 'milestoneId' cannot be null.");
+    else if (milestoneId !== undefined)
+      url_ += 'MilestoneId=' + encodeURIComponent('' + milestoneId) + '&';
+    if (startDate === null)
+      throw new Error("The parameter 'startDate' cannot be null.");
+    else if (startDate !== undefined)
+      url_ +=
+        'StartDate=' +
+        encodeURIComponent(startDate ? '' + startDate.toISOString() : '') +
+        '&';
+    if (dueDate === null)
+      throw new Error("The parameter 'dueDate' cannot be null.");
+    else if (dueDate !== undefined)
+      url_ +=
+        'DueDate=' +
+        encodeURIComponent(dueDate ? '' + dueDate.toISOString() : '') +
+        '&';
+    if (keyWords === null)
+      throw new Error("The parameter 'keyWords' cannot be null.");
+    else if (keyWords !== undefined)
+      url_ += 'KeyWords=' + encodeURIComponent('' + keyWords) + '&';
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'Page=' + encodeURIComponent('' + page) + '&';
+    if (itemsPerPage === null)
+      throw new Error("The parameter 'itemsPerPage' cannot be null.");
+    else if (itemsPerPage !== undefined)
+      url_ += 'ItemsPerPage=' + encodeURIComponent('' + itemsPerPage) + '&';
+    if (skip === null) throw new Error("The parameter 'skip' cannot be null.");
+    else if (skip !== undefined)
+      url_ += 'Skip=' + encodeURIComponent('' + skip) + '&';
+    if (take === null) throw new Error("The parameter 'take' cannot be null.");
+    else if (take !== undefined)
+      url_ += 'Take=' + encodeURIComponent('' + take) + '&';
+    if (sortField === null)
+      throw new Error("The parameter 'sortField' cannot be null.");
+    else if (sortField !== undefined)
+      url_ += 'SortField=' + encodeURIComponent('' + sortField) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: any = {
+      observe: 'response',
+      responseType: 'blob',
+      context: httpContext,
+      headers: new HttpHeaders({
+        Accept: 'text/plain',
+      }),
+    };
+
+    return this.http
+      .request('get', url_, options_)
+      .pipe(
+        _observableMergeMap((response_: any) => {
+          return this.processIssue(response_);
+        })
+      )
+      .pipe(
+        _observableCatch((response_: any) => {
+          if (response_ instanceof HttpResponseBase) {
+            try {
+              return this.processIssue(response_ as any);
+            } catch (e) {
+              return _observableThrow(e) as any as Observable<IssueResponse>;
+            }
+          } else
+            return _observableThrow(
+              response_
+            ) as any as Observable<IssueResponse>;
+        })
+      );
+  }
+
+  protected processIssue(
+    response: HttpResponseBase
+  ): Observable<IssueResponse> {
+    const status = response.status;
+    const responseBlob =
+      response instanceof HttpResponse
+        ? response.body
+        : (response as any).error instanceof Blob
+        ? (response as any).error
+        : undefined;
+
+    let _headers: any = {};
+    if (response.headers) {
+      for (let key of response.headers.keys()) {
+        _headers[key] = response.headers.get(key);
+      }
+    }
+    if (status === 200) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          let result200: any = null;
+          result200 =
+            _responseText === ''
+              ? null
+              : (JSON.parse(
+                  _responseText,
+                  this.jsonParseReviver
+                ) as IssueResponse);
+          return _observableOf(result200);
+        })
+      );
+    } else if (status !== 200 && status !== 204) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return throwException(
+            'An unexpected server error occurred.',
+            status,
+            _responseText,
+            _headers
+          );
+        })
+      );
+    }
+    return _observableOf(null as any);
+  }
+
+  /**
+   * @param id (optional)
+   * @return Success
+   */
+  id(id?: number | undefined, httpContext?: HttpContext): Observable<IssueDto> {
+    let url_ = this.baseUrl + '/api/Issue/Id?';
+    if (id === null) throw new Error("The parameter 'id' cannot be null.");
+    else if (id !== undefined)
+      url_ += 'Id=' + encodeURIComponent('' + id) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: any = {
+      observe: 'response',
+      responseType: 'blob',
+      context: httpContext,
+      headers: new HttpHeaders({
+        Accept: 'text/plain',
+      }),
+    };
+
+    return this.http
+      .request('get', url_, options_)
+      .pipe(
+        _observableMergeMap((response_: any) => {
+          return this.processId(response_);
+        })
+      )
+      .pipe(
+        _observableCatch((response_: any) => {
+          if (response_ instanceof HttpResponseBase) {
+            try {
+              return this.processId(response_ as any);
+            } catch (e) {
+              return _observableThrow(e) as any as Observable<IssueDto>;
+            }
+          } else
+            return _observableThrow(response_) as any as Observable<IssueDto>;
+        })
+      );
+  }
+
+  protected processId(response: HttpResponseBase): Observable<IssueDto> {
+    const status = response.status;
+    const responseBlob =
+      response instanceof HttpResponse
+        ? response.body
+        : (response as any).error instanceof Blob
+        ? (response as any).error
+        : undefined;
+
+    let _headers: any = {};
+    if (response.headers) {
+      for (let key of response.headers.keys()) {
+        _headers[key] = response.headers.get(key);
+      }
+    }
+    if (status === 200) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          let result200: any = null;
+          result200 =
+            _responseText === ''
+              ? null
+              : (JSON.parse(_responseText, this.jsonParseReviver) as IssueDto);
+          return _observableOf(result200);
+        })
+      );
+    } else if (status !== 200 && status !== 204) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return throwException(
+            'An unexpected server error occurred.',
+            status,
+            _responseText,
+            _headers
+          );
+        })
+      );
+    }
+    return _observableOf(null as any);
+  }
+
+  /**
+   * @return Success
+   */
+  deleteIssue(id: number, httpContext?: HttpContext): Observable<void> {
+    let url_ = this.baseUrl + '/api/Issue/delete-issue/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: any = {
+      observe: 'response',
+      responseType: 'blob',
+      context: httpContext,
+      headers: new HttpHeaders({}),
+    };
+
+    return this.http
+      .request('delete', url_, options_)
+      .pipe(
+        _observableMergeMap((response_: any) => {
+          return this.processDeleteIssue(response_);
+        })
+      )
+      .pipe(
+        _observableCatch((response_: any) => {
+          if (response_ instanceof HttpResponseBase) {
+            try {
+              return this.processDeleteIssue(response_ as any);
+            } catch (e) {
+              return _observableThrow(e) as any as Observable<void>;
+            }
+          } else return _observableThrow(response_) as any as Observable<void>;
+        })
+      );
+  }
+
+  protected processDeleteIssue(response: HttpResponseBase): Observable<void> {
+    const status = response.status;
+    const responseBlob =
+      response instanceof HttpResponse
+        ? response.body
+        : (response as any).error instanceof Blob
+        ? (response as any).error
+        : undefined;
+
+    let _headers: any = {};
+    if (response.headers) {
+      for (let key of response.headers.keys()) {
+        _headers[key] = response.headers.get(key);
+      }
+    }
+    if (status === 200) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return _observableOf(null as any);
+        })
+      );
+    } else if (status !== 200 && status !== 204) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return throwException(
+            'An unexpected server error occurred.',
+            status,
+            _responseText,
+            _headers
+          );
+        })
+      );
+    }
+    return _observableOf(null as any);
+  }
+
+  /**
+   * @param body (optional)
+   * @return Success
+   */
+  issuePOST(
+    body?: CreateUpdateIssueDto | undefined,
+    httpContext?: HttpContext
+  ): Observable<void> {
+    let url_ = this.baseUrl + '/api/Issue';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: any = {
+      body: content_,
+      observe: 'response',
+      responseType: 'blob',
+      context: httpContext,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    return this.http
+      .request('post', url_, options_)
+      .pipe(
+        _observableMergeMap((response_: any) => {
+          return this.processIssuePOST(response_);
+        })
+      )
+      .pipe(
+        _observableCatch((response_: any) => {
+          if (response_ instanceof HttpResponseBase) {
+            try {
+              return this.processIssuePOST(response_ as any);
+            } catch (e) {
+              return _observableThrow(e) as any as Observable<void>;
+            }
+          } else return _observableThrow(response_) as any as Observable<void>;
+        })
+      );
+  }
+
+  protected processIssuePOST(response: HttpResponseBase): Observable<void> {
+    const status = response.status;
+    const responseBlob =
+      response instanceof HttpResponse
+        ? response.body
+        : (response as any).error instanceof Blob
+        ? (response as any).error
+        : undefined;
+
+    let _headers: any = {};
+    if (response.headers) {
+      for (let key of response.headers.keys()) {
+        _headers[key] = response.headers.get(key);
+      }
+    }
+    if (status === 200) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return _observableOf(null as any);
+        })
+      );
+    } else if (status !== 200 && status !== 204) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return throwException(
+            'An unexpected server error occurred.',
+            status,
+            _responseText,
+            _headers
+          );
+        })
+      );
+    }
+    return _observableOf(null as any);
+  }
+
+  /**
+   * @param body (optional)
+   * @return Success
+   */
+  issuePUT(
+    id: number,
+    body?: CreateUpdateIssueDto | undefined,
+    httpContext?: HttpContext
+  ): Observable<void> {
+    let url_ = this.baseUrl + '/api/Issue/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(body);
+
+    let options_: any = {
+      body: content_,
+      observe: 'response',
+      responseType: 'blob',
+      context: httpContext,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    return this.http
+      .request('put', url_, options_)
+      .pipe(
+        _observableMergeMap((response_: any) => {
+          return this.processIssuePUT(response_);
+        })
+      )
+      .pipe(
+        _observableCatch((response_: any) => {
+          if (response_ instanceof HttpResponseBase) {
+            try {
+              return this.processIssuePUT(response_ as any);
+            } catch (e) {
+              return _observableThrow(e) as any as Observable<void>;
+            }
+          } else return _observableThrow(response_) as any as Observable<void>;
+        })
+      );
+  }
+
+  protected processIssuePUT(response: HttpResponseBase): Observable<void> {
+    const status = response.status;
+    const responseBlob =
+      response instanceof HttpResponse
+        ? response.body
+        : (response as any).error instanceof Blob
+        ? (response as any).error
+        : undefined;
+
+    let _headers: any = {};
+    if (response.headers) {
+      for (let key of response.headers.keys()) {
+        _headers[key] = response.headers.get(key);
+      }
+    }
+    if (status === 200) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return _observableOf(null as any);
+        })
+      );
+    } else if (status !== 200 && status !== 204) {
+      return blobToText(responseBlob).pipe(
+        _observableMergeMap((_responseText: string) => {
+          return throwException(
+            'An unexpected server error occurred.',
+            status,
+            _responseText,
+            _headers
+          );
+        })
+      );
+    }
+    return _observableOf(null as any);
+  }
+}
+
 export interface Setting {
   id?: number;
   creationTime?: Date | undefined;
@@ -970,4 +1523,39 @@ export interface IssueSetting {
 export enum ActiveType {
   Activate = 0,
   Deactivate = 1,
+}
+
+
+export interface IssueResponse {
+  page?: PagingResponseInfo;
+  issues?: IssueDto[] | undefined;
+}
+
+export interface IssueDto {
+  id?: number;
+  name?: string | undefined;
+  description?: string | undefined;
+  startDate?: Date | undefined;
+  dueDate?: Date | undefined;
+  assigneeId?: string;
+  isOpen?: boolean;
+  projectId?: number;
+  issueSettingId?: number | undefined;
+  milestoneId?: number;
+  issueSetting?: IssueSetting;
+  milestone?: Milestone;
+  project?: Project;
+  assignee?: AppUser;
+}
+
+export interface CreateUpdateIssueDto {
+  name?: string | undefined;
+  description?: string | undefined;
+  startDate?: Date | undefined;
+  dueDate?: Date | undefined;
+  assigneeId?: string;
+  isOpen?: boolean;
+  projectId?: number;
+  issueSettingId?: number | undefined;
+  milestoneId?: number;
 }

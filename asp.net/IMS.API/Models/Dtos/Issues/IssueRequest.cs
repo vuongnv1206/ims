@@ -9,7 +9,6 @@ namespace IMS.Api.Models.Dtos.Issues
 {
     public class IssueRequest : PagingRequestBase
     {
-        public int? Id { get; set; }
         public Guid? AssigneeId { get; set; }
         public int? ProjectId { get; set; }
         public int? IssueSettingId { get; set; }
