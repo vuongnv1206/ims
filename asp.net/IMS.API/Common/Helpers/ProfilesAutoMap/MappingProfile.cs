@@ -57,10 +57,14 @@ public class MappingProfile : Profile
         //Issue
         CreateMap<CreateUpdateIssueDto, Issue>().ReverseMap();
         CreateMap<IssueDto, Issue>().ReverseMap();
+        CreateMap<BatchUpdateDto, Issue>().ReverseMap();
+
+        //IssueSetting
+        CreateMap<CreateUpdateIssueSettingDto, IssueSetting>().ReverseMap();
+        CreateMap<IssueSettingDto, IssueSetting>().ReverseMap();
 
         //ProjectMember
         CreateMap<ProjectMemberDto, ProjectMember>().ReverseMap();
-
 
     }
 }
