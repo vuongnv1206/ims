@@ -1,0 +1,132 @@
+<form
+  class="form-horizontal form-label-left"
+  skipValidation
+  [formGroup]="form"
+  (ngSubmit)="saveChange()"
+>
+  <p-panel
+    #pnlDetail
+    header="Thông tin"
+    [toggleable]="true"
+    [collapsed]="false"
+  >
+    <div class="formgrid grid">
+      <div class="field col-12 md:col-6">
+        <label for="name">Name <span class="required">*</span></label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="name"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="startDate">Start Date </label>
+        <input
+          id="startDate"
+          type="datetime-local"
+          pInputText
+          dateFormat="yyyy-MM-dd"
+          formControlName="startDate"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="startDate"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="type">Milestone</label>
+        <p-dropdown
+          [(ngModel)]="milestoneId"
+          [options]="milestoneList"
+          formControlName="milestoneId"
+          placeholder="Select a milestone"
+          [style]="{ width: '100%' }"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="dueDate">Due Date </label>
+        <input
+          id="dueDate"
+          dateFormat="yyyy-MM-dd"
+          pInputText
+          type="datetime-local"
+          formControlName="dueDate"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="dueDate"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="type">Assigned</label>
+        <p-dropdown
+          
+          [style]="{ width: '100%' }"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 md:col-6">
+        <label for="type">Status</label>
+        <p-dropdown
+          formControlName="isOpen"
+          [(ngModel)]="statusId"
+          [options]="statusList"
+          placeholder="Select a status"
+          [style]="{ width: '100%' }"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-12 md:col-12">
+        <label for="description">Description</label>
+        <input
+          id="description"
+          type="text"
+          pInputText
+          formControlName="description"
+          [style]="{ width: '100%' }"
+        />
+        <app-validation-message
+          [entityForm]="form"
+          fieldName="description"
+          [validationMessages]="validationMessages"
+        ></app-validation-message>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!form.valid || btnDisabled"
+      >
+        {{ saveBtnName }}
+      </button>
+    </ng-template>
+
+    <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
+      <p-progressSpinner
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%'
+        }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</form>

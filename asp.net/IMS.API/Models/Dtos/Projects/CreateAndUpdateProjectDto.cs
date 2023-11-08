@@ -10,7 +10,7 @@ namespace IMS.Api.Models.Dtos.Projects
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Avatarurl { get; set; }
+        public string? Avatarurl { get; set; }
         public int Status { get; set; }
         public int ClassId { get; set; }
 

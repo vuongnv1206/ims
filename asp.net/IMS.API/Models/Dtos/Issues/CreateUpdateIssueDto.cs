@@ -13,9 +13,9 @@ public class CreateUpdateIssueDto
     public string? Description { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? DueDate { get; set; }
-    public Guid AssigneeId { get; set; }
+    public Guid? AssigneeId { get; set; }
     public bool IsOpen { get; set; }
-    public int ProjectId { get; set; }
+    public int? ProjectId { get; set; }
     public int? IssueSettingId { get; set; }
-    public int MilestoneId { get; set; }
+    public int? MilestoneId { get; set; }
 }
