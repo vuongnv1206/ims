@@ -6,6 +6,7 @@ using IMS.Api.Models.Dtos.Classes;
 using IMS.Api.Models.Dtos.Projects;
 using IMS.Api.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Api.APIControllers
@@ -17,18 +18,21 @@ namespace IMS.Api.APIControllers
         private readonly IUnitOfWork _unitOfWork;
         public readonly IClassService _classService;
         public readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
   
-        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork)
+        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork, UserManager<AppUser> userManager)
         {
             _classService = classService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         [Authorize(Permissions.Class.View)]
         [HttpGet("classes")]
         public async Task<ActionResult<ClassReponse>> GetAllClass([FromQuery] ClassRequest request)
         {
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
             var data = await _classService.GetAllClass(request);
             return Ok(data); 
         }

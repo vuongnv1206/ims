@@ -1,3 +1,112 @@
-<p>
-  class-detail works!
-</p>
+<div class="animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
+    <p-header> Member </p-header>
+    <div class="grid">
+      <div class="col-4">
+        <!-- <button pButton type="button" label="Xóa" icon="fa fa-trash" class="ml-1 p-button-danger" *ngIf="selectedItems.length > 0" (click)="deleteItems()" ></button> -->
+      </div>
+      <div class="col-8">
+        <div class="formgroup-inline">
+          <div class="field">
+            <input id="txtKeyword" pInputText (keyup.enter)="loadDataUsers()" [(ngModel)]="keyWords" placeholder="Nhập từ khóa..." type="text"/>
+          </div>
+          <button type="button" pButton (click)="loadDataUsers()">Tìm</button>
+        </div>
+      </div>
+    </div>
+    <p-table #pnl [value]="items" selectionMode="multiple" dataKey="id" [(selection)]="selectedItems" [metaKeySelection]="true" [responsive]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 10px">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th>Tên</th>
+          <th>Image</th>
+          <th>Email</th>
+          <th>Số ĐT</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr [pSelectableRow]="row">
+          <td style="width: 10px">
+            <span class="ui-column-title"></span>
+            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+          </td>
+          <td>{{ row.fullName }}</td>
+          <td><p-image [src]="row.avatar" alt="Image" width="50" [preview]="true"></p-image></td>
+          <td>{{ row.email }}</td>
+          <td>{{ row.phoneNumber }}</td>
+          <!-- <td style="width: 150px">
+            <p-badge *ngIf="row.isActive === 1" value="Kích hoạt" severity="success"></p-badge>
+            <p-badge *ngIf="row.isActive === 0" value="Khoá" severity="danger"></p-badge>
+          </td> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div style="text-align: left">Tổng số: {{ totalCount | number }}</div>
+      </ng-template>
+    </p-table>
+
+    <p-paginator [rows]="itemsPerPage" [totalRecords]="totalCount" [rowsPerPageOptions]="[10, 20, 50, 100]"
+    (onPageChange)="pageChanged($event)"
+    ></p-paginator>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration="1s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</div>
+
+
+<div class="animated fadeIn">
+  <p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
+    <p-header> Project Management </p-header>
+    <div class="grid">
+      <div class="col-3">
+        <div class="formgroup-inline">
+          <div class="field">
+            <input id="txtKeyword1" pInputText (keyup.enter)="loadDataProjects()" [(ngModel)]="keyWords" placeholder="Enter project..." type="text" />
+          </div>
+          <button pButton type="button" pButton (click)="loadDataProjects()">Find</button>
+        </div>
+      </div>
+    </div>
+
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"  (click)="showAddModal()" ></button>
+        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" *ngIf="selectedItems.length > 0" (click)="deleteItems()"  ></button>
+        <button pButton pRiffle label="Update" icon="pi pi-pencil" class="p-button-help"  *ngIf="selectedItems.length === 1" (click)="showEditModal()" ></button> -->
+      </ng-template>
+      <ng-template pTemplate="right">
+        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+        <!-- <button pButton pRipple label="Export Excel" icon="pi pi-file-excel" class="p-button-help mr-2" (click)="exportExcel()"></button>
+        <button type="button" pButton pRipple label="Export PDF" icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button> -->
+      </ng-template>
+    </p-toolbar>
+
+
+    <p-accordion [activeIndex]="activeIndex">
+      <p-accordionTab *ngFor="let project of itemsProject; let i = index" [header]="project.name" (click)="onTabClick(i)">
+        <p>{{ project.description }}</p>
+      </p-accordionTab>
+    </p-accordion>
+
+
+
+  <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+    <p-progressSpinner
+      [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>
+</div>
+
+
