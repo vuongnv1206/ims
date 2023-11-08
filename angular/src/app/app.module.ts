@@ -13,7 +13,7 @@ import {
 } from './api/api-generate';
 import { UserClientCustom } from './api/custom-api-generate';
 import { TokenService } from './shared/services/token.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from './shared/services/notification.service';
@@ -35,6 +35,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FileService } from './shared/services/file.service';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { TokenInterceptor } from './shared/services/token.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -78,6 +79,7 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
       } as SocialAuthServiceConfig,
     },
     { provide: API_BASE_URL, useValue: environment.API_URL },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     TokenService,
     AuthClient,
     UserClient,
@@ -89,6 +91,7 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
     UtilityService,
     FileService,
     UserClientCustom,
+    TokenInterceptor,
 
   ],
   bootstrap: [AppComponent],

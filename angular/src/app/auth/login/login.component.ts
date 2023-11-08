@@ -154,6 +154,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: AuthResponse) => {
           this.tokenService.saveToken(res.token);
+          this.tokenService.saveUser(res);
           this.toggleBlockUI(false);
           this.router.navigate([HOME_URL]);
         },

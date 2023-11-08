@@ -12,5 +12,6 @@ namespace IMS.Contract.Common.Responses
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Token { get; set; }
+        public List<string> Permissions { get; set; }
     }
 }
