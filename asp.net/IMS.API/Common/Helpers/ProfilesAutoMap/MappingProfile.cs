@@ -24,7 +24,7 @@ public class MappingProfile : Profile
         CreateMap<AppUser, UserDto>().ReverseMap();
 
 
-        //User
+        //User       
         CreateMap<CreateUserDto, AppUser>().ReverseMap();
         CreateMap<UpdateUserDto, AppUser>().ReverseMap()
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));

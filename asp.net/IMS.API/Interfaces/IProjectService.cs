@@ -7,5 +7,7 @@ namespace IMS.Api.Interfaces
     {
         Task<ProjectReponse> GetAllProjectAsync(ProjectRequest request);
         Task<ProjectDto> GetProjectById(int Id);
+
+
     }
 }
