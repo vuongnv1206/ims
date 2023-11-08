@@ -10,13 +10,30 @@ using IMS.Api.Models.Entities;
 using IMS.Api.Interfaces;
 using IMS.Api.Models.Dtos.Issues;
 using IMS.Api.Common.Helpers.Extensions;
+using IMS.Api.Common.UnitOfWorks;
+using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace IMS.Api.Services
 {
     internal class IssueService : ServiceBase<Issue>, IIssueService
     {
-        public IssueService(IMSDbContext context, IMapper mapper) : base(context, mapper)
-        {
+      
+        public IssueService(IMSDbContext context, IMapper mapper, IUnitOfWork unitOfWork) : base(context, mapper)
+        { 
+         
+         
+        }
+
+        public async Task<Issue> GetIssueBatchUpdate(BatchUpdateDto data)
+        {          
+            var issue = await context.Issues.Where(x => x.Id == data.Id).FirstAsync();
+            if (issue == null)
+            {
+                throw new Exception("Not found");
+            }
+            
+            return issue;           
         }
 
         public async Task<IssueResponse> GetIssue(IssueRequest request)

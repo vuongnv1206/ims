@@ -8,5 +8,6 @@ namespace IMS.Api.Interfaces
     {
         Task<IssueResponse> GetIssue(IssueRequest request);
         Task<IssueDto> GetIssueById(int issueId);
+        Task<Issue> GetIssueBatchUpdate(BatchUpdateDto data);
     }
 }

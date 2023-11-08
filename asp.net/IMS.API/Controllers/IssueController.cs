@@ -15,11 +15,11 @@ namespace IMS.Api.APIControllers
         public readonly IIssueService _issueService;
         public readonly IMapper _mapper;
 
-        public IssueController(IUnitOfWork unitOfWork, IIssueService issueService, IMapper mapper)
+        public IssueController(IUnitOfWork unitOfWork, IMapper mapper, IIssueService issueService)
         {
             _unitOfWork = unitOfWork;
-            _issueService = issueService;
             _mapper = mapper;
+            _issueService = issueService;
         }
 
         [HttpGet("Issue")]
@@ -77,31 +77,27 @@ namespace IMS.Api.APIControllers
         }
 
         [HttpPut("UpdateBatch")]
-        public async Task<IActionResult> BatchUpdateIssue(string listId, [FromBody] CreateUpdateIssueDto data)
+        public async Task<IActionResult> BatchUpdateIssue([FromBody] List<BatchUpdateDto> data)
         {
 
-            listId = listId.Replace("%2C", ",").Trim();
-            string[] split = listId.Split(',');
-
-
-            if (split != null)
+            if(data != null)
             {
-                foreach (String item in split)
+
+                foreach (var item in data)
                 {
-                    var input = await _issueService.GetById(Int32.Parse(item));
-                    if (input != null)
-                    {
-                        var map = _mapper.Map(data, input);
-                        var result = await _issueService.UpdateAsync(map);
-                        await _unitOfWork.SaveChangesAsync();
-                    }
+                    var input = await _issueService.GetById(item.Id);
+                    var map = _mapper.Map(item, input);
+                    var result = await _issueService.UpdateAsync(map);
+                    await _unitOfWork.SaveChangesAsync();
+                    
+
                 }
-                return Ok("Update Successfully !!!!");
+                return Ok("BatchUpdate Successfully !!!!");
             }
             else
-            {
-                return BadRequest("Update Fail !!!");
-            }
+            { return BadRequest("BatchUpdate Fail !!!"); }
+
+
 
         }
     }
