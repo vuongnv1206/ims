@@ -59,6 +59,8 @@ public static class BusinessServiceRegistration
         //ProjectMemberService
         services.AddScoped<IProjectMemberService, ProjectMemberService>();
 
+        //ClassStudents
+        services.AddScoped<IClassStudentService, ClassStudentService>();
         return services;
     }
 }
