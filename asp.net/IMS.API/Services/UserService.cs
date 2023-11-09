@@ -162,7 +162,8 @@ namespace IMS.Api.Services
 			return userDto;
 		}
 
-		public async Task UpdateUser(Guid id, UpdateUserDto userDto)
+
+        public async Task UpdateUser(Guid id, UpdateUserDto userDto)
 		{
             var user = await _userManager.FindByIdAsync(id.ToString());
 			if (user == null)
