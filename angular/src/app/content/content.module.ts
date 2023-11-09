@@ -37,6 +37,7 @@ import { AssignmentDetailComponent } from './subject/subject-detail/assignment-d
 import { MilestoneComponent } from './milestone/milestone.component';
 import { MilestoneDetailComponent } from './milestone/milestone-detail/milestone-detail.component';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ClassModalComponent } from './class/class-modal/class-modal.component';
 import { ClassDetailComponent } from './class/class-detail/class-detail.component';
 import { IssueDetailComponent } from './issue/issue-detail/issue-detail.component';
@@ -88,7 +89,8 @@ import { IssueDetailComponent } from './issue/issue-detail/issue-detail.componen
     NightMarketSharedModule,
     ContentRoutingModule,
     AccordionModule,
-    RadioButtonModule
+    RadioButtonModule,
+    MultiSelectModule
   ],
 })
 export class ContentModule { }

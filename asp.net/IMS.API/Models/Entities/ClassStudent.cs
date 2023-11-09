@@ -1,6 +1,7 @@
 ﻿
 using IMS.Api.Models.Abstracts;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace IMS.Api.Models.Entities
 {
@@ -11,7 +12,9 @@ namespace IMS.Api.Models.Entities
 
 
         [ForeignKey(nameof(ClassId))]
+        [JsonIgnore]
         public virtual Class? Class { get; set; }
+        [JsonIgnore]
         [ForeignKey(nameof(UserId))]
         public virtual AppUser? User{ get; set; }
     }

@@ -22,19 +22,20 @@ namespace IMS.Api.APIControllers
         public readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
   
-        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork , IClassStudentService classStudentService)
+        public ClassController(IClassService classService, IMapper mapper, IUnitOfWork unitOfWork , IClassStudentService classStudentService, UserManager<AppUser> userManager)
         {
             _classService = classService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _classStudentService = classStudentService;
+            _userManager = userManager;
         }
 
         [Authorize(Permissions.Class.View)]
         [HttpGet("classes")]
         public async Task<ActionResult<ClassReponse>> GetAllClass([FromQuery] ClassRequest request)
-        {
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+        {   
+
             var data = await _classService.GetAllClass(request);
             return Ok(data); 
         }
