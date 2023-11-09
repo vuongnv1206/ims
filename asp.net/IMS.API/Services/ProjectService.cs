@@ -62,5 +62,19 @@ namespace IMS.Api.Services
             var subjectDto = mapper.Map<ProjectDto>(subject);
             return subjectDto;
         }
+
+        public async Task DeleteStudentAsyns(Guid studentId, int projectId)
+        {
+            var queryStudent = await context.ProjectMembers.FirstOrDefaultAsync(x => x.UserId.Equals(studentId) && x.ProjectId == projectId);
+            if (queryStudent != null)
+            {
+                context.Remove(queryStudent);
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("User or project doesn't exist");
+            }
+        }
     }
 }
