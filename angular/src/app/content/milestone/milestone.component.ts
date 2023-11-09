@@ -28,8 +28,8 @@ public take: number | null;
 public sortField: string | null;
 
  //Filter variables
- projectId: number;
- classId:number ;
+ projectId: number | undefined;
+ classId:number | undefined;
  classList: any[] = [];
  projectList: any[] = [];
  startDate: Date | null;
@@ -80,6 +80,17 @@ loadData(selectionId = null) {
         this.toggleBlockUI(true);
       },
     });
+}
+handleProjectChange(newValue) {
+  if (newValue === null) {
+    this.projectId = undefined;
+  }
+}
+
+handleClassChange(newValue) {
+  if (newValue === null) {
+    this.classId = undefined;
+  }
 }
 
 loadProjects() {

@@ -12,8 +12,8 @@
             <button type="button" class="ml-1" pButton (click)="loadData()">Tìm</button>
       </div>
       <div class="col-3">
-        <p-dropdown [showClear]="true" [options]="projectList" [(ngModel)]="projectId" placeholder="Select project" class="mr-5"></p-dropdown>
-        <p-dropdown [showClear]="true" [options]="classList" [(ngModel)]="classId" placeholder="Select class"></p-dropdown>
+        <p-dropdown [showClear]="true" [options]="projectList" [(ngModel)]="projectId" placeholder="Select project" (ngModelChange)="handleProjectChange($event)" class="mr-5"></p-dropdown>
+        <p-dropdown [showClear]="true" [options]="classList" [(ngModel)]="classId" (ngModelChange)="handleClassChange($event)" placeholder="Select class"></p-dropdown>
       </div>
       <div class="col-3">
         <label class="mr-2" >Start Date</label>

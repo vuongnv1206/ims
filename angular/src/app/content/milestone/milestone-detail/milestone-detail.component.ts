@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
-import { MilestoneClient, MilestoneDto, ProjectClient, ProjectDto, ProjectReponse } from 'src/app/api/api-generate';
+import { ClassClient, ClassReponse, MilestoneClient, MilestoneDto, ProjectClient, ProjectDto, ProjectReponse } from 'src/app/api/api-generate';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -43,6 +43,7 @@ projectList: any[] = [];
     private utilService: UtilityService,
     private milestoneService: MilestoneClient,
     private projectService: ProjectClient,
+    private classService: ClassClient,
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,
     private fb: FormBuilder
@@ -60,6 +61,7 @@ projectList: any[] = [];
       this.closeBtnName = 'Hủy';
     } else {
       this.loadProjects();
+      this.loadClasses();
       this.saveBtnName = 'Thêm';
       this.closeBtnName = 'Đóng';
     }
@@ -77,6 +79,7 @@ projectList: any[] = [];
           this.selectedEntity = response;
           this.buildForm();
           this.loadProjects();
+          this.loadClasses();
           this.toggleBlockUI(false);
         },
         error: () => {
@@ -91,7 +94,7 @@ projectList: any[] = [];
       dueDate: new FormControl(this.selectedEntity.dueDate || null,Validators.required),
       description: new FormControl(this.selectedEntity.description || null),
       classId: new FormControl(this.selectedEntity.classId || null),
-      projectId: new FormControl(this.selectedEntity.projectId || null, Validators.required),
+      projectId: new FormControl(this.selectedEntity.projectId || null),
       selectedCategory: new FormControl()
     });
   }
@@ -152,6 +155,17 @@ projectList: any[] = [];
     this.projectService.projectGET().subscribe((response: ProjectReponse) => {
       response.projects.forEach(project => {
         this.projectList.push({
+          label: project.name,
+          value: project.id,
+        });
+      });
+    });
+  }
+
+  loadClasses() {
+    this.classService.classes().subscribe((response: ClassReponse) => {
+      response.classes.forEach(project => {
+        this.classList.push({
           label: project.name,
           value: project.id,
         });

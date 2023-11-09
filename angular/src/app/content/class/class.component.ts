@@ -91,6 +91,12 @@ constructor(
     });
   }
 
+  handleSubjectChange(newValue) {
+    if (newValue === null) {
+      this.subjectId = undefined;
+    }
+  }
+
   loadSettings() {
     this.settingService.settingGET().subscribe((response: SettingResponse) => {
       this.settingList = response.settings
@@ -102,6 +108,11 @@ constructor(
   });
   }
 
+  handleSettingChange(newValue) {
+    if (newValue === null) {
+      this.settingId = undefined;
+    }
+  }
   showAddModal() {
     const ref = this.dialogService.open(ClassModalComponent, {
       header: 'Add Class',

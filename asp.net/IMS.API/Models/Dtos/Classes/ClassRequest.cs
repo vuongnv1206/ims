@@ -11,6 +11,7 @@ namespace IMS.Api.Models.Dtos.Classes
     {
         public int? SettingId { get; set; }
         public int? SubjectId { get; set; }
+        public Guid? CurrentUserId { get; set; }
 
     }
 }
