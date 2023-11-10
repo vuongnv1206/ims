@@ -3,7 +3,7 @@
     <p-header> Member </p-header>
     <div class="grid">
       <div class="col-4">
-        <!-- <button pButton type="button" label="Xóa" icon="fa fa-trash" class="ml-1 p-button-danger" *ngIf="selectedItems.length > 0" (click)="deleteItems()" ></button> -->
+
       </div>
       <div class="col-8">
         <div class="formgroup-inline">
@@ -11,6 +11,17 @@
             <input id="txtKeyword" pInputText (keyup.enter)="loadDataUsers()" [(ngModel)]="keyWords" placeholder="Nhập từ khóa..." type="text"/>
           </div>
           <button type="button" pButton (click)="loadDataUsers()">Tìm</button>
+
+
+<div class="flex ml-2">
+  <p-button (click)="showDialog()" icon="pi pi-external-link" label="Add student"></p-button>
+  <p-dialog header="Add Student" [(visible)]="visible" [style]="{width: '30vw',height:'50vh'}">
+    <button pButton type="button" label="Thêm" icon="fa fa-plus"  class="mb-2 p-button-info" (click)="addStudent()" ></button>
+    <p-multiSelect [options]="studentList" [style]="{width: '100%'}" display="chip" [showClear]="true" [(ngModel)]="selectedStudents" optionLabel="label"></p-multiSelect>
+  </p-dialog>
+</div>
+
+
         </div>
       </div>
     </div>
@@ -67,6 +78,8 @@
   <p-panel #pnl [style]="{ 'margin-bottom': '10px' }">
     <p-header> Project Management </p-header>
     <div class="grid">
+      <div class="col-4">
+      </div>
       <div class="col-3">
         <div class="formgroup-inline">
           <div class="field">

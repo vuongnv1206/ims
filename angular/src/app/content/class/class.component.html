@@ -12,11 +12,11 @@
             <button type="button" class="ml-1" pButton (click)="loadData()">Tìm</button>
       </div>
       <div class="col-3">
-        <p-dropdown [showClear]="true" [options]="subjectList" [(ngModel)]="subjectId" placeholder="Select subject" class="mr-5"></p-dropdown>
+        <p-dropdown [showClear]="true" [options]="subjectList" [(ngModel)]="subjectId" (ngModelChange)="handleSubjectChange($event)" placeholder="Select subject" class="mr-5"></p-dropdown>
       </div>
 
       <div class="col-3">
-        <p-dropdown [showClear]="true" [options]="settingList" [(ngModel)]="settingId" placeholder="Select semester"></p-dropdown>
+        <p-dropdown [showClear]="true" [options]="settingList" [(ngModel)]="settingId" (ngModelChange)="handleSettingChange($event)" placeholder="Select semester"></p-dropdown>
       </div>
     </div>
     <p-table [value]="items" [responsive]="true" >

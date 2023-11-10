@@ -108,5 +108,17 @@ namespace IMS.Api.Common.Constants
             [Description("Xóa Milestone")]
             public const string Delete = "Permissions.Milestone.Delete";
         }
+
+        public static class Setting
+        {
+            [Description("Xem Setting")]
+            public const string View = "Permissions.Setting.View";
+            [Description("Tạo mới Setting")]
+            public const string Create = "Permissions.Setting.Create";
+            [Description("Sửa Setting")]
+            public const string Edit = "Permissions.Setting.Edit";
+            [Description("Xóa Setting")]
+            public const string Delete = "Permissions.Setting.Delete";
+        }
     }
 }

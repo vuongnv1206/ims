@@ -22,7 +22,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   //Paging variables
   public page: number = 1;
-  public itemsPerPage: number = 3;
+  public itemsPerPage: number = 10;
   public totalCount: number;
   public keyWords: string | null;
   public skip: number | null;
@@ -65,6 +65,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
     this.userService
       .users(
+        undefined,undefined,
         this.keyWords,
         this.page,
         this.itemsPerPage,

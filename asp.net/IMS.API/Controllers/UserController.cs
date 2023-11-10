@@ -24,7 +24,8 @@ namespace IMS.Api.APIControllers
 
         [HttpGet("users")]
         public async Task<ActionResult<UserResponse>> GetAllUsers([FromQuery] UserRequest request)
-        {
+        {   
+   
             var data = await _userService.GetListAllAsync(request);
             return Ok(data);
         }

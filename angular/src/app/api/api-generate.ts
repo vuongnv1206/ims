@@ -707,6 +707,15 @@ export interface IClassClient {
      * @return Success
      */
     classPOST(body?: CreateAndUpdateClassDto | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addStudent(body?: ClassStudentDto[] | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteStudent(id: number): Observable<void>;
 }
 
 @Injectable({
@@ -975,11 +984,114 @@ export class ClassClient implements IClassClient {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addStudent(body?: ClassStudentDto[] | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Class/add-student";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddStudent(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processAddStudent(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteStudent(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Class/delete-student/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteStudent(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteStudent(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export interface IIssueClient {
     /**
-     * @param id (optional) 
      * @param assigneeId (optional) 
      * @param projectId (optional) 
      * @param issueSettingId (optional) 
@@ -994,7 +1106,7 @@ export interface IIssueClient {
      * @param sortField (optional) 
      * @return Success
      */
-    issueGET(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<IssueResponse>;
+    issueGET(assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<IssueResponse>;
     /**
      * @param id (optional) 
      * @return Success
@@ -1015,11 +1127,10 @@ export interface IIssueClient {
      */
     issuePUT(id: number, body?: CreateUpdateIssueDto | undefined): Observable<void>;
     /**
-     * @param listId (optional) 
      * @param body (optional) 
      * @return Success
      */
-    updateBatch(listId?: string | undefined, body?: CreateUpdateIssueDto | undefined): Observable<void>;
+    updateBatch(body?: BatchUpdateDto[] | undefined): Observable<void>;
 }
 
 @Injectable({
@@ -1036,7 +1147,6 @@ export class IssueClient implements IIssueClient {
     }
 
     /**
-     * @param id (optional) 
      * @param assigneeId (optional) 
      * @param projectId (optional) 
      * @param issueSettingId (optional) 
@@ -1051,12 +1161,8 @@ export class IssueClient implements IIssueClient {
      * @param sortField (optional) 
      * @return Success
      */
-    issueGET(id?: number | undefined, assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<IssueResponse> {
+    issueGET(assigneeId?: string | undefined, projectId?: number | undefined, issueSettingId?: number | undefined, milestoneId?: number | undefined, startDate?: Date | undefined, dueDate?: Date | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<IssueResponse> {
         let url_ = this.baseUrl + "/api/Issue/Issue?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&";
         if (assigneeId === null)
             throw new Error("The parameter 'assigneeId' cannot be null.");
         else if (assigneeId !== undefined)
@@ -1368,16 +1474,11 @@ export class IssueClient implements IIssueClient {
     }
 
     /**
-     * @param listId (optional) 
      * @param body (optional) 
      * @return Success
      */
-    updateBatch(listId?: string | undefined, body?: CreateUpdateIssueDto | undefined, httpContext?: HttpContext): Observable<void> {
-        let url_ = this.baseUrl + "/api/Issue/UpdateBatch?";
-        if (listId === null)
-            throw new Error("The parameter 'listId' cannot be null.");
-        else if (listId !== undefined)
-            url_ += "listId=" + encodeURIComponent("" + listId) + "&";
+    updateBatch(body?: BatchUpdateDto[] | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Issue/UpdateBatch";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1407,6 +1508,209 @@ export class IssueClient implements IIssueClient {
     }
 
     protected processUpdateBatch(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+export interface IIssueSettingClient {
+    /**
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param subjectId (optional) 
+     * @return Success
+     */
+    issueSettingGET(projectId?: number | undefined, classId?: number | undefined, subjectId?: number | undefined): Observable<IssueSettingDto>;
+    /**
+     * @return Success
+     */
+    deleteIssueSetting(id: number): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issueSettingPOST(body?: CreateUpdateIssueSettingDto | undefined): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class IssueSettingClient implements IIssueSettingClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param projectId (optional) 
+     * @param classId (optional) 
+     * @param subjectId (optional) 
+     * @return Success
+     */
+    issueSettingGET(projectId?: number | undefined, classId?: number | undefined, subjectId?: number | undefined, httpContext?: HttpContext): Observable<IssueSettingDto> {
+        let url_ = this.baseUrl + "/api/IssueSetting/IssueSetting?";
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "projectId=" + encodeURIComponent("" + projectId) + "&";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "classId=" + encodeURIComponent("" + classId) + "&";
+        if (subjectId === null)
+            throw new Error("The parameter 'subjectId' cannot be null.");
+        else if (subjectId !== undefined)
+            url_ += "subjectId=" + encodeURIComponent("" + subjectId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIssueSettingGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIssueSettingGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<IssueSettingDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<IssueSettingDto>;
+        }));
+    }
+
+    protected processIssueSettingGET(response: HttpResponseBase): Observable<IssueSettingDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as IssueSettingDto;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteIssueSetting(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/IssueSetting/DeleteIssueSetting/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteIssueSetting(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteIssueSetting(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteIssueSetting(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    issueSettingPOST(body?: CreateUpdateIssueSettingDto | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/IssueSetting";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIssueSettingPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIssueSettingPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processIssueSettingPOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1817,6 +2121,15 @@ export interface IProjectClient {
      * @return Success
      */
     projectPUT(id: number, body?: CreateAndUpdateProjectDto | undefined): Observable<void>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addStudent2(body?: ProjectMemberDto[] | undefined): Observable<void>;
+    /**
+     * @return Success
+     */
+    deleteStudent2(id: number): Observable<void>;
 }
 
 @Injectable({
@@ -2065,6 +2378,110 @@ export class ProjectClient implements IProjectClient {
     }
 
     protected processProjectPUT(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    addStudent2(body?: ProjectMemberDto[] | undefined, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Project/add-student";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddStudent2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddStudent2(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processAddStudent2(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    deleteStudent2(id: number, httpContext?: HttpContext): Observable<void> {
+        let url_ = this.baseUrl + "/api/Project/delete-student/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            context: httpContext,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteStudent2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteStudent2(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteStudent2(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3237,6 +3654,8 @@ export class SubjectClient implements ISubjectClient {
 
 export interface IUserClient {
     /**
+     * @param classId (optional) 
+     * @param projectId (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -3245,7 +3664,7 @@ export interface IUserClient {
      * @param sortField (optional) 
      * @return Success
      */
-    users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<UserResponse>;
+    users(classId?: number | undefined, projectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined): Observable<UserResponse>;
     /**
      * @param userId (optional) 
      * @param body (optional) 
@@ -3291,6 +3710,8 @@ export class UserClient implements IUserClient {
     }
 
     /**
+     * @param classId (optional) 
+     * @param projectId (optional) 
      * @param keyWords (optional) 
      * @param page (optional) 
      * @param itemsPerPage (optional) 
@@ -3299,8 +3720,16 @@ export class UserClient implements IUserClient {
      * @param sortField (optional) 
      * @return Success
      */
-    users(keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<UserResponse> {
+    users(classId?: number | undefined, projectId?: number | undefined, keyWords?: string | undefined, page?: number | undefined, itemsPerPage?: number | undefined, skip?: number | undefined, take?: number | undefined, sortField?: string | undefined, httpContext?: HttpContext): Observable<UserResponse> {
         let url_ = this.baseUrl + "/api/User/users?";
+        if (classId === null)
+            throw new Error("The parameter 'classId' cannot be null.");
+        else if (classId !== undefined)
+            url_ += "ClassId=" + encodeURIComponent("" + classId) + "&";
+        if (projectId === null)
+            throw new Error("The parameter 'projectId' cannot be null.");
+        else if (projectId !== undefined)
+            url_ += "ProjectId=" + encodeURIComponent("" + projectId) + "&";
         if (keyWords === null)
             throw new Error("The parameter 'keyWords' cannot be null.");
         else if (keyWords !== undefined)
@@ -3732,6 +4161,19 @@ export interface AuthResponse {
     permissions?: string[] | undefined;
 }
 
+export interface BatchUpdateDto {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    startDate?: Date | undefined;
+    dueDate?: Date | undefined;
+    assigneeId?: string;
+    isOpen?: boolean;
+    projectId?: number;
+    issueSettingId?: number | undefined;
+    milestoneId?: number;
+}
+
 export interface Class {
     id?: number;
     creationTime?: Date | undefined;
@@ -3783,6 +4225,11 @@ export interface ClassStudent {
     user?: AppUser;
 }
 
+export interface ClassStudentDto {
+    classId?: number;
+    userId?: string;
+}
+
 export interface CreateAndUpdateClassDto {
     name?: string | undefined;
     description?: string | undefined;
@@ -3818,11 +4265,17 @@ export interface CreateUpdateIssueDto {
     description?: string | undefined;
     startDate?: Date | undefined;
     dueDate?: Date | undefined;
-    assigneeId?: string;
+    assigneeId?: string | undefined;
     isOpen?: boolean;
-    projectId?: number;
+    projectId?: number | undefined;
     issueSettingId?: number | undefined;
-    milestoneId?: number;
+    milestoneId?: number | undefined;
+}
+
+export interface CreateUpdateIssueSettingDto {
+    projectId?: number | undefined;
+    classId?: number | undefined;
+    subjectId?: number | undefined;
 }
 
 export interface CreateUpdateRoleDto {
@@ -3901,6 +4354,16 @@ export interface IssueSetting {
     projectId?: number | undefined;
     classId?: number | undefined;
     subjectId?: number | undefined;
+}
+
+export interface IssueSettingDto {
+    id?: number;
+    projectId?: number | undefined;
+    classId?: number | undefined;
+    subjectId?: number | undefined;
+    project?: Project;
+    subject?: Subject;
+    class?: Class;
 }
 
 export interface LoginModel {
@@ -3992,6 +4455,11 @@ export interface ProjectMember {
     projectId?: number;
     user?: AppUser;
     project?: Project;
+}
+
+export interface ProjectMemberDto {
+    projectId?: number;
+    userId?: string;
 }
 
 export interface ProjectReponse {

@@ -79,20 +79,13 @@ namespace IMS.Api.APIControllers
             return Ok("Add student successfully");
         }
 
-        [HttpDelete("delete-student/{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        [HttpDelete("delete-student")]
+        public async Task<IActionResult> DeleteStudent(Guid studentId ,int projectId)
         {
-            var data = await _projectMemberService.GetById(id);
-            if (data != null)
-            {
-                await _projectMemberService.DeleteAsync(data);
-                await _unitOfWork.SaveChangesAsync();
+            await _projectService.DeleteStudentAsyns(studentId, projectId);
+            await _unitOfWork.SaveChangesAsync();
                 return Ok("Delete Successfully !!!");
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
     }
 }
