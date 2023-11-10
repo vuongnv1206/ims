@@ -4,6 +4,7 @@ using IMS.Api.Seedings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 
 namespace IMS.Api.EnityFrameworkCore
 {

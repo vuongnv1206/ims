@@ -14,9 +14,9 @@ namespace IMS.Api.Common.Helpers.RegisterServices
     {
         public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-
+            var connectionString = configuration.GetConnectionString("Default");
             services.AddDbContext<IMSDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("Default")));
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             return services;
 

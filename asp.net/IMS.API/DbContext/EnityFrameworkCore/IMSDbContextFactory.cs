@@ -16,9 +16,9 @@ namespace IMS.Api.EnityFrameworkCore
 		{
 
 			var configuration = BuildConfiguration();
-
-			var builder = new DbContextOptionsBuilder<IMSDbContext>()
-				.UseSqlServer(configuration.GetConnectionString("Default"));
+            var connectionString = configuration.GetConnectionString("Default");
+            var builder = new DbContextOptionsBuilder<IMSDbContext>()
+				.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
 			return new IMSDbContext(builder.Options);
 		}
